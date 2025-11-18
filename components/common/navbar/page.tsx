@@ -31,10 +31,10 @@ export default function Navbar() {
   const navItems = [
     { label: "Home", href: "/", icon: Home },
     { label: "Discover", href: "/discover", icon: Compass },
-    { label: "Course", href: "#course", icon: BookOpen },
-    { label: "Students", href: "#students", icon: Users },
-    { label: "Instructor", href: "#instructor", icon: UserCheck },
-    { label: "Community", href: "#community", icon: MessageSquare },
+    { label: "Course", href: "/courses", icon: BookOpen },
+    { label: "Students", href: "/students", icon: Users },
+    { label: "Instructor", href: "/instructor", icon: UserCheck },
+    { label: "Community", href: "/community", icon: MessageSquare },
   ];
 
   return (
@@ -82,13 +82,18 @@ export default function Navbar() {
 
           {/* Desktop Right Section */}
           <div className="hidden lg:flex items-center gap-4">
-            <Button
-              variant="outline"
-              size="sm"
-              className="border-border hover:bg-yellow-400 hover:text-black hover:border-yellow-400 transition-all"
+            <Link
+              href="/signIn"
+              className="text-foreground/80 hover:text-yellow-500 font-medium transition-colors"
             >
-              Sign In
-            </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="border-border hover:bg-yellow-400 hover:text-black hover:border-yellow-400 transition-all"
+              >
+                Sign In
+              </Button>
+            </Link>
             {/* Profile Picture */}
             <div className="w-10 h-10 bg-linear-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center cursor-pointer hover:shadow-lg transition-shadow">
               <span className="text-black font-bold text-sm">JD</span>
