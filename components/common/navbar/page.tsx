@@ -50,10 +50,10 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
             <div className="w-8 h-8 bg-linear-to-br from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">E</span>
+              <span className="text-white font-bold text-lg">P</span>
             </div>
             <span className="font-bold text-xl hidden sm:inline text-foreground">
-              EduHub
+              Peer-Path
             </span>
           </Link>
 
