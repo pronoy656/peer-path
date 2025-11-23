@@ -17,20 +17,7 @@ export default function SemesterTabs({
   selectedSemester,
   onSelectSemester,
 }: SemesterTabsProps) {
-  const semesters = [
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "10",
-    "11",
-    "12",
-  ];
+  const semesters = ["1", "2", "3", "4", "5", "6", "7", "8"];
 
   return (
     <div className="flex flex-wrap gap-3">
