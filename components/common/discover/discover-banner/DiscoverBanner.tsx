@@ -1,3 +1,9 @@
+// import React from "react";
+
+// export default function DiscoverBanner() {
+//   return <div className="text-3xl text-red-500">DiscoverBanner Page</div>;
+// }
+
 import { ArrowRight } from "lucide-react";
 
 export default function DiscoverBanner() {
@@ -7,10 +13,10 @@ export default function DiscoverBanner() {
       <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full -mr-48 -mt-48 blur-3xl" />
 
       <div className="container mx-auto px-4 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-stretch">
           {/* Left Content */}
-          <div className="space-y-6">
-            <div className="inline-block px-4 py-2 bg-primary/10 rounded-full border border-primary/20">
+          <div className="space-y-6 flex flex-col justify-center">
+            <div className="inline-block px-4 py-2 bg-primary/10 rounded-full border border-primary/20 w-fit">
               <span className="text-sm font-semibold text-primary">
                 Explore Quality Education
               </span>
@@ -55,12 +61,12 @@ export default function DiscoverBanner() {
           </div>
 
           {/* Right Image */}
-          <div className="relative">
+          <div className="relative h-full min-h-96">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-2xl blur-xl" />
             <img
-              src="/students-studying-courses-online-learning.jpg"
-              alt="Explore courses"
-              className="relative rounded-2xl shadow-lg w-full h-auto object-cover"
+              src="https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=600&h=500&fit=crop"
+              alt="Students discovering courses"
+              className="relative rounded-2xl shadow-lg w-full h-full object-cover"
             />
           </div>
         </div>
