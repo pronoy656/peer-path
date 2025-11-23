@@ -1,5 +1,5 @@
 "use client";
-// comment
+//
 import { Button } from "@/components/ui/button";
 import {
   ArrowRight,
@@ -19,7 +19,6 @@ export function AlumniSection() {
     const interval = setInterval(() => {
       setActiveSlide((prev) => (prev + 1) % alumni.length);
     }, 5000);
-    console.log({ interval });
     return () => clearInterval(interval);
   }, []);
 
