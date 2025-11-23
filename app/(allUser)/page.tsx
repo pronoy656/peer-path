@@ -1,5 +1,7 @@
+// import AlumniSection from "@/components/common/home/alumni-section/AlumniSection";
+import { AlumniSection } from "@/components/common/home/alumni-section/AlumniSection";
 import ChoosePeerPath from "@/components/common/home/choose-peerpath/ChoosePeerPath";
-import CourseCard from "@/components/common/home/courses/CourseCard";
+
 import CourseMap from "@/components/common/home/courses/CourseMap";
 // import Courses from "@/components/common/home/courses/CourseCard";
 import Cta from "@/components/common/home/cta/Cta";
@@ -18,11 +20,14 @@ const page = () => {
       <div>
         <Review />
       </div>
-      <div className="p-20 pt-30">
-        <Cta />
+      <div>
+        <AlumniSection />
       </div>
       <div>
         <FaqSection />
+      </div>
+      <div className="p-20 pt-10">
+        <Cta />
       </div>
     </div>
   );
