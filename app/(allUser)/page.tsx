@@ -1,5 +1,6 @@
 // import AlumniSection from "@/components/common/home/alumni-section/AlumniSection";
-import { AlumniSection } from "@/components/common/home/alumni-section/AlumniSection";
+// import { AlumniSection } from "@/components/common/home/alumni-section/AlumniSection";
+import { AlumniSection } from "@/components/common/home/alumni-section/alumniSection";
 import ChoosePeerPath from "@/components/common/home/choose-peerpath/ChoosePeerPath";
 
 import CourseMap from "@/components/common/home/courses/CourseMap";
