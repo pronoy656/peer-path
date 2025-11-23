@@ -18,7 +18,7 @@ export default function CoursePreference() {
   };
 
   return (
-    <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary/5 via-secondary/5 to-primary/5 border-2 border-primary/20 p-8 md:p-12">
+    <div className="relative overflow-hidden rounded-2xl bg-linear-to-br from-primary/5 via-secondary/5 to-primary/5 border-2 border-primary/20 p-8 md:p-12">
       {/* Decorative elements */}
       <div className="absolute top-0 right-0 w-40 h-40 bg-primary/10 rounded-full -mr-20 -mt-20 blur-2xl" />
       <div className="absolute bottom-0 left-0 w-40 h-40 bg-secondary/10 rounded-full -ml-20 -mb-20 blur-2xl" />

@@ -41,7 +41,7 @@ export default function SemesterTabs({
           className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 ${
             selectedSemester === sem
               ? "bg-yellow-400 text-secondary-foreground shadow-lg scale-105"
-              : "bg-card text-foreground border-2 border-border hover:border-secondary"
+              : "bg-card text-foreground border-2 border-border hover:border-yellow-400"
           }`}
         >
           Semester {sem}
