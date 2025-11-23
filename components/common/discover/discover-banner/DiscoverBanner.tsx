@@ -8,7 +8,7 @@ import { ArrowRight } from "lucide-react";
 
 export default function DiscoverBanner() {
   return (
-    <div className="relative overflow-hidden bg-gradient-to-br from-background via-background to-background pt-12 pb-16">
+    <div className="relative overflow-hidden bg-gradient-to-br from-background via-background to-background pt-28 pb-16">
       {/* Subtle background accent */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full -mr-48 -mt-48 blur-3xl" />
 
