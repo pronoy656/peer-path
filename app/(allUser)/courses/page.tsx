@@ -1,13 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Star, Search, Filter } from "lucide-react";
+
 
 import courses from "./courses.json";
 import CourseCard from "./CourseCard";
+import { Filter, Search } from "lucide-react";
 
 export default function CoursesPage() {
   const [searchTerm, setSearchTerm] = useState("");
