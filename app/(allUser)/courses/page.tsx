@@ -5,8 +5,9 @@ import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Star, Search, Filter } from "lucide-react";
-import CourseCard from "@/components/CourseCard";
-import courses from "@/data/courses.json";
+
+import courses from "./courses.json";
+import CourseCard from "./CourseCard";
 
 export default function CoursesPage() {
   const [searchTerm, setSearchTerm] = useState("");
