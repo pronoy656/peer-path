@@ -3,8 +3,6 @@
 import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Star, Search, Filter } from "lucide-react"
@@ -147,8 +145,6 @@ export default function CoursesPage() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
-
       <main className="flex-1">
         {/* Page Header */}
         <section className="py-12 md:py-20 bg-gradient-to-b from-primary/5 to-transparent">
@@ -258,8 +254,6 @@ export default function CoursesPage() {
           </div>
         </section>
       </main>
-
-      <Footer />
     </div>
   )
 }
