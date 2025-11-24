@@ -7,7 +7,10 @@
         "reviews": 342,
         "difficulty": "Intermediate",
         "students": 1240,
-        "image": "/full-stack-web-development-classroom.jpg"
+        "image": "/image.png",
+        "description": "Learn to build modern web applications using front-end and back-end technologies, including React, Node.js, and databases.",
+        "courseCode": "CSE401",
+        "department": "CSE"
     },
     {
         "id": 2,
@@ -17,7 +20,10 @@
         "reviews": 512,
         "difficulty": "Advanced",
         "students": 1820,
-        "image": "/data-science-analytics-graphs.jpg"
+        "image": "/image.png",
+        "description": "Understand core concepts in data science, including statistics, Python programming, data visualization, and machine learning.",
+        "courseCode": "DS101",
+        "department": "DATA SCIENCE"
     },
     {
         "id": 3,
@@ -27,7 +33,10 @@
         "reviews": 289,
         "difficulty": "Beginner",
         "students": 856,
-        "image": "/digital-marketing-strategy.png"
+        "image": "/image.png",
+        "description": "Master digital marketing techniques, including SEO, social media marketing, email campaigns, and analytics.",
+        "courseCode": "MKT201",
+        "department": "MARKETING"
     },
     {
         "id": 4,
@@ -37,7 +46,10 @@
         "reviews": 198,
         "difficulty": "Intermediate",
         "students": 654,
-        "image": "/mobile-app-development-coding.png"
+        "image": "/image.png",
+        "description": "Build cross-platform mobile applications using Flutter and React Native, with real-world projects.",
+        "courseCode": "CSE402",
+        "department": "CSE"
     },
     {
         "id": 5,
@@ -47,7 +59,10 @@
         "reviews": 423,
         "difficulty": "Advanced",
         "students": 987,
-        "image": "/cloud-computing-aws-infrastructure.jpg"
+        "image": "/image.png",
+        "description": "Learn cloud architecture, AWS services, deployment, and serverless computing for modern applications.",
+        "courseCode": "CSE450",
+        "department": "CSE"
     },
     {
         "id": 6,
@@ -57,7 +72,10 @@
         "reviews": 678,
         "difficulty": "Beginner",
         "students": 2340,
-        "image": "/python-code.png"
+        "image": "/image.png",
+        "description": "Start your programming journey with Python. Learn syntax, data structures, and basic projects.",
+        "courseCode": "CSE101",
+        "department": "CSE"
     },
     {
         "id": 7,
@@ -67,7 +85,10 @@
         "reviews": 267,
         "difficulty": "Intermediate",
         "students": 523,
-        "image": "/ui-ux-design-mockup-interface.jpg"
+        "image": "/image.png",
+        "description": "Understand user interface and user experience design, wireframing, prototyping, and usability testing.",
+        "courseCode": "DES301",
+        "department": "DESIGN"
     },
     {
         "id": 8,
@@ -77,7 +98,10 @@
         "reviews": 345,
         "difficulty": "Advanced",
         "students": 789,
-        "image": "/business-analytics-dashboard-data.jpg"
+        "image": "/image.png",
+        "description": "Leverage data-driven techniques to analyze business performance, predictive analytics, and decision-making.",
+        "courseCode": "BBA301",
+        "department": "BBA"
     },
     {
         "id": 9,
@@ -87,7 +111,10 @@
         "reviews": 401,
         "difficulty": "Intermediate",
         "students": 912,
-        "image": "/cybersecurity-network-protection.png"
+        "image": "/image.png",
+        "description": "Learn the fundamentals of cybersecurity, including network security, ethical hacking, and threat management.",
+        "courseCode": "CSE460",
+        "department": "CSE"
     },
     {
         "id": 10,
@@ -97,7 +124,10 @@
         "reviews": 234,
         "difficulty": "Beginner",
         "students": 654,
-        "image": "/content-writing-seo-blog.jpg"
+        "image": "/image.png",
+        "description": "Develop writing skills for web content, blogs, and SEO optimization strategies.",
+        "courseCode": "MKT101",
+        "department": "MARKETING"
     },
     {
         "id": 11,
@@ -107,7 +137,10 @@
         "reviews": 289,
         "difficulty": "Advanced",
         "students": 445,
-        "image": "/machine-learning-neural-network-ai.jpg"
+        "image": "/image.png",
+        "description": "Explore advanced machine learning algorithms, model evaluation, and real-world AI applications.",
+        "courseCode": "DS401",
+        "department": "DATA SCIENCE"
     },
     {
         "id": 12,
@@ -117,6 +150,9 @@
         "reviews": 312,
         "difficulty": "Intermediate",
         "students": 634,
-        "image": "/graphic-design-creative-artwork.jpg"
+        "image": "/image.png",
+        "description": "Learn graphic design fundamentals, typography, color theory, and Adobe Creative Suite tools.",
+        "courseCode": "DES201",
+        "department": "DESIGN"
     }
 ]
