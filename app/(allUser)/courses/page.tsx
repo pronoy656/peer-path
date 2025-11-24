@@ -147,7 +147,7 @@ export default function CoursesPage() {
     <div className="min-h-screen flex flex-col">
       <main className="flex-1">
         {/* Page Header */}
-        <section className="py-12 md:py-20 bg-gradient-to-b from-primary/5 to-transparent">
+        <section className="py-12 md:py-20 bg-linear-to-b from-primary/5 to-transparent">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">Explore Courses</h1>
             <p className="text-xl text-foreground/60">
