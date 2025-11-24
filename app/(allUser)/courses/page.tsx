@@ -1,5 +1,8 @@
 import React from "react";
 
 export default function CoursesPage() {
-  return <div>CoursesPage</div>;
+  return 
+  <>
+    <h1>Courses Page</h1>
+  </>;
 }
