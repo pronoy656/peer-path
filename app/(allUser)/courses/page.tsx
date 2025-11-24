@@ -208,7 +208,7 @@ export default function CoursesPage() {
                 {filtered.map((course) => (
                   <Link key={course.id} href={`/courses/${course.id}`}>
                     <Card className="hover:shadow-lg transition-all hover:scale-105 overflow-hidden cursor-pointer flex flex-col h-full">
-                      <div className="relative w-full h-48 bg-gradient-to-b from-primary/10 to-primary/5">
+                      <div className="relative w-full h-48 bg-liner-to-b from-primary/10 to-primary/5">
                         <Image
                           src={course.image || "/placeholder.svg"}
                           alt={course.title}
