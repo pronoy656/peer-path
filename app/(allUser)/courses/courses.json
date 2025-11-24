@@ -1,0 +1,122 @@
+[
+    {
+        "id": 1,
+        "title": "Full Stack Web Development",
+        "instructor": "Sarah Chen",
+        "rating": 4.8,
+        "reviews": 342,
+        "difficulty": "Intermediate",
+        "students": 1240,
+        "image": "/full-stack-web-development-classroom.jpg"
+    },
+    {
+        "id": 2,
+        "title": "Data Science Fundamentals",
+        "instructor": "Prof. Rajesh Kumar",
+        "rating": 4.9,
+        "reviews": 512,
+        "difficulty": "Advanced",
+        "students": 1820,
+        "image": "/data-science-analytics-graphs.jpg"
+    },
+    {
+        "id": 3,
+        "title": "Digital Marketing Mastery",
+        "instructor": "Emily Rodriguez",
+        "rating": 4.7,
+        "reviews": 289,
+        "difficulty": "Beginner",
+        "students": 856,
+        "image": "/digital-marketing-strategy.png"
+    },
+    {
+        "id": 4,
+        "title": "Mobile App Development",
+        "instructor": "Alex Thompson",
+        "rating": 4.6,
+        "reviews": 198,
+        "difficulty": "Intermediate",
+        "students": 654,
+        "image": "/mobile-app-development-coding.png"
+    },
+    {
+        "id": 5,
+        "title": "Cloud Computing with AWS",
+        "instructor": "David Miller",
+        "rating": 4.8,
+        "reviews": 423,
+        "difficulty": "Advanced",
+        "students": 987,
+        "image": "/cloud-computing-aws-infrastructure.jpg"
+    },
+    {
+        "id": 6,
+        "title": "Python for Beginners",
+        "instructor": "Lisa Wong",
+        "rating": 4.9,
+        "reviews": 678,
+        "difficulty": "Beginner",
+        "students": 2340,
+        "image": "/python-code.png"
+    },
+    {
+        "id": 7,
+        "title": "UI/UX Design Principles",
+        "instructor": "James Park",
+        "rating": 4.5,
+        "reviews": 267,
+        "difficulty": "Intermediate",
+        "students": 523,
+        "image": "/ui-ux-design-mockup-interface.jpg"
+    },
+    {
+        "id": 8,
+        "title": "Business Analytics",
+        "instructor": "Maria Garcia",
+        "rating": 4.7,
+        "reviews": 345,
+        "difficulty": "Advanced",
+        "students": 789,
+        "image": "/business-analytics-dashboard-data.jpg"
+    },
+    {
+        "id": 9,
+        "title": "Cybersecurity Essentials",
+        "instructor": "Robert Chen",
+        "rating": 4.8,
+        "reviews": 401,
+        "difficulty": "Intermediate",
+        "students": 912,
+        "image": "/cybersecurity-network-protection.png"
+    },
+    {
+        "id": 10,
+        "title": "Content Writing & SEO",
+        "instructor": "Sarah Johnson",
+        "rating": 4.6,
+        "reviews": 234,
+        "difficulty": "Beginner",
+        "students": 654,
+        "image": "/content-writing-seo-blog.jpg"
+    },
+    {
+        "id": 11,
+        "title": "Machine Learning Advanced",
+        "instructor": "Dr. Amit Patel",
+        "rating": 4.9,
+        "reviews": 289,
+        "difficulty": "Advanced",
+        "students": 445,
+        "image": "/machine-learning-neural-network-ai.jpg"
+    },
+    {
+        "id": 12,
+        "title": "Graphic Design Bootcamp",
+        "instructor": "Elena Rodriguez",
+        "rating": 4.7,
+        "reviews": 312,
+        "difficulty": "Intermediate",
+        "students": 634,
+        "image": "/graphic-design-creative-artwork.jpg"
+    }
+]
