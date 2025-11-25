@@ -25,7 +25,7 @@ export default function CourseCard({ course }: { course: Course }) {
 
   return (
     <Link href={`/courses/${course.id}`}>
-      <Card className="hover:shadow-xl transition-all hover:scale-105 overflow-hidden cursor-pointer flex flex-col h-full rounded-xl border">
+      <Card className="hover:shadow-xl transition-all hover:scale-105 overflow-hidden cursor-pointer flex flex-col h-full rounded-xl border -py-6">
         {/* Course Image */}
         <div className="relative w-full h-48 bg-gradient-to-b from-primary/20 to-primary/5">
           <Image
@@ -98,7 +98,7 @@ export default function CourseCard({ course }: { course: Course }) {
           </div>
 
           {/* CTA Button */}
-          <Button className="w-full mt-auto bg-blue-600 hover:bg-blue-700 text-white font-medium">
+          <Button className="w-full mt-auto bg-primary text-white font-medium">
             View Course
           </Button>
         </div>
