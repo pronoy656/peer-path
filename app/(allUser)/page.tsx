@@ -1,5 +1,7 @@
 // import AlumniSection from "@/components/common/home/alumni-section/AlumniSection";
-import { AlumniSection } from "@/components/common/home/alumni-section/AlumniSection";
+// import { AlumniSection } from "@/components/common/home/alumni-section/AlumniSection";
+// import { AlumniSection } from "@/components/common/home/alumni-section/AlumniSection";
+import { AlumniSections } from "@/components/common/home/alumni-section/AlumniSections";
 import ChoosePeerPath from "@/components/common/home/choose-peerpath/ChoosePeerPath";
 
 import CourseMap from "@/components/common/home/courses/CourseMap";
@@ -21,7 +23,7 @@ const page = () => {
         <Review />
       </div>
       <div>
-        <AlumniSection />
+        <AlumniSections />
       </div>
       <div>
         <FaqSection />

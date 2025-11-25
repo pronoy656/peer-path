@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import { SuccessCard } from "./SuccessCard";
 // import { SuccessCard } from "@/components/success-card"
 
-export function AlumniSection() {
+export function AlumniSections() {
   const [activeSlide, setActiveSlide] = useState(0);
 
   useEffect(() => {
@@ -112,7 +112,7 @@ export function AlumniSection() {
             <div className="flex flex-col gap-6 mt-4.5">
               <div className="bg-linear-to-tl from-secondary/5 to-primary/20 border border-primary/20 rounded-2xl p-8 flex flex-col justify-center min-h-56">
                 <p className="text-foreground/70 mb-6 leading-relaxed">
-                  Our alumni community is more than just a network—it's a
+                  Our alumni community is more than just a network—it is a
                   lifelong bond of mentorship, collaboration, and shared
                   success.
                 </p>
@@ -213,7 +213,7 @@ export function AlumniSection() {
               Be Part of Our Growing Community
             </h3>
             <p className="text-lg text-foreground/70 mb-10 max-w-2xl">
-              Whether you're a current student or a graduate, join our network
+              Whether you are a current student or a graduate, join our network
               and connect with thousands of accomplished alumni shaping the
               future.
             </p>
