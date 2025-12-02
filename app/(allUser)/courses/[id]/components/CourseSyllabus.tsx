@@ -1,14 +1,10 @@
-interface CourseSyllabusProps {
+export default function CourseSyllabus({
+  syllabus = [],
+}: {
   syllabus?: string[];
-}
-
-export default function CourseSyllabus({ syllabus = [] }: CourseSyllabusProps) {
+}) {
   if (!syllabus || syllabus.length === 0) {
-    return (
-      <div className="py-8 text-center text-muted-foreground">
-        <p>No syllabus available yet.</p>
-      </div>
-    );
+    return <p className="text-muted-foreground">No syllabus available.</p>;
   }
 
   return (
@@ -23,7 +19,7 @@ export default function CourseSyllabus({ syllabus = [] }: CourseSyllabusProps) {
             <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
               {i + 1}
             </div>
-            <span className="font-medium text-foreground">{topic}</span>
+            <span className="font-medium">{topic}</span>
           </div>
         ))}
       </div>

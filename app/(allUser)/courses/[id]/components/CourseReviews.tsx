@@ -3,10 +3,10 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { courseDetails } from "../data/courseDetails";
 import ReviewForm from "./ReviewForm";
-
 import ReviewCard from "./ReviewCard";
-import { courseDetails } from "./courseDetails";
+
 
 
 export default function CourseReviews({

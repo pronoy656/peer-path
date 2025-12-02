@@ -1,18 +1,16 @@
 import { Star } from "lucide-react";
 
-interface RatingStarsProps {
-  rating?: number | string;
-  reviews?: number;
-  size?: "sm" | "lg";
-}
-
 export default function RatingStars({
   rating = 0,
   reviews,
   size = "sm",
-}: RatingStarsProps) {
-  const isLarge = size === "lg";
+}: {
+  rating?: number | string;
+  reviews?: number;
+  size?: "sm" | "lg";
+}) {
   const numRating = Number(rating) || 0;
+  const isLarge = size === "lg";
 
   return (
     <div className="flex items-center gap-3">

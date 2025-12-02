@@ -1,52 +1,37 @@
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
-interface CourseSidebarProps {
-  course: {
-    duration?: string;
-    difficulty?: string;
-    students?: number | string;
-    price?: string;
-  };
-  instructor?: string | null; // ← important: can be undefined/null
-}
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+
 
 export default function CourseSidebar({
   course,
   instructor,
-}: CourseSidebarProps) {
-  // Safe initials (e.g. "John Doe" → "JD", "Sarah" → "S", empty → "?")
-  const getInitials = (name: string | undefined | null): string => {
-    if (!name || typeof name !== "string" || name.trim() === "") {
-      return "?";
-    }
+}: {
+  course: any;
+  instructor?: string | null;
+}) {
+  const getInitials = (name?: string | null): string => {
+    if (!name?.trim()) return "?";
     return name
       .trim()
       .split(" ")
       .map((n) => n[0])
-      .slice(0, 2) // max 2 letters
+      .slice(0, 2)
       .join("")
       .toUpperCase();
   };
 
-  const initials = getInitials(instructor);
-
   return (
     <div className="space-y-6">
-      {/* Instructor Card */}
       <Card className="p-6">
         <h3 className="font-bold text-lg mb-4">Instructor</h3>
         <div className="flex items-center gap-4 mb-4">
-          <div
-            className="h-16 w-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-2xl text-white font-bold shadow-lg"
-            aria-hidden="true"
-          >
-            {initials}
+          <div className="h-16 w-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-2xl text-white font-bold shadow-lg">
+            {getInitials(instructor)}
           </div>
           <div>
-            <p className="font-semibold text-lg">
-              {instructor || "Unknown Instructor"}
-            </p>
+            <p className="font-semibold text-lg">{instructor || "Unknown"}</p>
             <p className="text-sm text-muted-foreground">Course Instructor</p>
           </div>
         </div>
@@ -55,7 +40,6 @@ export default function CourseSidebar({
         </Button>
       </Card>
 
-      {/* Course Info Card */}
       <Card className="p-6">
         <h3 className="font-bold text-lg mb-4">Course Details</h3>
         <div className="space-y-4 text-sm">
@@ -74,9 +58,7 @@ export default function CourseSidebar({
           <div className="flex justify-between">
             <span className="text-muted-foreground">Students</span>
             <span className="font-medium">
-              {course.students != null
-                ? Number(course.students).toLocaleString()
-                : "—"}
+              {course.students ? Number(course.students).toLocaleString() : "—"}
             </span>
           </div>
         </div>

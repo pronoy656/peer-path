@@ -2,11 +2,12 @@
 "use client";
 
 import { useState } from "react";
-import CourseCard from "./CourseCard";
+
 import { Filter, Search } from "lucide-react";
 
 // Import the full JSON with description & courseCode
 import courses from "./courses.json";
+import CourseCard from "@/components/common/home/courses/CourseCard";
 
 export default function CoursesPage() {
   const [searchTerm, setSearchTerm] = useState("");

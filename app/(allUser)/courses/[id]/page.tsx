@@ -1,26 +1,35 @@
 "use client";
 
 import { useParams } from "next/navigation";
-
+import { courseDetails } from "./data/courseDetails";
+import CourseHeader from "./components/CourseHeader";
+import CourseHero from "./components/CourseHero";
+import CourseSyllabus from "./components/CourseSyllabus";
+import CourseReviews from "./components/CourseReviews";
+import CourseSidebar from "./components/CourseSidebar";
 import { useState } from "react";
-import { courseDetails } from "./courseDetails";
-import CourseHeader from "./CourseHeader";
-import CourseHero from "./CourseHero";
-import CourseSyllabus from "./CourseSyllabus";
-import CourseReviews from "./CourseReviews";
-import CourseSidebar from "./CourseSidebar";
+
+const fallbackCourse = {
+  title: "Course Not Found",
+  instructor: "Unknown Instructor",
+  rating: 0,
+  reviews: 0,
+  students: 0,
+  difficulty: "Unknown",
+  duration: "Unknown",
+  price: "N/A",
+  description: "This course does not exist.",
+  image: "/placeholder.svg",
+  syllabus: [],
+  reviewsList: [],
+};
 
 export default function CoursePage() {
   const { id } = useParams();
-  const course = courseDetails[id as string] || courseDetails["1"];
+  const course = courseDetails[id as string] || fallbackCourse;
 
   const [isSaved, setIsSaved] = useState(false);
   const [isEnrolled, setIsEnrolled] = useState(false);
-
-  const handleEnroll = () => {
-    setIsEnrolled(true);
-    alert("Successfully enrolled! Welcome to the course 🎉");
-  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -30,7 +39,10 @@ export default function CoursePage() {
         <CourseHero
           course={course}
           isEnrolled={isEnrolled}
-          onEnroll={handleEnroll}
+          onEnroll={() => {
+            setIsEnrolled(true);
+            alert("Enrolled successfully!");
+          }}
           isSaved={isSaved}
           onToggleSave={() => setIsSaved(!isSaved)}
         />
@@ -38,7 +50,6 @@ export default function CoursePage() {
         <section className="py-12 md:py-16 bg-gray-50 dark:bg-gray-900">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {/* Main Content */}
               <div className="lg:col-span-2 space-y-16">
                 <CourseSyllabus syllabus={course.syllabus} />
                 <CourseReviews
@@ -46,8 +57,6 @@ export default function CoursePage() {
                   isEnrolled={isEnrolled}
                 />
               </div>
-
-              {/* Right Sidebar */}
               <div className="lg:col-span-1">
                 <CourseSidebar course={course} instructor={course.instructor} />
               </div>
