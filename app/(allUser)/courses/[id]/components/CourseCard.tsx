@@ -93,7 +93,7 @@ export default function CourseCard({ course }: { course: Course }) {
               {course.difficulty}
             </span>
             <span className="text-foreground/70">
-              {course.students.toLocaleString()} students
+              {(course.students ?? 0).toLocaleString()} students
             </span>
           </div>
 
