@@ -11,7 +11,7 @@ export const courseDetails: Record<string, any> = {
         duration: "12 weeks",
         price: "$99",
         description: "Master full stack web development with React, Node.js, and databases. Learn to build production-ready applications.",
-        image: "/web-development-coding-classroom.jpg",
+        image: "/bangla.jpg",
         syllabus: [
             "Frontend Fundamentals",
             "Backend Development",
@@ -34,7 +34,7 @@ export const courseDetails: Record<string, any> = {
         duration: "14 weeks",
         price: "$129",
         description: "Comprehensive data science course covering statistics, machine learning, and real-world applications.",
-        image: "/data-science-analytics-dashboard.jpg",
+        image: "/bangla.jpg",
         syllabus: ["Statistics Basics", "Python for Data Analysis", "Machine Learning", "Deep Learning", "Data Visualization"],
         reviewsList: [
             { id: 1, author: "Sam Chen", rating: 5, title: "Outstanding!", text: "Rajesh's teaching style is incredible.", helpful: 32, date: "3 weeks ago" },

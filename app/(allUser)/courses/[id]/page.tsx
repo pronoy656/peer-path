@@ -32,7 +32,7 @@ export default function CoursePage() {
   const [isEnrolled, setIsEnrolled] = useState(false);
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col mt-20">
       <CourseHeader image={course.image} title={course.title} />
 
       <main className="flex-1">
