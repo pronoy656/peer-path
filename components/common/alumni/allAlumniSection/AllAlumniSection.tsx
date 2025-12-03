@@ -498,7 +498,7 @@ export default function AllAlumniSection() {
         </section>
 
         {/* Job Board Section - Enhanced Design */}
-        <section className="py-16 md:py-20 bg-yellow-50 dark:bg-yellow-950/20 border-y border-yellow-200 dark:border-yellow-900/30">
+        <section className="py-16 md:py-20 bg-yellow-50 rounded-2xl dark:bg-yellow-950/20 border-y border-yellow-200 dark:border-yellow-900/30">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between mb-8">
               <div>
@@ -665,7 +665,7 @@ export default function AllAlumniSection() {
               fill
               className="object-cover"
             />
-            <div className="absolute inset-0 bg-yellow-600/70 dark:bg-yellow-900/70"></div>
+            <div className="absolute inset-0  bg-gray-600/70 dark:bg-gray-900/70"></div>
           </div>
 
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6 relative z-10">
