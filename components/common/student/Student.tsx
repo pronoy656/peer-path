@@ -68,7 +68,8 @@ const BATCHES = ["All Batches", "222", "223", "224", "225"];
 
 export default function Student() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedDepartment, setSelectedDepartment] = useState("All Departments");
+  const [selectedDepartment, setSelectedDepartment] =
+    useState("All Departments");
   const [selectedBatch, setSelectedBatch] = useState("All Batches");
 
   // Filtering Logic
@@ -105,7 +106,8 @@ export default function Student() {
             Find Your <span className="text-white drop-shadow-md">Peers</span>
           </h1>
           <p className="text-xl text-gray-800 max-w-2xl font-medium">
-            Connect with students from your department and batch. Build your network today.
+            Connect with students from your department and batch. Build your
+            network today.
           </p>
         </div>
       </div>
@@ -187,7 +189,10 @@ export default function Student() {
         {/* Results Info */}
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-2xl font-bold text-gray-900">
-            Students <span className="text-gray-400 font-normal text-lg ml-2">({filteredStudents.length})</span>
+            Students{" "}
+            <span className="text-gray-400 font-normal text-lg ml-2">
+              ({filteredStudents.length})
+            </span>
           </h2>
         </div>
 
@@ -207,7 +212,7 @@ export default function Student() {
               No students found
             </h3>
             <p className="text-gray-500 max-w-sm mx-auto">
-              We couldn't find any students matching your search filters. Try adjusting your criteria.
+              {`We couldn't find any students matching your search filters. Try adjusting your criteria.`}
             </p>
             <button
               onClick={() => {
