@@ -3,7 +3,7 @@
 import React from "react";
 // import { Course } from "@/lib/FacultyData";
 import { BookOpen } from "lucide-react";
-import { Course } from "@/lib/facultyData";
+import { Course } from "@/lib/FacultyData";
 
 interface CourseListProps {
   title: string;

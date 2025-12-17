@@ -4,7 +4,7 @@ import React, { useState } from "react";
 // import { FacultyMember } from "@/lib/FacultyData";
 import { Star, Briefcase, GraduationCap, Mail, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { FacultyMember } from "@/lib/facultyData";
+import { FacultyMember } from "@/lib/FacultyData";
 import ContactModal from "./ContactModal";
 // import ContactModal from "./ContactModal";
 
