@@ -4,7 +4,7 @@ import React, { useState, useMemo } from "react";
 // import { facultyData } from "@/lib/FacultyData";
 // import FacultyCard from "./FacultyCard";
 import { Search, Filter, GraduationCap } from "lucide-react";
-import { facultyData } from "@/lib/FacultyData";
+import { facultyData } from "@/lib/facultyData";
 import FacultyCard from "./FacultyCard";
 
 export default function Faculty() {

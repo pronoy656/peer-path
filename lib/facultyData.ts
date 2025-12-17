@@ -30,7 +30,7 @@ export interface FacultyMember {
     reviews: Review[];
 }
 
-export const FacultyData: FacultyMember[] = [
+export const facultyData: FacultyMember[] = [
     {
         id: "1",
         name: "Dr. Sarah Johnson",

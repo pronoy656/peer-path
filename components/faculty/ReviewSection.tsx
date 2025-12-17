@@ -3,7 +3,8 @@
 import React, { useState } from "react";
 // import { Review } from "@/lib/FacultyData";
 import { Star, MessageSquare, ThumbsUp } from "lucide-react";
-import { Review } from "@/lib/FacultyData";
+import { Review } from "@/lib/facultyData";
+
 // import { Review } from "@/lib/facultyData";
 
 interface ReviewSectionProps {

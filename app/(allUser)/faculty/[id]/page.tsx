@@ -8,7 +8,7 @@ import { notFound } from "next/navigation";
 import ContactButton from "@/components/faculty/ContactButton";
 import ReviewSection from "@/components/faculty/ReviewSection";
 import CourseList from "@/components/faculty/CourseList";
-import { facultyData } from "@/lib/FacultyData";
+import { facultyData } from "@/lib/facultyData";
 
 interface PageProps {
   params: Promise<{ id: string }>;
