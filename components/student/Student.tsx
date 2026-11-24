@@ -1,24 +1,26 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { Search, Filter, GraduationCap, Users } from "lucide-react";
+import { Search, Users } from "lucide-react";
 import StudentCard from "./StudentCard";
 import { useAppStore } from "@/lib/store/AppStore";
 import { getStudentsList } from "@/lib/services/people";
+import { EmptyState } from "@/components/ui/empty-state";
 
-const DEPARTMENTS = ["All Departments", "CSE", "BBA", "MSJ", "English", "Bangla"];
+const DEPARTMENTS = ["All", "CSE", "BBA", "MSJ", "English", "Bangla"];
 
 export default function Student() {
   const { state } = useAppStore();
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedDepartment, setSelectedDepartment] =
-    useState("All Departments");
+  const [selectedDepartment, setSelectedDepartment] = useState("All");
   const [selectedBatch, setSelectedBatch] = useState("All Batches");
 
   const students = getStudentsList(state);
 
   const batches = useMemo(() => {
-    const set = new Set(students.map((s) => s.batch).filter(Boolean) as string[]);
+    const set = new Set(
+      students.map((s) => s.batch).filter(Boolean) as string[]
+    );
     return ["All Batches", ...Array.from(set).sort()];
   }, [students]);
 
@@ -33,7 +35,7 @@ export default function Student() {
         (student.interests?.some((i) => i.toLowerCase().includes(q)) ?? false);
 
       const matchesDepartment =
-        selectedDepartment === "All Departments" ||
+        selectedDepartment === "All" ||
         student.department === selectedDepartment;
 
       const matchesBatch =
@@ -44,140 +46,95 @@ export default function Student() {
   }, [students, searchQuery, selectedDepartment, selectedBatch]);
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-32 pt-24">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="rounded-2xl bg-yellow-400 py-20 px-6 sm:px-10 shadow-sm relative overflow-hidden">
-          <div className="absolute top-1/5 right-8 opacity-10 pointer-events-none">
-            <GraduationCap className="w-72 h-72" />
-          </div>
-          <div className="relative z-10 max-w-2xl">
-            <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4 tracking-tight">
-              Find Your <span className="text-white drop-shadow-sm">Peers</span>
-            </h1>
-            <p className="text-lg sm:text-xl text-gray-900/85 font-medium">
-              Connect with {students.length} ULAB students across departments and
-              batches for study groups, projects, and course advice.
-            </p>
-          </div>
+    <div className="min-h-screen bg-background pb-20 pt-16">
+      <section className="bg-card border-b border-border py-10 px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto space-y-2">
+          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            Student directory
+          </p>
+          <h1 className="text-3xl sm:text-4xl font-bold font-display text-foreground">
+            Find your ULAB peers
+          </h1>
+          <p className="text-sm sm:text-base text-muted-foreground max-w-2xl">
+            Connect with {students.length} students across batches for study
+            groups, lab partners, and course advice.
+          </p>
         </div>
-      </div>
+      </section>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
-        <div className="bg-white rounded-2xl shadow-lg p-6 mb-10 border border-gray-100">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-            <div className="md:col-span-6 lg:col-span-5">
-              <label
-                htmlFor="student-search"
-                className="block text-sm font-semibold text-gray-700 mb-2"
-              >
-                Search Students
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Search className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  id="student-search"
-                  type="text"
-                  placeholder="Search by name, ID, email, or interest..."
-                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl leading-5 bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all font-medium"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </div>
+      <section className="bg-card border-b border-border py-6 px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+            <div className="relative md:col-span-3">
+              <Search className="h-4 w-4 text-muted-foreground absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                placeholder="Search by name, student ID, email, or interest..."
+                className="w-full h-10 pl-10 pr-4 border border-border rounded-lg bg-card text-sm text-foreground"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
             </div>
 
-            <div className="md:col-span-6 lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label
-                  htmlFor="student-dept"
-                  className="block text-sm font-semibold text-gray-700 mb-2"
-                >
-                  Department
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Filter className="h-5 w-5 text-gray-400" />
-                  </div>
-                  <select
-                    id="student-dept"
-                    className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-xl leading-5 bg-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all appearance-none font-medium cursor-pointer"
-                    value={selectedDepartment}
-                    onChange={(e) => setSelectedDepartment(e.target.value)}
-                  >
-                    {DEPARTMENTS.map((dept) => (
-                      <option key={dept} value={dept}>
-                        {dept}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label
-                  htmlFor="student-batch"
-                  className="block text-sm font-semibold text-gray-700 mb-2"
-                >
-                  Batch
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Users className="h-5 w-5 text-gray-400" />
-                  </div>
-                  <select
-                    id="student-batch"
-                    className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-xl leading-5 bg-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all appearance-none font-medium cursor-pointer"
-                    value={selectedBatch}
-                    onChange={(e) => setSelectedBatch(e.target.value)}
-                  >
-                    {batches.map((batch) => (
-                      <option key={batch} value={batch}>
-                        {batch === "All Batches" ? batch : `Batch ${batch}`}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            </div>
+            <select
+              aria-label="Filter by batch"
+              className="h-10 px-3 border border-border rounded-lg bg-card text-sm font-medium text-foreground"
+              value={selectedBatch}
+              onChange={(e) => setSelectedBatch(e.target.value)}
+            >
+              {batches.map((batch) => (
+                <option key={batch} value={batch}>
+                  {batch === "All Batches" ? batch : `Batch ${batch}`}
+                </option>
+              ))}
+            </select>
           </div>
-        </div>
 
-        <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-gray-900">
-            Students{" "}
-            <span className="text-gray-400 font-normal text-lg ml-2">
-              ({filteredStudents.length})
-            </span>
-          </h2>
-        </div>
+          <div className="flex flex-wrap gap-2">
+            {DEPARTMENTS.map((dept) => {
+              const selected = selectedDepartment === dept;
+              return (
+                <button
+                  key={dept}
+                  type="button"
+                  onClick={() => setSelectedDepartment(dept)}
+                  className={`h-8 px-3.5 rounded-full text-xs font-semibold border transition-colors ${
+                    selected
+                      ? "bg-primary text-primary-foreground border-primary"
+                      : "bg-card text-foreground border-border hover:bg-muted"
+                  }`}
+                >
+                  {dept === "All" ? "All Depts" : dept}
+                </button>
+              );
+            })}
+          </div>
 
+          <p className="text-xs font-medium text-muted-foreground">
+            Showing {filteredStudents.length} of {students.length} students
+          </p>
+        </div>
+      </section>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
         {filteredStudents.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {filteredStudents.map((student) => (
               <StudentCard key={student.id} student={student} />
             ))}
           </div>
         ) : (
-          <div className="text-center py-20 bg-white rounded-2xl border border-dashed">
-            <h3 className="text-xl font-bold text-gray-900 mb-2">
-              No students match your filter
-            </h3>
-            <p className="text-gray-500 mb-4">
-              Try clearing your search or selecting All Departments.
-            </p>
-            <button
-              type="button"
-              onClick={() => {
-                setSearchQuery("");
-                setSelectedDepartment("All Departments");
-                setSelectedBatch("All Batches");
-              }}
-              className="px-4 py-2 bg-yellow-400 text-black font-semibold rounded-lg"
-            >
-              Reset Filters
-            </button>
-          </div>
+          <EmptyState
+            icon={<Users className="w-6 h-6" />}
+            title="No students matched"
+            description="Try adjusting your search or selecting All Departments."
+            actionLabel="Reset filters"
+            onAction={() => {
+              setSearchQuery("");
+              setSelectedDepartment("All");
+              setSelectedBatch("All Batches");
+            }}
+          />
         )}
       </div>
     </div>

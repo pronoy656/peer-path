@@ -14,21 +14,24 @@ export default function DepartmentTabs({
   const departments: Department[] = ["CSE", "BBA", "MSJ", "English", "Bangla"];
 
   return (
-    <div className="flex flex-wrap gap-3">
-      {departments.map((dept) => (
-        <button
-          key={dept}
-          type="button"
-          onClick={() => onSelectDepartment(dept)}
-          className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 ${
-            selectedDepartment === dept
-              ? "bg-primary text-primary-foreground shadow-lg scale-105"
-              : "bg-card text-foreground border-2 border-border hover:border-primary"
-          }`}
-        >
-          {dept}
-        </button>
-      ))}
+    <div className="flex flex-wrap gap-2">
+      {departments.map((dept) => {
+        const selected = selectedDepartment === dept;
+        return (
+          <button
+            key={dept}
+            type="button"
+            onClick={() => onSelectDepartment(dept)}
+            className={`h-9 px-4 rounded-full text-sm font-semibold border transition-colors duration-150 ${
+              selected
+                ? "bg-primary text-primary-foreground border-primary"
+                : "bg-card text-foreground border-border hover:bg-muted"
+            }`}
+          >
+            {dept}
+          </button>
+        );
+      })}
     </div>
   );
 }

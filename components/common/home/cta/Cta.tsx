@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Send, CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Send } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { useAppStore } from "@/lib/store/AppStore";
 
 export default function Cta() {
@@ -38,69 +39,65 @@ export default function Cta() {
     setEmail("");
     setMessage("");
     setSubmitted(true);
-    showToast("Message sent to PeerPath ULAB Support!");
+    showToast("Message sent to PeerPath support!");
   };
 
   return (
-    <div
-      className="relative bg-cover bg-center flex items-center justify-center rounded-3xl overflow-hidden"
-      style={{
-        backgroundImage: "url(/ulab-D1-building.png)",
-      }}
-    >
-      <div className="absolute inset-0 bg-black/60 rounded-3xl" />
-
-      <div className="relative z-10 w-full max-w-3xl px-6 py-12">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl sm:text-5xl font-bold text-white mb-3">
-            Contact ULAB PeerPath Support
+    <section className="py-16 lg:py-20 px-4 sm:px-6 bg-background">
+      <div className="max-w-3xl mx-auto rounded-2xl border border-border bg-card p-6 sm:p-10 shadow-[var(--shadow-card)] space-y-6">
+        <div className="space-y-2">
+          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            Support
+          </p>
+          <h2 className="text-2xl sm:text-3xl font-bold font-display text-foreground">
+            Questions for the PeerPath team?
           </h2>
-          <p className="text-base sm:text-lg text-white/90">
-            Have a question about course registration, advising, or mentorship?
-            Reach our campus team directly.
+          <p className="text-sm sm:text-base text-muted-foreground">
+            Reach out about course listings, department transfers, or mentor
+            onboarding.
           </p>
         </div>
 
         {submitted && (
-          <div className="mb-6 rounded-xl bg-emerald-500/20 border border-emerald-400/50 text-white px-4 py-3 flex items-center gap-2 text-sm">
-            <CheckCircle2 className="w-5 h-5 text-emerald-300 shrink-0" />
+          <div className="rounded-xl bg-green-50 border border-green-200 text-green-800 px-4 py-3 flex items-center gap-2 text-sm">
+            <CheckCircle2 className="w-4 h-4 shrink-0" />
             <span>
-              Thank you! Your message has been saved and will appear in the
-              Admin Support inbox.
+              Thank you! Your message has been delivered to the Admin Support
+              inbox.
             </span>
           </div>
         )}
 
         {error && (
-          <div className="mb-4 rounded-xl bg-red-500/20 border border-red-400/50 text-white px-4 py-2.5 text-sm">
+          <div className="rounded-xl bg-red-50 border border-red-200 text-danger px-4 py-2.5 text-sm">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label
                 htmlFor="cta-name"
-                className="block text-sm font-semibold text-white mb-2"
+                className="block text-sm font-medium text-foreground mb-1.5"
               >
-                Your Name
+                Your name
               </label>
               <input
                 id="cta-name"
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="e.g. Arif Rahman"
-                className="w-full px-4 py-3 bg-white text-slate-900 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 transition"
+                placeholder="Arif Rahman"
+                className="w-full h-10 px-3.5 rounded-lg border border-border bg-card text-sm text-foreground"
               />
             </div>
             <div>
               <label
                 htmlFor="cta-email"
-                className="block text-sm font-semibold text-white mb-2"
+                className="block text-sm font-medium text-foreground mb-1.5"
               >
-                ULAB Email
+                ULAB email
               </label>
               <input
                 id="cta-email"
@@ -108,7 +105,7 @@ export default function Cta() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="name@ulab.edu.bd"
-                className="w-full px-4 py-3 bg-white text-slate-900 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 transition"
+                className="w-full h-10 px-3.5 rounded-lg border border-border bg-card text-sm text-foreground"
               />
             </div>
           </div>
@@ -116,7 +113,7 @@ export default function Cta() {
           <div>
             <label
               htmlFor="cta-message"
-              className="block text-sm font-semibold text-white mb-2"
+              className="block text-sm font-medium text-foreground mb-1.5"
             >
               Message
             </label>
@@ -124,23 +121,18 @@ export default function Cta() {
               id="cta-message"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              placeholder="Ask about courses, department transfers, or mentor matching..."
+              placeholder="Ask about courses, advising, or mentor matching..."
               rows={4}
-              className="w-full px-4 py-3 bg-white text-slate-900 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 transition resize-none"
+              className="w-full p-3.5 rounded-lg border border-border bg-card text-sm text-foreground resize-none"
             />
           </div>
 
-          <div className="flex justify-center pt-2">
-            <button
-              type="submit"
-              className="px-8 py-3.5 bg-yellow-400 hover:bg-yellow-500 text-black font-bold rounded-xl transition flex items-center gap-2 shadow-lg"
-            >
-              Send Message
-              <Send className="w-4 h-4" />
-            </button>
-          </div>
+          <Button type="submit" variant="default" size="md">
+            <Send className="w-4 h-4" />
+            Send message
+          </Button>
         </form>
       </div>
-    </div>
+    </section>
   );
 }

@@ -3,10 +3,8 @@
 import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
 import {
   ArrowLeft,
-  Briefcase,
   MessageCircle,
   Send,
   Star,
@@ -21,12 +19,15 @@ import {
 } from "@/lib/services/people";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Avatar } from "@/components/ui/avatar";
 
 export default function AlumniProfilePage() {
   const { id } = useParams();
   const router = useRouter();
   const { state, dispatch, currentUser, showToast } = useAppStore();
 
+  const [activeTab, setActiveTab] = useState<"about" | "jobs">("about");
   const [mentorNote, setMentorNote] = useState("");
   const [showMentorForm, setShowMentorForm] = useState(false);
   const [msgText, setMsgText] = useState("");
@@ -36,16 +37,15 @@ export default function AlumniProfilePage() {
 
   if (!alumni) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center pt-24 px-4 text-center">
-        <h1 className="text-3xl font-bold mb-2">Alumni Mentor Not Found</h1>
-        <p className="text-muted-foreground mb-6">
+      <div className="min-h-screen flex flex-col items-center justify-center pt-24 px-4 text-center bg-background">
+        <h1 className="text-3xl font-bold font-display mb-2">
+          Alumni mentor not found
+        </h1>
+        <p className="text-sm text-muted-foreground mb-6">
           This alumni profile does not exist.
         </p>
-        <Link
-          href="/alumni"
-          className="px-5 py-2.5 rounded-xl bg-yellow-400 text-black font-semibold"
-        >
-          Back to Alumni Directory
+        <Link href="/alumni">
+          <Button variant="default">Back to alumni directory</Button>
         </Link>
       </div>
     );
@@ -93,159 +93,211 @@ export default function AlumniProfilePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50/50 pb-20 pt-20">
-      <div className="bg-white border-b">
-        <div className="max-w-5xl mx-auto px-4 py-4">
+    <div className="min-h-screen bg-background pb-20 pt-16">
+      <div className="bg-card border-b border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <Link
             href="/alumni"
             className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground"
           >
             <ArrowLeft className="w-4 h-4" />
-            Back to Alumni Directory
+            Back to alumni directory
           </Link>
+
+          <div className="flex items-center gap-5">
+            <Avatar
+              src={alumni.avatar}
+              name={alumni.name}
+              size="xl"
+              department={alumni.department}
+              avatarColor={alumni.avatarColor}
+            />
+            <div className="space-y-1.5">
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge department={alumni.department}>
+                  {alumni.department}
+                </Badge>
+                <Badge
+                  variant={
+                    alumni.availability === "Available" ? "enrolled" : "pending"
+                  }
+                >
+                  {alumni.availability}
+                </Badge>
+                <span className="text-xs text-muted-foreground">
+                  Batch {alumni.batch}
+                </span>
+              </div>
+              <h1 className="text-2xl sm:text-3xl font-bold font-display text-foreground">
+                {alumni.name}
+              </h1>
+              <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+                <span>
+                  {alumni.currentRole} · {alumni.company}
+                </span>
+                <span>·</span>
+                <span className="inline-flex items-center gap-1 font-semibold text-foreground">
+                  <Star className="w-4 h-4 fill-accent text-accent" />
+                  {alumni.rating.toFixed(1)}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex gap-2 border-t border-border pt-4">
+            {(
+              [
+                { id: "about", label: "About & journey" },
+                { id: "jobs", label: `Posted jobs (${postedJobs.length})` },
+              ] as const
+            ).map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setActiveTab(tab.id)}
+                className={`h-9 px-4 rounded-lg text-sm font-semibold transition-colors ${
+                  activeTab === tab.id
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <Card className="p-6 h-fit">
-          <div className="flex flex-col items-center text-center mb-6">
-            <Image
-              src={alumni.avatar || "/avater-1.jpg"}
-              alt={alumni.name}
-              width={112}
-              height={112}
-              className="w-28 h-28 rounded-full object-cover border-4 border-yellow-200 mb-4"
-            />
-            <h1 className="text-2xl font-bold">{alumni.name}</h1>
-            <p className="text-sm font-semibold text-amber-700 mt-1">
-              {alumni.currentRole}
-            </p>
-            <p className="text-sm text-muted-foreground">{alumni.company}</p>
-            <div className="flex items-center gap-2 mt-3">
-              <span className="px-3 py-1 rounded-full bg-yellow-100 text-amber-900 text-xs font-semibold">
-                {alumni.department} • Batch {alumni.batch}
-              </span>
-              <span className="flex items-center gap-1 text-sm font-bold">
-                <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                {alumni.rating.toFixed(1)}
-              </span>
-            </div>
-          </div>
-
-          <div className="space-y-3">
-            <Button
-              onClick={() => setShowMentorForm(!showMentorForm)}
-              className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold gap-2"
-            >
-              <UserCheck className="w-4 h-4" />
-              Request Mentorship
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => setShowMsgForm(!showMsgForm)}
-              className="w-full gap-2"
-            >
-              <MessageCircle className="w-4 h-4" />
-              Send Message
-            </Button>
-          </div>
-
-          {showMentorForm && (
-            <form onSubmit={handleRequestMentorship} className="mt-4 space-y-3">
-              <textarea
-                required
-                rows={3}
-                value={mentorNote}
-                onChange={(e) => setMentorNote(e.target.value)}
-                placeholder="Tell the mentor what guidance you are looking for..."
-                className="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-yellow-400 outline-none resize-none"
-              />
-              <Button type="submit" className="w-full gap-2">
-                Submit Request <Send className="w-4 h-4" />
-              </Button>
-            </form>
-          )}
-
-          {showMsgForm && (
-            <form onSubmit={handleSendMessage} className="mt-4 space-y-3">
-              <textarea
-                required
-                rows={3}
-                value={msgText}
-                onChange={(e) => setMsgText(e.target.value)}
-                placeholder={`Write a message to ${alumni.name}...`}
-                className="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-yellow-400 outline-none resize-none"
-              />
-              <Button type="submit" variant="secondary" className="w-full">
-                Send Direct Message
-              </Button>
-            </form>
-          )}
-        </Card>
-
-        <div className="lg:col-span-2 space-y-6">
-          <Card className="p-6 space-y-4">
-            <h2 className="text-xl font-bold">About &amp; Career Journey</h2>
-            <p className="text-foreground/80 leading-relaxed">{alumni.bio}</p>
-            <div className="border-l-4 border-yellow-400 pl-4 py-1 bg-yellow-50/50 rounded-r-lg">
-              <p className="text-sm font-semibold text-foreground mb-1">
-                ULAB to Industry Journey
-              </p>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                {alumni.journey}
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-sm font-semibold mb-2">Expertise Areas</h3>
-              <div className="flex flex-wrap gap-2">
-                {alumni.expertise.map((exp) => (
-                  <span
-                    key={exp}
-                    className="px-3 py-1 rounded-full bg-yellow-100 text-amber-900 text-xs font-semibold"
-                  >
-                    {exp}
-                  </span>
-                ))}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="lg:col-span-8">
+          {activeTab === "about" && (
+            <Card className="p-6 sm:p-8 space-y-6">
+              <div>
+                <h2 className="text-xl font-bold font-display mb-2">
+                  Biography
+                </h2>
+                <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+                  {alumni.bio}
+                </p>
               </div>
-            </div>
-          </Card>
+              <div className="border-l-4 border-accent pl-4 py-2 bg-background rounded-r-lg">
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+                  ULAB to industry journey
+                </p>
+                <p className="text-sm text-foreground/85 leading-relaxed">
+                  {alumni.journey}
+                </p>
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold mb-2">Expertise areas</h3>
+                <div className="flex flex-wrap gap-2">
+                  {alumni.expertise.map((exp) => (
+                    <Badge key={exp} variant="neutral">
+                      {exp}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            </Card>
+          )}
 
-          <Card className="p-6">
-            <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-              <Briefcase className="w-5 h-5 text-primary" />
-              Jobs Posted by {alumni.name} ({postedJobs.length})
-            </h2>
-            {postedJobs.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
-                No active job postings from this mentor right now.
-              </p>
-            ) : (
-              <div className="space-y-3">
-                {postedJobs.map((job) => (
-                  <Link
-                    key={job.id}
-                    href={`/jobs/${job.id}`}
-                    className="block p-4 rounded-xl border hover:border-primary hover:bg-primary/5 transition"
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <div>
-                        <p className="font-semibold">{job.title}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {job.company} • {job.location} • {job.type}
-                        </p>
+          {activeTab === "jobs" && (
+            <Card className="p-6 space-y-4">
+              <h2 className="text-xl font-bold font-display">
+                Jobs posted by {alumni.name}
+              </h2>
+              {postedJobs.length === 0 ? (
+                <p className="text-sm text-muted-foreground">
+                  No active job postings from this mentor right now.
+                </p>
+              ) : (
+                <div className="space-y-3">
+                  {postedJobs.map((job) => (
+                    <Link
+                      key={job.id}
+                      href={`/jobs/${job.id}`}
+                      className="block p-4 rounded-xl border border-border hover:border-primary/40 hover:bg-muted/40 transition"
+                    >
+                      <div className="flex items-center justify-between gap-2">
+                        <div>
+                          <p className="font-semibold text-sm">{job.title}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {job.company} · {job.location} · {job.type}
+                          </p>
+                        </div>
+                        <span className="text-xs font-semibold text-primary">
+                          BDT {job.salaryMin.toLocaleString()}–
+                          {job.salaryMax.toLocaleString()}/mo
+                        </span>
                       </div>
-                      <span className="text-sm font-bold text-primary">
-                        BDT {job.salaryMin.toLocaleString()} –{" "}
-                        {job.salaryMax.toLocaleString()}
-                      </span>
-                    </div>
-                  </Link>
-                ))}
-              </div>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </Card>
+          )}
+        </div>
+
+        <aside className="lg:col-span-4">
+          <Card className="p-6 space-y-4">
+            <h2 className="font-display font-bold text-lg">
+              Connect with mentor
+            </h2>
+            <div className="space-y-2.5">
+              <Button
+                type="button"
+                variant="accent"
+                className="w-full"
+                onClick={() => setShowMentorForm(!showMentorForm)}
+              >
+                <UserCheck className="w-4 h-4" />
+                Request mentorship
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full"
+                onClick={() => setShowMsgForm(!showMsgForm)}
+              >
+                <MessageCircle className="w-4 h-4" />
+                Send message
+              </Button>
+            </div>
+
+            {showMentorForm && (
+              <form onSubmit={handleRequestMentorship} className="space-y-3 pt-2">
+                <textarea
+                  required
+                  rows={3}
+                  value={mentorNote}
+                  onChange={(e) => setMentorNote(e.target.value)}
+                  placeholder="Tell the mentor what guidance you are looking for..."
+                  className="w-full p-3 border border-border rounded-lg text-sm resize-none"
+                />
+                <Button type="submit" size="sm" className="w-full">
+                  <Send className="w-4 h-4" />
+                  Submit request
+                </Button>
+              </form>
+            )}
+
+            {showMsgForm && (
+              <form onSubmit={handleSendMessage} className="space-y-3 pt-2">
+                <textarea
+                  required
+                  rows={3}
+                  value={msgText}
+                  onChange={(e) => setMsgText(e.target.value)}
+                  placeholder={`Write a message to ${alumni.name}...`}
+                  className="w-full p-3 border border-border rounded-lg text-sm resize-none"
+                />
+                <Button type="submit" variant="default" size="sm" className="w-full">
+                  Send message
+                </Button>
+              </form>
             )}
           </Card>
-        </div>
+        </aside>
       </div>
     </div>
   );

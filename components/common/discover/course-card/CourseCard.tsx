@@ -1,10 +1,12 @@
 "use client";
 
-import CourseCardDesign from "../course-card-design/CourseCardDesign";
+import { BookOpen, Check, Plus } from "lucide-react";
 import { useAppStore } from "@/lib/store/AppStore";
 import { getInstructorForCourse, searchCourses } from "@/lib/services/courses";
 import type { Course, Department } from "@/lib/types";
-import { BookOpen } from "lucide-react";
+import UnifiedCourseCard from "@/components/common/home/courses/CourseCard";
+import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
 
 interface CourseGridProps {
   department: Department;
@@ -30,38 +32,46 @@ export default function CourseCard({
 
   if (courses.length === 0) {
     return (
-      <div className="text-center py-12 px-4 rounded-2xl border border-dashed border-border bg-card/50">
-        <BookOpen className="w-10 h-10 mx-auto text-muted-foreground mb-3" />
-        <p className="text-lg font-semibold text-foreground">
-          No {department} courses listed for Semester {semester} yet.
-        </p>
-        <p className="text-sm text-muted-foreground mt-1 mb-4">
-          Try Semesters 1–4 for {department} or browse the full catalog.
-        </p>
-        {onResetSemester && (
-          <button
-            type="button"
-            onClick={onResetSemester}
-            className="px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-colors"
-          >
-            Jump to Semester 1
-          </button>
-        )}
-      </div>
+      <EmptyState
+        icon={<BookOpen className="w-6 h-6" />}
+        title={`No ${department} courses in Semester ${semester}`}
+        description="Courses for this department are currently seeded in Semesters 1–4."
+        actionLabel={onResetSemester ? "Jump to Semester 1" : undefined}
+        onAction={onResetSemester}
+      />
     );
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
       {courses.map((course) => {
         const instructor = getInstructorForCourse(state, course);
+        const isSelected = selectedCourses.includes(course.id);
         return (
-          <CourseCardDesign
+          <UnifiedCourseCard
             key={course.id}
             course={course}
-            instructorName={instructor?.name ?? "ULAB Faculty"}
-            onAddCourse={onAddCourse}
-            isSelected={selectedCourses.includes(course.id)}
+            instructorName={instructor?.name}
+            actionSlot={
+              <Button
+                type="button"
+                size="sm"
+                variant={isSelected ? "secondary" : "default"}
+                onClick={() => onAddCourse?.(course)}
+              >
+                {isSelected ? (
+                  <>
+                    <Check className="w-3.5 h-3.5 text-success" />
+                    Added
+                  </>
+                ) : (
+                  <>
+                    <Plus className="w-3.5 h-3.5" />
+                    Add
+                  </>
+                )}
+              </Button>
+            }
           />
         );
       })}

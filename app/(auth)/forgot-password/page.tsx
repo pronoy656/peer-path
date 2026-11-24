@@ -5,6 +5,8 @@ import Link from "next/link";
 import { ArrowLeft, CheckCircle2, Mail } from "lucide-react";
 import { forgotPassword } from "@/lib/services/auth";
 import { useAppStore } from "@/lib/store/AppStore";
+import AuthSplitLayout from "@/components/common/signIn/auth-split-layout";
+import { Button } from "@/components/ui/button";
 
 export default function ForgotPasswordPage() {
   const { showToast } = useAppStore();
@@ -25,19 +27,19 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-muted/30 p-4">
-      <div className="w-full max-w-md bg-card border border-border rounded-3xl p-8 shadow-sm space-y-6">
+    <AuthSplitLayout>
+      <div className="space-y-6">
         <Link
           href="/signIn"
           className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground"
         >
           <ArrowLeft className="w-4 h-4" />
-          Back to Sign In
+          Back to sign in
         </Link>
 
         <div>
-          <h1 className="text-2xl font-bold text-foreground">
-            Reset Password
+          <h1 className="text-2xl sm:text-3xl font-bold font-display text-foreground">
+            Reset password
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
             Enter your PeerPath or @ulab.edu.bd email address to receive reset
@@ -46,20 +48,19 @@ export default function ForgotPasswordPage() {
         </div>
 
         {sent ? (
-          <div className="rounded-2xl bg-emerald-50 border border-emerald-200 p-5 space-y-3">
-            <div className="flex items-center gap-2 text-emerald-800 font-semibold">
+          <div className="rounded-2xl bg-green-50 border border-green-200 p-5 space-y-3">
+            <div className="flex items-center gap-2 text-green-800 font-semibold text-sm">
               <CheckCircle2 className="w-5 h-5" />
-              Reset Link Sent
+              Reset link sent
             </div>
-            <p className="text-sm text-emerald-900/80">{statusMessage}</p>
+            <p className="text-sm text-green-900/80">{statusMessage}</p>
             <p className="text-xs text-muted-foreground">
-              Demo accounts always use <code>demo1234</code>.
+              Demo accounts use <code>demo1234</code>.
             </p>
-            <Link
-              href="/signIn"
-              className="inline-block w-full text-center py-2.5 rounded-xl bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-bold text-sm"
-            >
-              Return to Sign In
+            <Link href="/signIn" className="block pt-1">
+              <Button variant="default" size="md" className="w-full">
+                Return to sign in
+              </Button>
             </Link>
           </div>
         ) : (
@@ -69,7 +70,7 @@ export default function ForgotPasswordPage() {
                 htmlFor="reset-email"
                 className="block text-sm font-medium mb-1.5"
               >
-                Email Address
+                Email address
               </label>
               <div className="relative">
                 <Mail className="w-4 h-4 text-muted-foreground absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -80,19 +81,16 @@ export default function ForgotPasswordPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="student@peerpath.demo"
-                  className="w-full pl-10 pr-4 py-2.5 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary bg-background"
+                  className="w-full h-10 pl-10 pr-4 border border-border rounded-lg bg-card text-sm"
                 />
               </div>
             </div>
-            <button
-              type="submit"
-              className="w-full py-3 rounded-xl bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-bold transition-colors"
-            >
-              Send Reset Link
-            </button>
+            <Button type="submit" variant="default" size="md" className="w-full">
+              Send reset link
+            </Button>
           </form>
         )}
       </div>
-    </div>
+    </AuthSplitLayout>
   );
 }

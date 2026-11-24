@@ -2,22 +2,23 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
-  Star,
-  MessageCircle,
-  MapPin,
   Briefcase,
-  Search,
-  ArrowRight,
-  X,
   Calendar,
   CheckCircle2,
+  MapPin,
+  MessageCircle,
+  Search,
   Send,
+  Star,
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Avatar } from "@/components/ui/avatar";
+import { EmptyState } from "@/components/ui/empty-state";
 import { useAppStore } from "@/lib/store/AppStore";
 import {
   getAlumniList,
@@ -27,14 +28,15 @@ import {
 } from "@/lib/services/people";
 import type { AlumniProfile } from "@/lib/types";
 
+const DEPARTMENTS = ["All", "CSE", "BBA", "MSJ", "English", "Bangla"];
+
 export default function AllAlumniSection() {
   const { state, dispatch, currentUser, showToast } = useAppStore();
   const router = useRouter();
 
   const [selectedDepartment, setSelectedDepartment] = useState("All");
-  const [selectedExpertise, setSelectedExpertise] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
-  const [mentorFilter, setMentorFilter] = useState<"all" | "available">("all");
+  const [onlyAvailable, setOnlyAvailable] = useState(false);
   const [mentorshipTarget, setMentorshipTarget] =
     useState<AlumniProfile | null>(null);
   const [mentorshipMsg, setMentorshipMsg] = useState("");
@@ -43,41 +45,19 @@ export default function AllAlumniSection() {
   const jobs = getJobs(state).filter((j) => j.status === "open");
   const events = getEvents(state);
 
-  const departments = ["All", "CSE", "BBA", "MSJ", "English", "Bangla"];
-
-  const expertiseAreas = [
-    "All",
-    ...Array.from(
-      new Set(
-        mentors
-          .filter(
-            (m) =>
-              selectedDepartment === "All" ||
-              m.department === selectedDepartment
-          )
-          .flatMap((m) => m.expertise)
-      )
-    ),
-  ];
-
   const filtered = mentors.filter((mentor) => {
     const q = searchTerm.toLowerCase();
     const matchesSearch =
+      !q ||
       mentor.name.toLowerCase().includes(q) ||
       mentor.currentRole.toLowerCase().includes(q) ||
-      mentor.company.toLowerCase().includes(q);
+      mentor.company.toLowerCase().includes(q) ||
+      mentor.expertise.some((e) => e.toLowerCase().includes(q));
     const matchesDepartment =
       selectedDepartment === "All" || mentor.department === selectedDepartment;
-    const matchesExpertise =
-      selectedExpertise === "All" ||
-      mentor.expertise.includes(selectedExpertise);
-    const matchesFilter =
-      mentorFilter === "all" ||
-      (mentorFilter === "available" && mentor.availability === "Available");
-
-    return (
-      matchesSearch && matchesDepartment && matchesExpertise && matchesFilter
-    );
+    const matchesAvail =
+      !onlyAvailable || mentor.availability === "Available";
+    return matchesSearch && matchesDepartment && matchesAvail;
   });
 
   const handleRequestMentorship = (e: React.FormEvent) => {
@@ -119,406 +99,284 @@ export default function AllAlumniSection() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <main className="flex-1 pt-20">
-        {/* Hero Section */}
-        <section className="relative py-16 md:py-24 overflow-hidden bg-yellow-50">
-          <div className="absolute inset-0 z-0">
-            <Image
-              src="/alumni-together.jpg"
-              alt="ULAB Alumni Network"
-              fill
-              className="h-full w-full object-cover object-center"
-              priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-slate-900/80 to-slate-900/55" />
-          </div>
+    <div className="min-h-screen bg-background pt-16 pb-20">
+      <section className="bg-card border-b border-border py-10 px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto space-y-2">
+          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            Alumni directory
+          </p>
+          <h1 className="text-3xl sm:text-4xl font-bold font-display text-foreground">
+            ULAB alumni mentors &amp; opportunities
+          </h1>
+          <p className="text-sm sm:text-base text-muted-foreground max-w-2xl">
+            {mentors.length} ULAB graduates sharing mentorship, {jobs.length}{" "}
+            open Dhaka roles, and {events.length} upcoming campus events.
+          </p>
+        </div>
+      </section>
 
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 max-w-7xl">
-            <div className="max-w-2xl">
-              <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-                ULAB Alumni Network
-              </h1>
-              <p className="text-lg sm:text-xl text-white/90 mb-8">
-                Connect with verified ULAB graduates across Dhaka&apos;s tech,
-                business, and media sectors for mentorship, jobs, and campus
-                sessions.
-              </p>
-
-              <div className="grid grid-cols-3 gap-4 sm:gap-6">
-                <div className="bg-white/15 backdrop-blur-sm rounded-xl p-4 border border-white/25">
-                  <p className="text-2xl font-bold text-white">
-                    {mentors.length}
-                  </p>
-                  <p className="text-xs sm:text-sm text-white/85">
-                    Alumni Mentors
-                  </p>
-                </div>
-                <div className="bg-white/15 backdrop-blur-sm rounded-xl p-4 border border-white/25">
-                  <p className="text-2xl font-bold text-white">{jobs.length}</p>
-                  <p className="text-xs sm:text-sm text-white/85">
-                    Open Job Roles
-                  </p>
-                </div>
-                <div className="bg-white/15 backdrop-blur-sm rounded-xl p-4 border border-white/25">
-                  <p className="text-2xl font-bold text-white">
-                    {events.length}
-                  </p>
-                  <p className="text-xs sm:text-sm text-white/85">
-                    Upcoming Events
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Mentors Section */}
-        <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-8">
-            <h2 className="text-3xl font-bold">Find Your Mentor</h2>
-            <p className="text-muted-foreground mt-1">
-              Filter ULAB alumni by department, expertise, or availability
-            </p>
-          </div>
-
-          <div className="space-y-4 mb-8 bg-card p-6 rounded-xl border border-yellow-200">
-            <div className="relative">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+      <section className="bg-card border-b border-border py-6 px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto space-y-4">
+          <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
+            <div className="relative flex-1 max-w-xl">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <input
                 type="text"
-                placeholder="Search mentors by name, role, or company..."
+                placeholder="Search mentors by name, company, or expertise..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-11 pr-4 py-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-background"
+                className="w-full h-10 pl-10 pr-4 border border-border rounded-lg bg-card text-sm text-foreground"
               />
             </div>
 
-            <div className="space-y-2">
-              <p className="text-sm font-semibold">Department</p>
-              <div className="flex flex-wrap gap-2">
-                {departments.map((dept) => (
-                  <button
-                    key={dept}
-                    type="button"
-                    onClick={() => {
-                      setSelectedDepartment(dept);
-                      setSelectedExpertise("All");
-                    }}
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                      selectedDepartment === dept
-                        ? "bg-yellow-400 text-black shadow-sm"
-                        : "bg-yellow-100/70 text-foreground hover:bg-yellow-200"
-                    }`}
-                  >
-                    {dept}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <p className="text-sm font-semibold">Expertise Areas</p>
-              <div className="flex flex-wrap gap-2">
-                {expertiseAreas.map((area) => (
-                  <button
-                    key={area}
-                    type="button"
-                    onClick={() => setSelectedExpertise(area)}
-                    className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all ${
-                      selectedExpertise === area
-                        ? "bg-slate-900 text-white"
-                        : "bg-secondary text-foreground hover:bg-secondary/80"
-                    }`}
-                  >
-                    {area}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="flex gap-3 pt-1">
-              <button
-                type="button"
-                onClick={() => setMentorFilter("all")}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                  mentorFilter === "all"
-                    ? "bg-yellow-400 text-black font-semibold"
-                    : "bg-muted text-foreground hover:bg-muted/80"
-                }`}
-              >
-                All Mentors ({mentors.length})
-              </button>
-              <button
-                type="button"
-                onClick={() => setMentorFilter("available")}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                  mentorFilter === "available"
-                    ? "bg-yellow-400 text-black font-semibold"
-                    : "bg-muted text-foreground hover:bg-muted/80"
-                }`}
-              >
-                Available Now
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={() => setOnlyAvailable(!onlyAvailable)}
+              className={`h-9 px-4 rounded-full text-xs font-semibold border transition-colors ${
+                onlyAvailable
+                  ? "bg-primary text-primary-foreground border-primary"
+                  : "bg-card text-foreground border-border hover:bg-muted"
+              }`}
+            >
+              Available mentors only
+            </button>
           </div>
 
-          {filtered.length === 0 ? (
-            <Card className="p-12 text-center border-dashed">
-              <p className="font-semibold text-lg">No mentors matched</p>
-              <p className="text-sm text-muted-foreground mt-1 mb-4">
-                Try clearing your search or choosing All departments.
-              </p>
-              <Button
-                onClick={() => {
-                  setSearchTerm("");
-                  setSelectedDepartment("All");
-                  setSelectedExpertise("All");
-                  setMentorFilter("all");
-                }}
+          <div className="flex flex-wrap gap-2">
+            {DEPARTMENTS.map((dept) => {
+              const selected = selectedDepartment === dept;
+              return (
+                <button
+                  key={dept}
+                  type="button"
+                  onClick={() => setSelectedDepartment(dept)}
+                  className={`h-8 px-3.5 rounded-full text-xs font-semibold border transition-colors ${
+                    selected
+                      ? "bg-primary text-primary-foreground border-primary"
+                      : "bg-card text-foreground border-border hover:bg-muted"
+                  }`}
+                >
+                  {dept === "All" ? "All Depts" : dept}
+                </button>
+              );
+            })}
+          </div>
+
+          <p className="text-xs font-medium text-muted-foreground">
+            Showing {filtered.length} of {mentors.length} mentors
+          </p>
+        </div>
+      </section>
+
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+        {filtered.length === 0 ? (
+          <EmptyState
+            icon={<Search className="w-6 h-6" />}
+            title="No mentors matched"
+            description="Try clearing your search or selecting All Departments."
+            actionLabel="Reset filters"
+            onAction={() => {
+              setSearchTerm("");
+              setSelectedDepartment("All");
+              setOnlyAvailable(false);
+            }}
+          />
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {filtered.map((mentor) => (
+              <div
+                key={mentor.id}
+                className="bg-card border border-border rounded-2xl p-6 shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between gap-4 h-full"
               >
-                Reset Filters
-              </Button>
-            </Card>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filtered.map((mentor) => (
-                <Card
-                  key={mentor.id}
-                  className="p-6 hover:shadow-lg transition-all flex flex-col border-yellow-200/80"
-                >
-                  <div className="space-y-4 flex-1">
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="flex gap-3 flex-1 min-w-0">
-                        <Image
-                          src={mentor.avatar || "/avater-1.jpg"}
-                          alt={mentor.name}
-                          width={48}
-                          height={48}
-                          className="rounded-full object-cover w-12 h-12 shrink-0"
-                        />
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-semibold text-lg truncate">
-                            {mentor.name}
-                          </h3>
-                          <p className="text-sm text-muted-foreground truncate">
-                            {mentor.currentRole} • {mentor.company}
-                          </p>
-                        </div>
-                      </div>
-                      <span
-                        className={`px-2.5 py-0.5 text-xs rounded-full font-medium whitespace-nowrap ${
-                          mentor.availability === "Available"
-                            ? "bg-emerald-100 text-emerald-700"
-                            : "bg-amber-100 text-amber-800"
-                        }`}
-                      >
-                        {mentor.availability}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center gap-2 text-xs">
-                      <span className="px-2.5 py-1 bg-yellow-100 text-amber-900 rounded-full font-semibold">
-                        {mentor.department} • Batch {mentor.batch}
-                      </span>
-                      <span className="flex items-center gap-1 font-medium text-foreground">
-                        <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
-                        {mentor.rating.toFixed(1)}
-                      </span>
-                    </div>
-
-                    <p className="text-sm text-foreground/75 line-clamp-2">
-                      {mentor.bio}
-                    </p>
-
-                    <div className="flex flex-wrap gap-1.5">
-                      {mentor.expertise.slice(0, 3).map((exp) => (
-                        <span
-                          key={exp}
-                          className="px-2.5 py-1 bg-muted text-foreground text-xs rounded-full font-medium"
-                        >
-                          {exp}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="flex gap-2 pt-4 border-t border-border mt-4">
-                    <Link href={`/alumni/${mentor.id}`} className="flex-1">
-                      <Button variant="outline" className="w-full">
-                        View Profile
-                      </Button>
-                    </Link>
-                    <Button
-                      className="flex-1 gap-2 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold"
-                      onClick={() => setMentorshipTarget(mentor)}
-                    >
-                      <MessageCircle className="h-4 w-4" />
-                      Mentorship
-                    </Button>
-                  </div>
-                </Card>
-              ))}
-            </div>
-          )}
-        </section>
-
-        {/* Job Board Section */}
-        <section className="py-16 bg-yellow-50/70 border-y border-yellow-200">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
-              <div>
-                <h2 className="text-3xl font-bold">Alumni Job Board</h2>
-                <p className="text-muted-foreground mt-1">
-                  Dhaka &amp; remote roles posted by ULAB graduates (salaries in
-                  BDT/month)
-                </p>
-              </div>
-              <Link href="/jobs">
-                <Button className="gap-2 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold">
-                  View All Jobs
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
-              </Link>
-            </div>
-
-            <div className="grid gap-4">
-              {jobs.map((job) => (
-                <Card
-                  key={job.id}
-                  className="p-6 hover:shadow-md transition-all border-l-4 border-l-yellow-400"
-                >
-                  <div className="flex items-start justify-between gap-4 flex-wrap">
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-bold text-lg text-foreground">
-                        {job.title}
+                <div className="space-y-4">
+                  <div className="flex items-start gap-3.5">
+                    <Avatar
+                      src={mentor.avatar}
+                      name={mentor.name}
+                      size="md"
+                      department={mentor.department}
+                      avatarColor={mentor.avatarColor}
+                    />
+                    <div className="min-w-0 flex-1">
+                      <h3 className="font-display font-semibold text-base text-foreground truncate">
+                        {mentor.name}
                       </h3>
-                      <p className="text-muted-foreground font-medium">
-                        {job.company}
+                      <p className="text-xs text-muted-foreground truncate">
+                        {mentor.currentRole} · {mentor.company}
                       </p>
-
-                      <div className="flex flex-wrap gap-4 text-sm text-muted-foreground mt-3">
-                        <span className="flex items-center gap-1">
-                          <MapPin className="h-4 w-4" />
-                          {job.location}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <Briefcase className="h-4 w-4" />
-                          {job.type}
-                        </span>
-                        <span className="font-semibold text-foreground">
-                          BDT {job.salaryMin.toLocaleString()} –{" "}
-                          {job.salaryMax.toLocaleString()}/mo
+                      <div className="flex flex-wrap items-center gap-2 mt-1.5">
+                        <Badge department={mentor.department}>
+                          {mentor.department}
+                        </Badge>
+                        <Badge
+                          variant={
+                            mentor.availability === "Available"
+                              ? "enrolled"
+                              : "pending"
+                          }
+                        >
+                          {mentor.availability}
+                        </Badge>
+                        <span className="inline-flex items-center gap-1 text-xs font-semibold text-foreground">
+                          <Star className="w-3.5 h-3.5 fill-accent text-accent" />
+                          {mentor.rating.toFixed(1)}
                         </span>
                       </div>
                     </div>
-
-                    <div className="flex gap-2 shrink-0">
-                      <Link href={`/jobs/${job.id}`}>
-                        <Button className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold">
-                          Apply Now
-                        </Button>
-                      </Link>
-                    </div>
                   </div>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
 
-        {/* Upcoming Events Section */}
-        <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
+                  <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
+                    {mentor.bio}
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2.5 pt-3 border-t border-border">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setMentorshipTarget(mentor)}
+                  >
+                    <MessageCircle className="w-3.5 h-3.5" />
+                    Mentorship
+                  </Button>
+                  <Link href={`/alumni/${mentor.id}`}>
+                    <Button variant="default" size="sm" className="w-full">
+                      View profile
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* Job Board Preview */}
+      <section className="py-12 bg-card border-y border-border px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto space-y-6">
+          <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
-              <h2 className="text-3xl font-bold">Upcoming Campus Events</h2>
-              <p className="text-muted-foreground mt-1">
-                Workshops, mock interviews, and advising sessions at ULAB
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                Opportunities
               </p>
+              <h2 className="text-2xl font-bold font-display text-foreground">
+                Alumni job board
+              </h2>
             </div>
-            <Link href="/events">
-              <Button variant="outline" className="gap-2">
-                All Events <ArrowRight className="h-4 w-4" />
+            <Link href="/jobs">
+              <Button variant="outline" size="sm">
+                View all jobs ({jobs.length})
               </Button>
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {events.map((event) => {
-              const organizer = state.users.find(
-                (u) => u.id === event.organizerId
-              );
-              const isGoing = currentUser
-                ? event.attendees.includes(currentUser.id)
-                : false;
-
-              return (
-                <Card
-                  key={event.id}
-                  className="p-6 flex flex-col justify-between border-t-4 border-t-yellow-400"
-                >
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between text-xs text-muted-foreground">
-                      <span className="inline-flex items-center gap-1 font-semibold text-amber-700">
-                        <Calendar className="w-3.5 h-3.5" />
-                        {new Date(event.date).toLocaleDateString("en-US", {
-                          month: "short",
-                          day: "numeric",
-                          year: "numeric",
-                        })}
-                      </span>
-                      <span>{event.attendees.length} going</span>
-                    </div>
-                    <h3 className="font-bold text-lg text-foreground">
-                      {event.title}
+          <div className="grid gap-4 md:grid-cols-2">
+            {jobs.map((job) => (
+              <Card key={job.id} className="p-5 gap-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <Badge variant="saved">{job.type}</Badge>
+                    <h3 className="font-display font-semibold text-base mt-2">
+                      {job.title}
                     </h3>
-                    <p className="text-sm text-muted-foreground line-clamp-3">
-                      {event.description}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      <span className="font-semibold text-foreground">
-                        Location:
-                      </span>{" "}
-                      {event.location}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      Hosted by {organizer?.name ?? "ULAB Alumni"}
-                    </p>
+                    <p className="text-sm text-muted-foreground">{job.company}</p>
                   </div>
-
-                  <Button
-                    type="button"
-                    variant={isGoing ? "secondary" : "default"}
-                    onClick={() => handleRsvp(event.id, event.title)}
-                    className={`w-full mt-5 ${
-                      isGoing
-                        ? "bg-emerald-100 text-emerald-800 hover:bg-emerald-200"
-                        : "bg-yellow-400 hover:bg-yellow-500 text-black font-semibold"
-                    }`}
-                  >
-                    {isGoing ? (
-                      <span className="flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4" /> RSVP&apos;d (Cancel)
-                      </span>
-                    ) : (
-                      "RSVP Now"
-                    )}
-                  </Button>
-                </Card>
-              );
-            })}
+                  <Link href={`/jobs/${job.id}`}>
+                    <Button variant="accent" size="sm">
+                      Apply
+                    </Button>
+                  </Link>
+                </div>
+                <div className="flex flex-wrap gap-4 text-xs text-muted-foreground pt-2 border-t border-border">
+                  <span className="flex items-center gap-1">
+                    <MapPin className="w-3.5 h-3.5" />
+                    {job.location}
+                  </span>
+                  <span className="flex items-center gap-1 font-semibold text-foreground">
+                    <Briefcase className="w-3.5 h-3.5" />
+                    BDT {job.salaryMin.toLocaleString()}–
+                    {job.salaryMax.toLocaleString()}/mo
+                  </span>
+                </div>
+              </Card>
+            ))}
           </div>
-        </section>
-      </main>
+        </div>
+      </section>
+
+      {/* Upcoming Events */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12 space-y-6">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Campus calendar
+            </p>
+            <h2 className="text-2xl font-bold font-display text-foreground">
+              Upcoming events
+            </h2>
+          </div>
+          <Link href="/events">
+            <Button variant="outline" size="sm">
+              All events ({events.length})
+            </Button>
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {events.map((event) => {
+            const isGoing = currentUser
+              ? event.attendees.includes(currentUser.id)
+              : false;
+            return (
+              <Card key={event.id} className="p-5 justify-between gap-4">
+                <div className="space-y-2.5">
+                  <div className="flex items-center justify-between text-xs text-muted-foreground">
+                    <span className="inline-flex items-center gap-1 font-semibold text-primary">
+                      <Calendar className="w-3.5 h-3.5" />
+                      {new Date(event.date).toLocaleDateString()}
+                    </span>
+                    <span>{event.attendees.length} going</span>
+                  </div>
+                  <h3 className="font-display font-semibold text-base text-foreground">
+                    {event.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground line-clamp-2">
+                    {event.description}
+                  </p>
+                  <p className="text-xs text-muted-foreground">{event.location}</p>
+                </div>
+
+                <Button
+                  type="button"
+                  size="sm"
+                  variant={isGoing ? "secondary" : "default"}
+                  onClick={() => handleRsvp(event.id, event.title)}
+                  className="w-full"
+                >
+                  {isGoing ? (
+                    <>
+                      <CheckCircle2 className="w-4 h-4 text-success" />{" "}
+                      Attending (Cancel)
+                    </>
+                  ) : (
+                    "RSVP for event"
+                  )}
+                </Button>
+              </Card>
+            );
+          })}
+        </div>
+      </section>
 
       {/* Request Mentorship Modal */}
       {mentorshipTarget && (
         <div
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 bg-black/50 backdrop-blur-xs z-50 flex items-center justify-center p-4"
           onClick={() => setMentorshipTarget(null)}
         >
           <Card
-            className="w-full max-w-md p-6 space-y-4 bg-white"
+            className="w-full max-w-md p-6 gap-4 shadow-[var(--shadow-modal)]"
             onClick={(e) => e.stopPropagation()}
             role="dialog"
             aria-modal="true"
@@ -526,8 +384,10 @@ export default function AllAlumniSection() {
           >
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-xl font-bold">Request Mentorship</h3>
-                <p className="text-sm text-muted-foreground">
+                <h3 className="text-lg font-bold font-display">
+                  Request mentorship
+                </h3>
+                <p className="text-xs text-muted-foreground">
                   To: {mentorshipTarget.name} ({mentorshipTarget.company})
                 </p>
               </div>
@@ -535,9 +395,9 @@ export default function AllAlumniSection() {
                 type="button"
                 aria-label="Close modal"
                 onClick={() => setMentorshipTarget(null)}
-                className="p-1.5 rounded-full hover:bg-muted"
+                className="p-1.5 rounded-lg hover:bg-muted"
               >
-                <X className="h-5 w-5" />
+                <X className="h-4 w-4" />
               </button>
             </div>
 
@@ -547,7 +407,7 @@ export default function AllAlumniSection() {
                   htmlFor="mentorship-msg"
                   className="block text-sm font-medium mb-1.5"
                 >
-                  Your Goals / Questions
+                  Your goals or questions
                 </label>
                 <textarea
                   id="mentorship-msg"
@@ -556,24 +416,21 @@ export default function AllAlumniSection() {
                   value={mentorshipMsg}
                   onChange={(e) => setMentorshipMsg(e.target.value)}
                   placeholder="Share your semester, interests, and what advice you're looking for..."
-                  className="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-yellow-400 outline-none resize-none"
+                  className="w-full p-3 border border-border rounded-lg text-sm resize-none"
                 />
               </div>
 
-              <div className="flex gap-3">
+              <div className="flex gap-2.5 justify-end">
                 <Button
                   type="button"
                   variant="outline"
-                  className="flex-1"
                   onClick={() => setMentorshipTarget(null)}
                 >
                   Cancel
                 </Button>
-                <Button
-                  type="submit"
-                  className="flex-1 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold gap-2"
-                >
-                  Send Request <Send className="w-4 h-4" />
+                <Button type="submit" variant="accent">
+                  <Send className="w-4 h-4" />
+                  Send request
                 </Button>
               </div>
             </form>
