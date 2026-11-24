@@ -819,7 +819,7 @@ export function AppStoreProvider({ children }: { children: React.ReactNode }) {
       setToasts((prev) => [...prev, { id, message, variant }]);
       setTimeout(() => {
         setToasts((prev) => prev.filter((t) => t.id !== id));
-      }, 3600);
+      }, 4000);
     },
     []
   );
@@ -863,20 +863,14 @@ export function AppStoreProvider({ children }: { children: React.ReactNode }) {
           <div
             key={toast.id}
             role="status"
-            className={`pointer-events-auto flex items-start gap-3 rounded-xl border px-4 py-3 shadow-lg backdrop-blur-md transition-all animate-in fade-in slide-in-from-bottom-2 ${
-              toast.variant === "error"
-                ? "bg-red-50/95 border-red-200 text-red-900"
-                : toast.variant === "info"
-                ? "bg-slate-900/95 border-slate-700 text-white"
-                : "bg-white/95 border-yellow-400 text-slate-900"
-            }`}
+            className="pointer-events-auto flex items-start gap-3 rounded-xl border border-white/10 bg-foreground text-white px-4 py-3 shadow-[var(--shadow-modal)] transition-all animate-in fade-in slide-in-from-bottom-2"
           >
             {toast.variant === "error" ? (
-              <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+              <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
             ) : toast.variant === "info" ? (
-              <Info className="w-5 h-5 text-yellow-400 shrink-0 mt-0.5" />
+              <Info className="w-5 h-5 text-accent shrink-0 mt-0.5" />
             ) : (
-              <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-5 h-5 text-green-400 shrink-0 mt-0.5" />
             )}
             <p className="text-sm font-medium flex-1 leading-snug">
               {toast.message}
@@ -885,7 +879,7 @@ export function AppStoreProvider({ children }: { children: React.ReactNode }) {
               type="button"
               onClick={() => dismissToast(toast.id)}
               aria-label="Dismiss notification"
-              className="opacity-60 hover:opacity-100 p-0.5 rounded"
+              className="opacity-70 hover:opacity-100 p-0.5 rounded"
             >
               <X className="w-4 h-4" />
             </button>

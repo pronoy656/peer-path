@@ -1,73 +1,77 @@
+"use client";
+
 import Link from "next/link";
-import { ScrollBasedVelocityDemo } from "./Velocity";
+import { ArrowUp, GraduationCap } from "lucide-react";
 
 const footerSections = [
   {
     title: "Explore",
     links: [
-      { title: "Discover Courses", href: "/discover" },
-      { title: "All Courses", href: "/courses" },
-      { title: "Faculty Directory", href: "/faculty" },
-      { title: "Community Feed", href: "/community" },
+      { title: "Discover courses", href: "/discover" },
+      { title: "All courses", href: "/courses" },
+      { title: "Faculty directory", href: "/faculty" },
+      { title: "Community feed", href: "/community" },
     ],
   },
   {
     title: "Community",
     links: [
       { title: "Students", href: "/students" },
-      { title: "Alumni Mentors", href: "/alumni" },
-      { title: "Campus Events", href: "/events" },
-      { title: "Alumni Job Board", href: "/jobs" },
+      { title: "Alumni mentors", href: "/alumni" },
+      { title: "Campus events", href: "/events" },
+      { title: "Alumni job board", href: "/jobs" },
     ],
   },
   {
     title: "Support",
     links: [
-      { title: "Contact Us", href: "/contact" },
+      { title: "Contact us", href: "/contact" },
       { title: "FAQ", href: "/#faq" },
-      { title: "Privacy Policy", href: "/privacy" },
-      { title: "Terms of Use", href: "/terms" },
+      { title: "Privacy policy", href: "/privacy" },
+      { title: "Terms of use", href: "/terms" },
     ],
   },
 ];
 
 export default function Footer() {
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
-    <footer className="border-t bg-muted/50">
-      <div className="max-w-7xl mx-auto px-6 xl:px-8 py-12">
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-8 gap-y-10 z-20 relative">
-          <div className="col-span-full lg:col-span-2">
-            <Link href="/" className="inline-flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-xl flex items-center justify-center shadow-sm">
-                <span className="text-slate-900 font-extrabold text-xl">P</span>
-              </div>
-              <div>
-                <span className="text-2xl font-bold tracking-tight text-foreground">
-                  PeerPath
-                </span>
-                <span className="block text-xs font-medium text-muted-foreground">
-                  ULAB Campus Learning Network
-                </span>
-              </div>
+    <footer className="bg-sidebar text-sidebar-foreground border-t border-sidebar-border">
+      <div className="max-w-7xl mx-auto px-6 py-14">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-10">
+          {/* Brand column */}
+          <div className="col-span-full lg:col-span-2 space-y-4">
+            <Link href="/" className="inline-flex items-center gap-2.5">
+              <span className="w-9 h-9 rounded-lg bg-accent text-accent-foreground flex items-center justify-center">
+                <GraduationCap className="w-5 h-5" />
+              </span>
+              <span className="font-display font-bold text-xl text-white">
+                PeerPath
+              </span>
             </Link>
-            <p className="mt-4 text-sm text-muted-foreground max-w-md leading-relaxed">
-              PeerPath helps University of Liberal Arts Bangladesh (ULAB)
-              students find the right semester courses, connect with peers and
-              faculty, learn from alumni mentors, and grow together.
+            <p className="text-sm font-medium text-white/90">
+              Find your path at ULAB.
+            </p>
+            <p className="text-sm text-sidebar-foreground/70 max-w-sm leading-relaxed">
+              Courses, peer reviews, faculty office hours, and alumni mentorship
+              for University of Liberal Arts Bangladesh students.
             </p>
           </div>
 
           {footerSections.map(({ title, links }) => (
             <div key={title}>
-              <h6 className="font-semibold text-foreground md:text-right">
+              <h6 className="text-xs font-semibold uppercase tracking-wider text-white/90">
                 {title}
               </h6>
-              <ul className="mt-4 space-y-3 md:text-right text-sm">
+              <ul className="mt-4 space-y-3 text-sm">
                 {links.map(({ title: linkTitle, href }) => (
                   <li key={linkTitle}>
                     <Link
                       href={href}
-                      className="text-muted-foreground hover:text-foreground transition-colors"
+                      className="text-sidebar-foreground/70 hover:text-white transition-colors duration-150"
                     >
                       {linkTitle}
                     </Link>
@@ -78,17 +82,18 @@ export default function Footer() {
           ))}
         </div>
 
-        <div className="mt-10 pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground relative z-20">
+        <div className="mt-12 pt-6 border-t border-sidebar-border flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-sidebar-foreground/65">
           <p>
-            © {new Date().getFullYear()} PeerPath — University of Liberal Arts
-            Bangladesh (ULAB) Student Community.
+            © {new Date().getFullYear()} PeerPath · Made for ULAB students
           </p>
-          <p>Built for CSE, BBA, MSJ, English &amp; Bangla learners.</p>
+          <button
+            type="button"
+            onClick={scrollToTop}
+            className="inline-flex items-center gap-1.5 text-sidebar-foreground/80 hover:text-white transition-colors"
+          >
+            Back to top <ArrowUp className="w-3.5 h-3.5" />
+          </button>
         </div>
-      </div>
-
-      <div className="relative w-full overflow-hidden -mt-20 pointer-events-none select-none">
-        <ScrollBasedVelocityDemo />
       </div>
     </footer>
   );
