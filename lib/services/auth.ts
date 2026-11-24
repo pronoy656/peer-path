@@ -97,7 +97,7 @@ export function signUp(
     studentId: `${payload.batch.trim() || "241"}014${Math.floor(100 + Math.random() * 899)}`,
     interests: [payload.department],
     bio: `ULAB ${payload.department} student (Batch ${payload.batch.trim() || "241"}).`,
-    avatarColor: "#eab308",
+    avatarColor: "amber",
     createdAt: new Date().toISOString(),
   };
 

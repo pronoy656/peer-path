@@ -11,7 +11,7 @@ export const SEED_STUDENTS: User[] = [
     batch: "241",
     interests: ["UI/UX Design", "Frontend Dev", "Product Design"],
     bio: "CSE sophomore passionate about clean user interfaces and campus hackathons.",
-    avatarColor: "#ec4899",
+    avatarColor: "rose",
     createdAt: "2026-01-16T10:00:00Z",
   },
   {
@@ -24,7 +24,7 @@ export const SEED_STUDENTS: User[] = [
     batch: "233",
     interests: ["Backend Systems", "Databases", "DevOps"],
     bio: "Senior peer tutor for Data Structures and SQL. Happy to help juniors prepare for midterms.",
-    avatarColor: "#3b82f6",
+    avatarColor: "blue",
     createdAt: "2025-09-12T11:00:00Z",
   },
   {
@@ -37,7 +37,7 @@ export const SEED_STUDENTS: User[] = [
     batch: "241",
     interests: ["Brand Strategy", "Digital Marketing", "Case Competitions"],
     bio: "BBA student leading ULAB Business Club workshops and marketing case teams.",
-    avatarColor: "#f59e0b",
+    avatarColor: "amber",
     createdAt: "2026-01-18T09:30:00Z",
   },
   {
@@ -50,7 +50,7 @@ export const SEED_STUDENTS: User[] = [
     batch: "232",
     interests: ["Finance", "Business Analytics", "Startups"],
     bio: "Focused on financial modeling and Dhaka startup ecosystem research.",
-    avatarColor: "#10b981",
+    avatarColor: "emerald",
     createdAt: "2025-05-20T08:00:00Z",
   },
   {
@@ -63,7 +63,7 @@ export const SEED_STUDENTS: User[] = [
     batch: "241",
     interests: ["Documentary Film", "Campus Radio", "Photojournalism"],
     bio: "MSJ student documenting campus culture and environmental stories around Dhaka.",
-    avatarColor: "#ef4444",
+    avatarColor: "rose",
     createdAt: "2026-01-20T12:00:00Z",
   },
   {
@@ -76,7 +76,7 @@ export const SEED_STUDENTS: User[] = [
     batch: "233",
     interests: ["Podcasting", "Media Ethics", "Sports Reporting"],
     bio: "Producer at ULAB Campus Radio and aspiring sports journalist.",
-    avatarColor: "#6366f1",
+    avatarColor: "violet",
     createdAt: "2025-09-14T14:00:00Z",
   },
   {
@@ -89,7 +89,7 @@ export const SEED_STUDENTS: User[] = [
     batch: "242",
     interests: ["Creative Writing", "Literary Criticism", "Debate"],
     bio: "English major and ULAB Debating Club member exploring fiction and rhetoric.",
-    avatarColor: "#8b5cf6",
+    avatarColor: "violet",
     createdAt: "2026-05-05T10:00:00Z",
   },
   {
@@ -102,7 +102,7 @@ export const SEED_STUDENTS: User[] = [
     batch: "232",
     interests: ["Applied Linguistics", "TESOL", "Academic Writing"],
     bio: "Helps first-year peers polish essays and presentation scripts at the writing center.",
-    avatarColor: "#14b8a6",
+    avatarColor: "emerald",
     createdAt: "2025-05-25T09:00:00Z",
   },
   {
@@ -115,7 +115,7 @@ export const SEED_STUDENTS: User[] = [
     batch: "241",
     interests: ["Bangla Poetry", "Cultural Heritage", "Translation"],
     bio: "Organizes Ekushey cultural programs and bilingual poetry circles at ULAB.",
-    avatarColor: "#f97316",
+    avatarColor: "orange",
     createdAt: "2026-01-22T11:00:00Z",
   },
   {
@@ -128,7 +128,7 @@ export const SEED_STUDENTS: User[] = [
     batch: "242",
     interests: ["Machine Learning", "Python", "Robotics"],
     bio: "First-year CSE enthusiast building small Arduino and Python automation tools.",
-    avatarColor: "#0284c7",
+    avatarColor: "blue",
     createdAt: "2026-05-06T09:00:00Z",
   },
   {
@@ -141,7 +141,7 @@ export const SEED_STUDENTS: User[] = [
     batch: "233",
     interests: ["Modern Fiction", "Editorial Writing", "Theatre"],
     bio: "Student editor for ULAB Bangla literary magazine and stage drama performer.",
-    avatarColor: "#db2777",
+    avatarColor: "rose",
     createdAt: "2025-09-18T13:00:00Z",
   },
 ];

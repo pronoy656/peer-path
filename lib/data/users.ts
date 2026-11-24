@@ -81,7 +81,7 @@ export const SEED_CORE_USERS: User[] = [
     interests: ["Web Development", "AI/ML", "Competitive Programming"],
     bio: "3rd-semester CSE undergraduate at ULAB exploring full-stack engineering and peer study groups.",
     avatar: "/students.jpg",
-    avatarColor: "#eab308",
+    avatarColor: "amber",
     createdAt: "2026-01-15T09:00:00Z",
   },
   {
@@ -92,7 +92,7 @@ export const SEED_CORE_USERS: User[] = [
     department: "CSE",
     batch: "241",
     bio: "Batch Advisor & Class Teacher for CSE Batch 241 & 242 at ULAB.",
-    avatarColor: "#0ea5e9",
+    avatarColor: "blue",
     createdAt: "2025-09-01T08:00:00Z",
   },
   {
@@ -103,7 +103,7 @@ export const SEED_CORE_USERS: User[] = [
     department: "MSJ",
     batch: "223",
     bio: "Senior student moderator ensuring respectful academic discussions across PeerPath.",
-    avatarColor: "#8b5cf6",
+    avatarColor: "violet",
     createdAt: "2025-08-10T10:00:00Z",
   },
   {
@@ -113,7 +113,7 @@ export const SEED_CORE_USERS: User[] = [
     role: "admin",
     department: "CSE",
     bio: "ULAB PeerPath Platform Administrator.",
-    avatarColor: "#111827",
+    avatarColor: "navy",
     createdAt: "2025-01-01T00:00:00Z",
   },
 ];

@@ -15,7 +15,7 @@ export const SEED_ALUMNI: AlumniProfile[] = [
     rating: 4.9,
     menteesCount: 14,
     avatar: "/avater-2.jpg",
-    avatarColor: "#e11d48",
+    avatarColor: "rose",
     bio: "ULAB CSE '18 graduate building high-throughput fintech services in Dhaka. Mentors juniors on DSA interviews and production backend engineering.",
     journey:
       "Started as a peer tutor in ULAB CSE labs, interned at a local software house in Banani, and now lead backend architecture for payment APIs at bKash.",
@@ -35,7 +35,7 @@ export const SEED_ALUMNI: AlumniProfile[] = [
     rating: 4.8,
     menteesCount: 11,
     avatar: "/avater-1.jpg",
-    avatarColor: "#7c3aed",
+    avatarColor: "violet",
     bio: "Crafts mobile-first rider and merchant experiences at Pathao. Loves helping ULAB students transition into product design.",
     journey:
       "Discovered human-centered design during an elective at ULAB, built three campus case studies, and joined Pathao's design team right after graduation.",
@@ -55,7 +55,7 @@ export const SEED_ALUMNI: AlumniProfile[] = [
     rating: 4.8,
     menteesCount: 9,
     avatar: "/avater-2.jpg",
-    avatarColor: "#059669",
+    avatarColor: "emerald",
     bio: "Leads omnichannel growth campaigns at Chaldal. Coaches BBA students on case competitions and marketing internships.",
     journey:
       "President of ULAB Business Club in 2019, won national brand challenges, and scaled digital acquisition campaigns across Dhaka.",
@@ -75,7 +75,7 @@ export const SEED_ALUMNI: AlumniProfile[] = [
     rating: 4.9,
     menteesCount: 16,
     avatar: "/avater-1.jpg",
-    avatarColor: "#2563eb",
+    avatarColor: "blue",
     bio: "Builds Bangla NLP models and enterprise AI pipelines at Brain Station 23.",
     journey:
       "Published undergraduate thesis work with ULAB CSE faculty before joining Brain Station 23's AI R&D division.",
@@ -95,7 +95,7 @@ export const SEED_ALUMNI: AlumniProfile[] = [
     rating: 4.7,
     menteesCount: 10,
     avatar: "/avater-2.jpg",
-    avatarColor: "#d97706",
+    avatarColor: "amber",
     bio: "Works closely with SMEs across Bangladesh to digitize supply chains at ShopUp.",
     journey:
       "Combined BBA analytics coursework with startup internships to break into product management.",
@@ -115,7 +115,7 @@ export const SEED_ALUMNI: AlumniProfile[] = [
     rating: 4.9,
     menteesCount: 12,
     avatar: "/avater-1.jpg",
-    avatarColor: "#dc2626",
+    avatarColor: "rose",
     bio: "Produces investigative video features and digital newsroom series in Dhaka.",
     journey:
       "Cut her teeth editing campus documentaries at ULAB MSJ Media Lab and moved straight to national newsroom production.",
@@ -135,7 +135,7 @@ export const SEED_ALUMNI: AlumniProfile[] = [
     rating: 4.8,
     menteesCount: 8,
     avatar: "/avater-2.jpg",
-    avatarColor: "#0284c7",
+    avatarColor: "blue",
     bio: "Helps engineering teams at Cefalo automate cloud infrastructure and reliable deployments.",
     journey:
       "Maintained student club web servers at ULAB and turned that curiosity into a remote-first DevOps career.",
@@ -155,7 +155,7 @@ export const SEED_ALUMNI: AlumniProfile[] = [
     rating: 4.8,
     menteesCount: 7,
     avatar: "/avater-1.jpg",
-    avatarColor: "#9333ea",
+    avatarColor: "violet",
     bio: "Crafts impact reports and global communications campaigns for development programs at BRAC.",
     journey:
       "Edited ULAB's English department journal before joining BRAC's communications team.",
@@ -175,7 +175,7 @@ export const SEED_ALUMNI: AlumniProfile[] = [
     rating: 4.7,
     menteesCount: 6,
     avatar: "/avater-2.jpg",
-    avatarColor: "#0d9488",
+    avatarColor: "emerald",
     bio: "Edits contemporary Bangladeshi fiction, essays, and bilingual translations in Dhaka.",
     journey:
       "Mentored by ULAB Bangla faculty and now guides emerging writers into publishing.",
@@ -195,7 +195,7 @@ export const SEED_ALUMNI: AlumniProfile[] = [
     rating: 4.8,
     menteesCount: 13,
     avatar: "/avater-2.jpg",
-    avatarColor: "#ea580c",
+    avatarColor: "orange",
     bio: "Builds educational video formats and learner engagement strategies at 10 Minute School.",
     journey:
       "Started creating explainer videos for ULAB peers and scaled that passion to millions of Bangladeshi learners.",

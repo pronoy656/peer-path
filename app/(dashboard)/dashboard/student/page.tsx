@@ -68,7 +68,7 @@ export default function StudentDashboardPage() {
     (currentUser?.interests ?? []).join(", ")
   );
   const [avatarColor, setAvatarColor] = useState(
-    currentUser?.avatarColor ?? "#eab308"
+    currentUser?.avatarColor ?? "amber"
   );
 
   const userId = currentUser?.id ?? "u-student-1";
@@ -155,7 +155,7 @@ export default function StudentDashboardPage() {
           setDeptInput(currentUser.department ?? "CSE");
           setBatchInput(currentUser.batch ?? "241");
           setInterestsInput((currentUser.interests ?? []).join(", "));
-          setAvatarColor(currentUser.avatarColor ?? "#eab308");
+          setAvatarColor(currentUser.avatarColor ?? "amber");
         }
         setActiveTab(tab);
       }}
@@ -816,22 +816,26 @@ export default function StudentDashboardPage() {
                   Initials Avatar Color
                 </label>
                 <div className="flex gap-2">
-                  {["#eab308", "#38bdf8", "#34d399", "#f472b6", "#a78bfa"].map(
-                    (c) => (
-                      <button
-                        key={c}
-                        type="button"
-                        aria-label={`Select avatar color ${c}`}
-                        onClick={() => setAvatarColor(c)}
-                        className={`w-8 h-8 rounded-full border-2 ${
-                          avatarColor === c
-                            ? "border-slate-900 scale-110"
-                            : "border-transparent"
-                        }`}
-                        style={{ backgroundColor: c }}
-                      />
-                    )
-                  )}
+                  {[
+                    { key: "amber", cls: "bg-amber-200" },
+                    { key: "blue", cls: "bg-blue-200" },
+                    { key: "emerald", cls: "bg-green-200" },
+                    { key: "rose", cls: "bg-rose-200" },
+                    { key: "violet", cls: "bg-purple-200" },
+                    { key: "navy", cls: "bg-primary/20" },
+                  ].map((c) => (
+                    <button
+                      key={c.key}
+                      type="button"
+                      aria-label={`Select avatar theme ${c.key}`}
+                      onClick={() => setAvatarColor(c.key)}
+                      className={`w-8 h-8 rounded-full border-2 ${c.cls} ${
+                        avatarColor === c.key
+                          ? "border-primary scale-110"
+                          : "border-transparent"
+                      }`}
+                    />
+                  ))}
                 </div>
               </div>
 

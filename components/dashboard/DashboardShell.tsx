@@ -12,6 +12,7 @@ import {
 import { useAppStore } from "@/lib/store/AppStore";
 import { signOut } from "@/lib/services/auth";
 import type { Role } from "@/lib/types";
+import { getAvatarTintClass } from "@/lib/theme/tokens";
 import RoleGuard from "./RoleGuard";
 
 export interface DashboardNavItem {
@@ -204,10 +205,10 @@ export default function DashboardShell({
                   </p>
                 </div>
                 <div
-                  className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold text-slate-900 border border-yellow-400"
-                  style={{
-                    backgroundColor: currentUser.avatarColor || "#facc15",
-                  }}
+                  className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold border ${getAvatarTintClass(
+                    currentUser.avatarColor,
+                    currentUser.department
+                  )}`}
                 >
                   {initials}
                 </div>
