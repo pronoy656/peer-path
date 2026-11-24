@@ -17,6 +17,8 @@ import DashboardShell, {
   type DashboardNavItem,
 } from "@/components/dashboard/DashboardShell";
 import MessagesPanel from "@/components/dashboard/MessagesPanel";
+import { StatCard } from "@/components/ui/stat-card";
+import { Badge } from "@/components/ui/badge";
 import { useAppStore } from "@/lib/store/AppStore";
 import {
   addCourseMaterial,
@@ -149,63 +151,89 @@ export default function FacultyDashboardPage() {
     >
       {activeTab === "overview" && (
         <div className="space-y-6">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <Card className="p-5">
-              <p className="text-xs text-muted-foreground">My Courses</p>
-              <p className="text-3xl font-bold mt-1">{myCourses.length}</p>
-            </Card>
-            <Card className="p-5">
-              <p className="text-xs text-muted-foreground">Total Students</p>
-              <p className="text-3xl font-bold mt-1">{myStudents.length}</p>
-            </Card>
-            <Card className="p-5">
-              <p className="text-xs text-muted-foreground">Average Rating</p>
-              <p className="text-3xl font-bold mt-1">{avgRating} ★</p>
-            </Card>
-            <Card className="p-5">
-              <p className="text-xs text-muted-foreground">Pending Replies</p>
-              <p className="text-3xl font-bold mt-1 text-amber-600">
-                {pendingReplies}
-              </p>
-            </Card>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <StatCard
+              label="My courses"
+              value={myCourses.length}
+              hint="Active sections"
+              icon={<BookOpen className="w-5 h-5" />}
+            />
+            <StatCard
+              label="Enrolled students"
+              value={myStudents.length}
+              hint="Across your courses"
+              icon={<Users className="w-5 h-5" />}
+            />
+            <StatCard
+              label="Average rating"
+              value={`${avgRating} ★`}
+              hint={`${myReviews.length} total reviews`}
+              hintTone="success"
+              icon={<Star className="w-5 h-5" />}
+            />
+            <StatCard
+              label="Pending replies"
+              value={pendingReplies}
+              hint={pendingReplies > 0 ? "Needs reply" : "All answered"}
+              hintTone={pendingReplies > 0 ? "danger" : "success"}
+              icon={<MessageSquare className="w-5 h-5" />}
+            />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card className="p-6 space-y-4">
+            <Card className="p-6 gap-4">
               <div className="flex items-center justify-between">
-                <h2 className="font-bold text-lg">Courses You Teach</h2>
+                <h2 className="font-display font-bold text-lg">
+                  Seat capacity by course
+                </h2>
                 <Link
                   href={`/faculty/${facultyId}`}
                   className="text-xs font-semibold text-primary hover:underline"
                 >
-                  Public Profile →
+                  Public profile →
                 </Link>
               </div>
-              <div className="space-y-3">
-                {myCourses.map((c) => (
-                  <Link
-                    key={c.id}
-                    href={`/courses/${c.id}`}
-                    className="block p-3.5 rounded-xl border hover:border-primary transition"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-xs font-bold text-primary">
-                          {c.code}
-                        </p>
-                        <p className="font-semibold text-sm">{c.title}</p>
+              <div className="space-y-3.5">
+                {myCourses.map((c) => {
+                  const pct = Math.min(
+                    100,
+                    Math.round((c.seatsTaken / Math.max(1, c.seatsTotal)) * 100)
+                  );
+                  return (
+                    <div key={c.id} className="space-y-1.5">
+                      <div className="flex items-center justify-between text-xs font-semibold">
+                        <span className="truncate">
+                          {c.code} · {c.title}
+                        </span>
+                        <span className="text-foreground">
+                          {c.seatsTaken}/{c.seatsTotal}
+                        </span>
                       </div>
-                      <span className="text-xs text-muted-foreground">
-                        {c.seatsTaken}/{c.seatsTotal} seats
-                      </span>
+                      <div className="h-2.5 rounded-full bg-muted overflow-hidden">
+                        <div
+                          className="h-full bg-primary rounded-full"
+                          style={{ width: `${pct}%` }}
+                        />
+                      </div>
                     </div>
-                  </Link>
-                ))}
+                  );
+                })}
               </div>
             </Card>
 
-            <Card className="p-6 space-y-4">
-              <h2 className="font-bold text-lg">Recent Student Messages</h2>
+            <Card className="p-6 gap-4">
+              <div className="flex items-center justify-between">
+                <h2 className="font-display font-bold text-lg">
+                  Needs attention · Messages
+                </h2>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => setActiveTab("messages")}
+                >
+                  Open inbox
+                </Button>
+              </div>
               {myMessages.length === 0 ? (
                 <p className="text-sm text-muted-foreground">
                   No messages yet.
@@ -215,12 +243,22 @@ export default function FacultyDashboardPage() {
                   {myMessages.slice(-4).map((m) => {
                     const sender = state.users.find((u) => u.id === m.senderId);
                     return (
-                      <div key={m.id} className="p-3.5 rounded-xl border">
-                        <p className="text-xs font-bold text-primary">
-                          {sender?.name ?? "Student"}
-                          {m.subject ? ` — ${m.subject}` : ""}
-                        </p>
-                        <p className="text-sm text-foreground/80 mt-1 line-clamp-2">
+                      <div
+                        key={m.id}
+                        className="p-3.5 rounded-xl border border-border"
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-xs font-semibold text-primary">
+                            {sender?.name ?? "Student"}
+                          </span>
+                          <Badge variant="neutral">Message</Badge>
+                        </div>
+                        {m.subject && (
+                          <p className="text-xs font-semibold text-foreground mt-0.5">
+                            {m.subject}
+                          </p>
+                        )}
+                        <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
                           {m.content}
                         </p>
                       </div>

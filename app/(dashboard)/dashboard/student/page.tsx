@@ -24,6 +24,9 @@ import DashboardShell, {
 } from "@/components/dashboard/DashboardShell";
 import ConfirmDialog from "@/components/dashboard/ConfirmDialog";
 import MessagesPanel from "@/components/dashboard/MessagesPanel";
+import { StatCard } from "@/components/ui/stat-card";
+import { Badge } from "@/components/ui/badge";
+import { EmptyState } from "@/components/ui/empty-state";
 import { useAppStore } from "@/lib/store/AppStore";
 import {
   advanceProgress,
@@ -162,31 +165,84 @@ export default function StudentDashboardPage() {
     >
       {activeTab === "overview" && (
         <div className="space-y-6">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <Card className="p-5">
-              <p className="text-xs text-muted-foreground">Enrolled Courses</p>
-              <p className="text-3xl font-bold mt-1">{enrollments.length}</p>
-            </Card>
-            <Card className="p-5">
-              <p className="text-xs text-muted-foreground">Semester Credits</p>
-              <p className="text-3xl font-bold mt-1">{totalCredits} / 14</p>
-            </Card>
-            <Card className="p-5">
-              <p className="text-xs text-muted-foreground">Upcoming RSVPs</p>
-              <p className="text-3xl font-bold mt-1">{rsvpEvents.length}</p>
-            </Card>
-            <Card className="p-5">
-              <p className="text-xs text-muted-foreground">Unread Alerts</p>
-              <p className="text-3xl font-bold mt-1 text-amber-600">
-                {unreadCount}
-              </p>
-            </Card>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <StatCard
+              label="Enrolled courses"
+              value={enrollments.length}
+              hint="Active this semester"
+              icon={<BookOpen className="w-5 h-5" />}
+            />
+            <StatCard
+              label="Semester credits"
+              value={`${totalCredits} / 14`}
+              hint={`${Math.max(0, 14 - totalCredits)} credits available`}
+              hintTone="success"
+              icon={<Compass className="w-5 h-5" />}
+            />
+            <StatCard
+              label="Upcoming RSVPs"
+              value={rsvpEvents.length}
+              hint="Campus events"
+              icon={<Calendar className="w-5 h-5" />}
+            />
+            <StatCard
+              label="Unread alerts"
+              value={unreadCount}
+              hint={unreadCount > 0 ? "Needs attention" : "All caught up"}
+              hintTone={unreadCount > 0 ? "danger" : "success"}
+              icon={<Bell className="w-5 h-5" />}
+            />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card className="p-6 space-y-4">
+            <Card className="p-6 gap-4">
               <div className="flex items-center justify-between">
-                <h2 className="font-bold text-lg">Recommended For You</h2>
+                <h2 className="font-display font-bold text-lg">
+                  Course progress
+                </h2>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab("courses")}
+                  className="text-xs font-semibold text-primary hover:underline"
+                >
+                  Manage courses →
+                </button>
+              </div>
+              {enrollments.length === 0 ? (
+                <EmptyState
+                  icon={<BookOpen className="w-5 h-5" />}
+                  title="No enrolled courses yet"
+                  description="Pick courses on Discover to start tracking progress."
+                  actionLabel="Open Discover"
+                  actionHref="/discover"
+                />
+              ) : (
+                <div className="space-y-4">
+                  {enrollments.map(({ course, progress }) => (
+                    <div key={course.id} className="space-y-1.5">
+                      <div className="flex items-center justify-between text-xs font-semibold">
+                        <span className="truncate">
+                          {course.code} · {course.title}
+                        </span>
+                        <span className="text-primary">{progress}%</span>
+                      </div>
+                      <div className="h-2.5 rounded-full bg-muted overflow-hidden">
+                        <div
+                          className="h-full bg-primary rounded-full transition-all"
+                          style={{ width: `${progress}%` }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </Card>
+
+            <Card className="p-6 gap-4">
+              <div className="flex items-center justify-between">
+                <h2 className="font-display font-bold text-lg">
+                  Needs attention
+                </h2>
                 <Link
                   href="/discover"
                   className="text-xs font-semibold text-primary hover:underline"
@@ -198,19 +254,25 @@ export default function StudentDashboardPage() {
                 {recommended.slice(0, 3).map((course) => (
                   <div
                     key={course.id}
-                    className="p-3.5 rounded-xl border flex items-center justify-between gap-3"
+                    className="p-3.5 rounded-xl border border-border flex items-center justify-between gap-3"
                   >
                     <div className="min-w-0">
-                      <p className="text-xs font-bold text-primary">
-                        {course.code} • {course.credits} Cr
-                      </p>
-                      <p className="font-semibold text-sm truncate">
+                      <div className="flex items-center gap-2">
+                        <Badge department={course.department}>
+                          {course.code}
+                        </Badge>
+                        <span className="text-xs text-muted-foreground">
+                          {course.credits} cr
+                        </span>
+                      </div>
+                      <p className="font-semibold text-sm truncate mt-1">
                         {course.title}
                       </p>
                     </div>
                     <Button
                       size="sm"
-                      className="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-semibold shrink-0"
+                      variant="accent"
+                      className="shrink-0"
                       onClick={() => {
                         const res = enroll(state, dispatch, userId, course.id);
                         showToast(res.message, res.ok ? "success" : "info");
@@ -222,30 +284,37 @@ export default function StudentDashboardPage() {
                 ))}
               </div>
             </Card>
+          </div>
 
-            <Card className="p-6 space-y-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card className="p-6 gap-4">
               <div className="flex items-center justify-between">
-                <h2 className="font-bold text-lg">Upcoming RSVP&apos;d Events</h2>
+                <h2 className="font-display font-bold text-lg">
+                  Upcoming RSVP&apos;d events
+                </h2>
                 <Link
                   href="/events"
                   className="text-xs font-semibold text-primary hover:underline"
                 >
-                  All Events →
+                  All events →
                 </Link>
               </div>
               {rsvpEvents.length === 0 ? (
-                <p className="text-sm text-muted-foreground py-6 text-center">
-                  No event RSVPs yet. Explore{" "}
-                  <Link href="/events" className="underline font-semibold">
-                    Campus Events
-                  </Link>
-                  .
-                </p>
+                <EmptyState
+                  icon={<Calendar className="w-5 h-5" />}
+                  title="No event RSVPs yet"
+                  description="Explore workshops and mock interviews at ULAB."
+                  actionLabel="Browse events"
+                  actionHref="/events"
+                />
               ) : (
                 <div className="space-y-3">
                   {rsvpEvents.map((ev) => (
-                    <div key={ev.id} className="p-3.5 rounded-xl border">
-                      <p className="text-xs font-semibold text-amber-700 flex items-center gap-1">
+                    <div
+                      key={ev.id}
+                      className="p-3.5 rounded-xl border border-border"
+                    >
+                      <p className="text-xs font-semibold text-primary flex items-center gap-1">
                         <Calendar className="w-3.5 h-3.5" />
                         {new Date(ev.date).toLocaleDateString()}
                       </p>
@@ -258,31 +327,37 @@ export default function StudentDashboardPage() {
                 </div>
               )}
             </Card>
-          </div>
 
-          <Card className="p-6 space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="font-bold text-lg">Recent Community Activity</h2>
-              <Link
-                href="/community"
-                className="text-xs font-semibold text-primary hover:underline"
-              >
-                Visit Community →
-              </Link>
-            </div>
-            <div className="grid md:grid-cols-3 gap-4">
-              {recentPosts.map((post) => (
-                <div key={post.id} className="p-4 rounded-xl border bg-background">
-                  <p className="text-xs font-bold text-primary">
-                    {post.group || "General"} • {post.author?.name ?? "ULAB Peer"}
-                  </p>
-                  <p className="text-sm mt-1.5 line-clamp-3 text-foreground/85">
-                    {post.content}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </Card>
+            <Card className="p-6 gap-4">
+              <div className="flex items-center justify-between">
+                <h2 className="font-display font-bold text-lg">
+                  Recent community activity
+                </h2>
+                <Link
+                  href="/community"
+                  className="text-xs font-semibold text-primary hover:underline"
+                >
+                  Visit community →
+                </Link>
+              </div>
+              <div className="space-y-3">
+                {recentPosts.map((post) => (
+                  <div
+                    key={post.id}
+                    className="p-3.5 rounded-xl border border-border bg-background"
+                  >
+                    <p className="text-xs font-semibold text-primary">
+                      {post.group || "General"} ·{" "}
+                      {post.author?.name ?? "ULAB Peer"}
+                    </p>
+                    <p className="text-sm mt-1 line-clamp-2 text-foreground/85">
+                      {post.content}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          </div>
         </div>
       )}
 

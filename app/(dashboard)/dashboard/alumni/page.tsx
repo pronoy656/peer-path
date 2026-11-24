@@ -20,6 +20,8 @@ import DashboardShell, {
 } from "@/components/dashboard/DashboardShell";
 import ConfirmDialog from "@/components/dashboard/ConfirmDialog";
 import MessagesPanel from "@/components/dashboard/MessagesPanel";
+import { StatCard } from "@/components/ui/stat-card";
+import { Badge } from "@/components/ui/badge";
 import { useAppStore } from "@/lib/store/AppStore";
 import { getAlumniById } from "@/lib/services/people";
 import { Card } from "@/components/ui/card";
@@ -167,41 +169,47 @@ export default function AlumniDashboardPage() {
     >
       {activeTab === "overview" && (
         <div className="space-y-6">
-          <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-            <Card className="p-5">
-              <p className="text-xs text-muted-foreground">Pending Requests</p>
-              <p className="text-3xl font-bold mt-1 text-amber-600">
-                {incomingRequests.length}
-              </p>
-            </Card>
-            <Card className="p-5">
-              <p className="text-xs text-muted-foreground">My Mentees</p>
-              <p className="text-3xl font-bold mt-1">{myMentees.length}</p>
-            </Card>
-            <Card className="p-5">
-              <p className="text-xs text-muted-foreground">Posted Jobs</p>
-              <p className="text-3xl font-bold mt-1">{myJobs.length}</p>
-            </Card>
-            <Card className="p-5">
-              <p className="text-xs text-muted-foreground">My Events</p>
-              <p className="text-3xl font-bold mt-1">{myEvents.length}</p>
-            </Card>
-            <Card className="p-5">
-              <p className="text-xs text-muted-foreground">Profile Views</p>
-              <p className="text-3xl font-bold mt-1">142</p>
-            </Card>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <StatCard
+              label="Mentorship requests"
+              value={incomingRequests.length}
+              hint={incomingRequests.length > 0 ? "Pending reply" : "All handled"}
+              hintTone={incomingRequests.length > 0 ? "danger" : "success"}
+              icon={<UserCheck className="w-5 h-5" />}
+            />
+            <StatCard
+              label="Active mentees"
+              value={myMentees.length}
+              hint="1-on-1 guidance"
+              icon={<Users className="w-5 h-5" />}
+            />
+            <StatCard
+              label="Posted jobs"
+              value={myJobs.length}
+              hint="BDT roles live"
+              icon={<Briefcase className="w-5 h-5" />}
+            />
+            <StatCard
+              label="My events"
+              value={myEvents.length}
+              hint="142 profile views"
+              hintTone="success"
+              icon={<Calendar className="w-5 h-5" />}
+            />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card className="p-6 space-y-3">
+            <Card className="p-6 gap-4">
               <div className="flex items-center justify-between">
-                <h2 className="font-bold text-lg">Latest Mentorship Requests</h2>
+                <h2 className="font-display font-bold text-lg">
+                  Needs attention · Requests
+                </h2>
                 <Button
                   size="sm"
-                  variant="outline"
+                  variant="accent"
                   onClick={() => setActiveTab("requests")}
                 >
-                  Review All
+                  Review all
                 </Button>
               </div>
               {incomingRequests.length === 0 ? (
@@ -212,9 +220,12 @@ export default function AlumniDashboardPage() {
                 incomingRequests.map((req) => {
                   const stu = state.users.find((u) => u.id === req.studentId);
                   return (
-                    <div key={req.id} className="p-3.5 rounded-xl border">
+                    <div
+                      key={req.id}
+                      className="p-3.5 rounded-xl border border-border"
+                    >
                       <p className="font-semibold text-sm">
-                        {stu?.name ?? "ULAB Student"} ({stu?.department} • Batch{" "}
+                        {stu?.name ?? "ULAB Student"} ({stu?.department} · Batch{" "}
                         {stu?.batch})
                       </p>
                       <p className="text-xs text-muted-foreground mt-1">
@@ -226,31 +237,33 @@ export default function AlumniDashboardPage() {
               )}
             </Card>
 
-            <Card className="p-6 space-y-3">
+            <Card className="p-6 gap-4">
               <div className="flex items-center justify-between">
-                <h2 className="font-bold text-lg">Job Applicants Summary</h2>
+                <h2 className="font-display font-bold text-lg">
+                  Job applicants summary
+                </h2>
                 <Link
                   href="/jobs"
                   className="text-xs font-semibold text-primary hover:underline"
                 >
-                  Public Job Board →
+                  Public job board →
                 </Link>
               </div>
               {myJobs.map((job) => (
                 <div
                   key={job.id}
-                  className="p-3.5 rounded-xl border flex items-center justify-between"
+                  className="p-3.5 rounded-xl border border-border flex items-center justify-between"
                 >
                   <div>
                     <p className="font-semibold text-sm">{job.title}</p>
                     <p className="text-xs text-muted-foreground">
-                      {job.company} • BDT {job.salaryMin.toLocaleString()}–
+                      {job.company} · BDT {job.salaryMin.toLocaleString()}–
                       {job.salaryMax.toLocaleString()}
                     </p>
                   </div>
-                  <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-yellow-100 text-amber-900">
+                  <Badge variant="saved">
                     {job.applicants.length} applicant(s)
-                  </span>
+                  </Badge>
                 </div>
               ))}
             </Card>

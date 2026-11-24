@@ -20,6 +20,10 @@ import DashboardShell, {
   type DashboardNavItem,
 } from "@/components/dashboard/DashboardShell";
 import ConfirmDialog from "@/components/dashboard/ConfirmDialog";
+import DetailDrawer from "@/components/dashboard/DetailDrawer";
+import { StatCard } from "@/components/ui/stat-card";
+import { Badge } from "@/components/ui/badge";
+import type { Report } from "@/lib/types";
 import { useAppStore } from "@/lib/store/AppStore";
 import {
   deleteComment,
@@ -41,6 +45,7 @@ export default function ModeratorDashboardPage() {
   const [activeTab, setActiveTab] = useState("overview");
   const [postQuery, setPostQuery] = useState("");
   const [userQuery, setUserQuery] = useState("");
+  const [selectedReport, setSelectedReport] = useState<Report | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<{
     type: "post" | "comment";
     id: string;
@@ -98,154 +103,148 @@ export default function ModeratorDashboardPage() {
     >
       {activeTab === "overview" && (
         <div className="space-y-6">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <Card className="p-5">
-              <p className="text-xs text-muted-foreground">Open Reports</p>
-              <p className="text-3xl font-bold mt-1 text-red-600">
-                {openReports.length}
-              </p>
-            </Card>
-            <Card className="p-5">
-              <p className="text-xs text-muted-foreground">Community Posts</p>
-              <p className="text-3xl font-bold mt-1">{state.posts.length}</p>
-            </Card>
-            <Card className="p-5">
-              <p className="text-xs text-muted-foreground">Hidden Items</p>
-              <p className="text-3xl font-bold mt-1">
-                {hiddenPostsCount + hiddenReviewsCount}
-              </p>
-            </Card>
-            <Card className="p-5">
-              <p className="text-xs text-muted-foreground">Moderation Actions</p>
-              <p className="text-3xl font-bold mt-1">
-                {state.moderationLogs.length}
-              </p>
-            </Card>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <StatCard
+              label="Open reports"
+              value={openReports.length}
+              hint={openReports.length > 0 ? "Needs review" : "Queue clear"}
+              hintTone={openReports.length > 0 ? "danger" : "success"}
+              icon={<ShieldAlert className="w-5 h-5" />}
+            />
+            <StatCard
+              label="Community posts"
+              value={state.posts.length}
+              hint="Active discussions"
+              icon={<MessageSquare className="w-5 h-5" />}
+            />
+            <StatCard
+              label="Hidden items"
+              value={hiddenPostsCount + hiddenReviewsCount}
+              hint="Posts & reviews"
+              icon={<EyeOff className="w-5 h-5" />}
+            />
+            <StatCard
+              label="Actions logged"
+              value={state.moderationLogs.length}
+              hint="Audit trail"
+              icon={<History className="w-5 h-5" />}
+            />
           </div>
 
-          <Card className="p-6 space-y-4">
+          <Card className="p-6 gap-4">
             <div className="flex items-center justify-between">
-              <h2 className="font-bold text-lg">Recent Moderation Activity</h2>
+              <h2 className="font-display font-bold text-lg">
+                Recent moderation activity
+              </h2>
               <Button
                 size="sm"
-                variant="outline"
+                variant="accent"
                 onClick={() => setActiveTab("reports")}
               >
-                Open Queue ({openReports.length})
+                Open queue ({openReports.length})
               </Button>
             </div>
-            {state.moderationLogs.slice(0, 5).map((log) => (
-              <div
-                key={log.id}
-                className="p-3.5 rounded-xl border flex flex-wrap items-center justify-between gap-2 text-sm"
-              >
-                <div>
-                  <span className="font-semibold">{log.action}</span>
-                  <span className="text-muted-foreground">
-                    {" "}
-                    • {log.details}
-                  </span>
-                </div>
-                <span className="text-xs text-muted-foreground">
-                  {new Date(log.createdAt).toLocaleString()}
-                </span>
-              </div>
-            ))}
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-border text-left text-xs uppercase tracking-wider text-muted-foreground">
+                    <th className="py-3 pr-4 font-semibold">Action</th>
+                    <th className="py-3 pr-4 font-semibold">Details</th>
+                    <th className="py-3 font-semibold text-right">Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {state.moderationLogs.slice(0, 5).map((log) => (
+                    <tr
+                      key={log.id}
+                      className="h-14 border-b border-border last:border-0 hover:bg-muted/40 transition-colors"
+                    >
+                      <td className="py-3 pr-4 font-semibold">{log.action}</td>
+                      <td className="py-3 pr-4 text-muted-foreground">
+                        {log.details}
+                      </td>
+                      <td className="py-3 text-right text-xs text-muted-foreground">
+                        {new Date(log.createdAt).toLocaleDateString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </Card>
         </div>
       )}
 
       {activeTab === "reports" && (
-        <div className="space-y-4">
+        <Card className="p-6 gap-4">
+          <div className="flex items-center justify-between">
+            <h2 className="font-display font-bold text-lg">
+              Reports queue ({state.reports.length})
+            </h2>
+            <span className="text-xs text-muted-foreground">
+              Click any row to inspect &amp; resolve
+            </span>
+          </div>
           {state.reports.length === 0 ? (
-            <Card className="p-12 text-center border-dashed">
-              <p className="font-semibold text-lg">Reports queue is clear</p>
-            </Card>
+            <p className="text-sm text-muted-foreground py-8 text-center">
+              Reports queue is clear.
+            </p>
           ) : (
-            state.reports.map((rep) => {
-              const reporter = state.users.find((u) => u.id === rep.reporterId);
-              return (
-                <Card key={rep.id} className="p-5 space-y-3">
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
-                      <FileWarning className="w-4 h-4 text-amber-600" />
-                      <span className="text-xs font-bold uppercase px-2 py-0.5 rounded-full bg-secondary">
-                        {rep.targetType}
-                      </span>
-                      <span
-                        className={`text-xs font-bold px-2.5 py-0.5 rounded-full ${
-                          rep.status === "open"
-                            ? "bg-red-100 text-red-700"
-                            : rep.status === "resolved"
-                            ? "bg-emerald-100 text-emerald-700"
-                            : "bg-gray-100 text-gray-700"
-                        }`}
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-border text-left text-xs uppercase tracking-wider text-muted-foreground">
+                    <th className="py-3 pr-4 font-semibold">Type</th>
+                    <th className="py-3 pr-4 font-semibold">Reason</th>
+                    <th className="py-3 pr-4 font-semibold">Reporter</th>
+                    <th className="py-3 pr-4 font-semibold">Status</th>
+                    <th className="py-3 text-right font-semibold">Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {state.reports.map((rep) => {
+                    const reporter = state.users.find(
+                      (u) => u.id === rep.reporterId
+                    );
+                    return (
+                      <tr
+                        key={rep.id}
+                        onClick={() => setSelectedReport(rep)}
+                        className="h-14 border-b border-border last:border-0 hover:bg-muted/40 cursor-pointer transition-colors"
                       >
-                        {rep.status}
-                      </span>
-                    </div>
-                    <span className="text-xs text-muted-foreground">
-                      Reported by {reporter?.name ?? "User"} •{" "}
-                      {new Date(rep.createdAt).toLocaleDateString()}
-                    </span>
-                  </div>
-
-                  <p className="text-sm font-medium">Reason: {rep.reason}</p>
-                  <div className="p-3 rounded-xl bg-muted/60 text-xs text-foreground/80">
-                    <span className="font-semibold">Target preview: </span>
-                    {getTargetPreview(rep.targetType, rep.targetId)}
-                  </div>
-
-                  {rep.status === "open" && (
-                    <div className="flex flex-wrap gap-2 pt-1">
-                      <Button
-                        size="sm"
-                        className="bg-red-600 hover:bg-red-700 text-white gap-1"
-                        onClick={() => {
-                          resolveReport(state, dispatch, {
-                            reportId: rep.id,
-                            moderatorId: modId,
-                            action: "hide",
-                            note: "Hidden by moderator due to report.",
-                          });
-                          showToast("Target hidden & report resolved!");
-                        }}
-                      >
-                        <EyeOff className="w-4 h-4" /> Resolve &amp; Hide
-                      </Button>
-                      <Button
-                        size="sm"
-                        className="bg-emerald-600 hover:bg-emerald-700 text-white gap-1"
-                        onClick={() => {
-                          resolveReport(state, dispatch, {
-                            reportId: rep.id,
-                            moderatorId: modId,
-                            action: "none",
-                            note: "Reviewed and resolved.",
-                          });
-                          showToast("Report marked resolved.");
-                        }}
-                      >
-                        <Check className="w-4 h-4" /> Resolve
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="gap-1"
-                        onClick={() => {
-                          dismissReport(dispatch, rep.id, modId);
-                          showToast("Report dismissed.", "info");
-                        }}
-                      >
-                        <X className="w-4 h-4" /> Dismiss
-                      </Button>
-                    </div>
-                  )}
-                </Card>
-              );
-            })
+                        <td className="py-3 pr-4">
+                          <Badge variant="neutral">{rep.targetType}</Badge>
+                        </td>
+                        <td className="py-3 pr-4 font-medium max-w-xs truncate">
+                          {rep.reason}
+                        </td>
+                        <td className="py-3 pr-4 text-muted-foreground">
+                          {reporter?.name ?? "User"}
+                        </td>
+                        <td className="py-3 pr-4">
+                          <Badge
+                            variant={
+                              rep.status === "open"
+                                ? "full"
+                                : rep.status === "resolved"
+                                ? "enrolled"
+                                : "neutral"
+                            }
+                          >
+                            {rep.status}
+                          </Badge>
+                        </td>
+                        <td className="py-3 text-right text-xs text-muted-foreground">
+                          {new Date(rep.createdAt).toLocaleDateString()}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           )}
-        </div>
+        </Card>
       )}
 
       {activeTab === "posts" && (
@@ -500,6 +499,84 @@ export default function ModeratorDashboardPage() {
           })}
         </Card>
       )}
+
+      <DetailDrawer
+        open={selectedReport !== null}
+        title={`Report · ${selectedReport?.targetType ?? ""}`}
+        subtitle={`Status: ${selectedReport?.status ?? ""}`}
+        onClose={() => setSelectedReport(null)}
+      >
+        {selectedReport && (
+          <div className="space-y-4">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                Reason
+              </p>
+              <p className="text-sm font-medium mt-1">
+                {selectedReport.reason}
+              </p>
+            </div>
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                Reported content preview
+              </p>
+              <div className="p-3.5 rounded-xl bg-muted text-sm mt-1">
+                {getTargetPreview(
+                  selectedReport.targetType,
+                  selectedReport.targetId
+                )}
+              </div>
+            </div>
+            {selectedReport.status === "open" && (
+              <div className="flex flex-wrap gap-2 pt-3 border-t border-border">
+                <Button
+                  size="sm"
+                  variant="destructive"
+                  onClick={() => {
+                    resolveReport(state, dispatch, {
+                      reportId: selectedReport.id,
+                      moderatorId: modId,
+                      action: "hide",
+                      note: "Hidden by moderator due to report.",
+                    });
+                    setSelectedReport(null);
+                    showToast("Target hidden & report resolved!");
+                  }}
+                >
+                  <EyeOff className="w-4 h-4" /> Resolve &amp; Hide
+                </Button>
+                <Button
+                  size="sm"
+                  variant="default"
+                  onClick={() => {
+                    resolveReport(state, dispatch, {
+                      reportId: selectedReport.id,
+                      moderatorId: modId,
+                      action: "none",
+                      note: "Reviewed and resolved.",
+                    });
+                    setSelectedReport(null);
+                    showToast("Report marked resolved.");
+                  }}
+                >
+                  <Check className="w-4 h-4" /> Resolve
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => {
+                    dismissReport(dispatch, selectedReport.id, modId);
+                    setSelectedReport(null);
+                    showToast("Report dismissed.", "info");
+                  }}
+                >
+                  <X className="w-4 h-4" /> Dismiss
+                </Button>
+              </div>
+            )}
+          </div>
+        )}
+      </DetailDrawer>
 
       <ConfirmDialog
         open={confirmDelete !== null}

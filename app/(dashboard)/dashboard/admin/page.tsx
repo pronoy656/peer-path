@@ -25,6 +25,10 @@ import DashboardShell, {
   type DashboardNavItem,
 } from "@/components/dashboard/DashboardShell";
 import ConfirmDialog from "@/components/dashboard/ConfirmDialog";
+import DetailDrawer from "@/components/dashboard/DetailDrawer";
+import { StatCard } from "@/components/ui/stat-card";
+import { Badge } from "@/components/ui/badge";
+import type { SupportMessage } from "@/lib/types";
 import { useAppStore } from "@/lib/store/AppStore";
 import { getDemoAccounts, getDemoPassword } from "@/lib/services/auth";
 import {
@@ -88,6 +92,9 @@ export default function AdminDashboardPage() {
   // Settings state
   const [siteName, setSiteName] = useState(state.siteSettings.siteName);
   const [tagline, setTagline] = useState(state.siteSettings.tagline);
+  const [selectedSupport, setSelectedSupport] = useState<SupportMessage | null>(
+    null
+  );
 
   // Confirm dialogs
   const [confirmAction, setConfirmAction] = useState<{
@@ -265,41 +272,47 @@ export default function AdminDashboardPage() {
     >
       {activeTab === "overview" && (
         <div className="space-y-6">
-          <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-            <Card className="p-5">
-              <p className="text-xs text-muted-foreground">Total Users</p>
-              <p className="text-3xl font-bold mt-1">{state.users.length}</p>
-            </Card>
-            <Card className="p-5">
-              <p className="text-xs text-muted-foreground">Approved Courses</p>
-              <p className="text-3xl font-bold mt-1">
-                {allCourses.filter((c) => c.status === "approved").length}
-              </p>
-            </Card>
-            <Card className="p-5">
-              <p className="text-xs text-muted-foreground">Enrollments</p>
-              <p className="text-3xl font-bold mt-1">
-                {state.enrollments.length}
-              </p>
-            </Card>
-            <Card className="p-5">
-              <p className="text-xs text-muted-foreground">Community Posts</p>
-              <p className="text-3xl font-bold mt-1">{state.posts.length}</p>
-            </Card>
-            <Card className="p-5">
-              <p className="text-xs text-muted-foreground">Open Reports</p>
-              <p className="text-3xl font-bold mt-1 text-red-600">
-                {openReports.length}
-              </p>
-            </Card>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <StatCard
+              label="Total users"
+              value={state.users.length}
+              hint="Across 6 campus roles"
+              icon={<Users className="w-5 h-5" />}
+            />
+            <StatCard
+              label="Approved courses"
+              value={allCourses.filter((c) => c.status === "approved").length}
+              hint={`${pendingCourses.length} pending approval`}
+              hintTone={pendingCourses.length > 0 ? "danger" : "success"}
+              icon={<BookOpen className="w-5 h-5" />}
+            />
+            <StatCard
+              label="Enrollments"
+              value={state.enrollments.length}
+              hint={`${state.posts.length} community posts`}
+              hintTone="success"
+              icon={<GraduationCap className="w-5 h-5" />}
+            />
+            <StatCard
+              label="Open reports"
+              value={openReports.length}
+              hint={`${unhandledSupport.length} support unread`}
+              hintTone={openReports.length > 0 ? "danger" : "success"}
+              icon={<ShieldAlert className="w-5 h-5" />}
+            />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card className="p-6 space-y-4">
-              <h2 className="font-bold text-lg flex items-center gap-2">
-                <BarChart3 className="w-5 h-5 text-primary" />
-                Users by Role
-              </h2>
+            <Card className="p-6 gap-4">
+              <div className="flex items-center justify-between">
+                <h2 className="font-display font-bold text-lg flex items-center gap-2">
+                  <BarChart3 className="w-5 h-5 text-primary" />
+                  Users by role
+                </h2>
+                <span className="text-xs text-muted-foreground">
+                  Total: {state.users.length}
+                </span>
+              </div>
               <div className="space-y-3">
                 {usersByRole.map(({ role, count }) => (
                   <div key={role} className="space-y-1">
@@ -309,7 +322,7 @@ export default function AdminDashboardPage() {
                     </div>
                     <div className="h-3 rounded-full bg-muted overflow-hidden">
                       <div
-                        className="h-full bg-yellow-400 rounded-full transition-all"
+                        className="h-full bg-accent rounded-full transition-all"
                         style={{
                           width: `${Math.round((count / maxRoleCount) * 100)}%`,
                         }}
@@ -320,11 +333,16 @@ export default function AdminDashboardPage() {
               </div>
             </Card>
 
-            <Card className="p-6 space-y-4">
-              <h2 className="font-bold text-lg flex items-center gap-2">
-                <BookOpen className="w-5 h-5 text-primary" />
-                Active Courses by Department
-              </h2>
+            <Card className="p-6 gap-4">
+              <div className="flex items-center justify-between">
+                <h2 className="font-display font-bold text-lg flex items-center gap-2">
+                  <BookOpen className="w-5 h-5 text-primary" />
+                  Active courses by department
+                </h2>
+                <span className="text-xs text-muted-foreground">
+                  5 departments
+                </span>
+              </div>
               <div className="space-y-3">
                 {coursesByDept.map(({ dept, count }) => (
                   <div key={dept} className="space-y-1">
@@ -334,7 +352,7 @@ export default function AdminDashboardPage() {
                     </div>
                     <div className="h-3 rounded-full bg-muted overflow-hidden">
                       <div
-                        className="h-full bg-slate-900 rounded-full transition-all"
+                        className="h-full bg-primary rounded-full transition-all"
                         style={{
                           width: `${Math.round((count / maxDeptCount) * 100)}%`,
                         }}
@@ -345,6 +363,79 @@ export default function AdminDashboardPage() {
               </div>
             </Card>
           </div>
+
+          <Card className="p-6 gap-4">
+            <div className="flex items-center justify-between">
+              <h2 className="font-display font-bold text-lg">
+                Needs attention
+              </h2>
+              <span className="text-xs text-muted-foreground">
+                Pending courses &amp; open support
+              </span>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-border text-left text-xs uppercase tracking-wider text-muted-foreground">
+                    <th className="py-3 pr-4 font-semibold">Item</th>
+                    <th className="py-3 pr-4 font-semibold">Category</th>
+                    <th className="py-3 pr-4 font-semibold">Status</th>
+                    <th className="py-3 text-right font-semibold">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {pendingCourses.map((c) => (
+                    <tr
+                      key={c.id}
+                      className="h-14 border-b border-border hover:bg-muted/40 transition-colors"
+                    >
+                      <td className="py-3 pr-4 font-semibold">
+                        {c.code} · {c.title}
+                      </td>
+                      <td className="py-3 pr-4">
+                        <Badge department={c.department}>{c.department}</Badge>
+                      </td>
+                      <td className="py-3 pr-4">
+                        <Badge variant="pending">Pending approval</Badge>
+                      </td>
+                      <td className="py-3 text-right">
+                        <Button
+                          size="sm"
+                          variant="accent"
+                          onClick={() => {
+                            approveCourse(dispatch, c.id);
+                            showToast(`Approved ${c.code}!`);
+                          }}
+                        >
+                          Approve
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                  {unhandledSupport.map((s) => (
+                    <tr
+                      key={s.id}
+                      onClick={() => setSelectedSupport(s)}
+                      className="h-14 border-b border-border last:border-0 hover:bg-muted/40 cursor-pointer transition-colors"
+                    >
+                      <td className="py-3 pr-4 font-semibold">
+                        {s.name} — {s.message.slice(0, 48)}…
+                      </td>
+                      <td className="py-3 pr-4">
+                        <Badge variant="neutral">Support</Badge>
+                      </td>
+                      <td className="py-3 pr-4">
+                        <Badge variant="pending">Open</Badge>
+                      </td>
+                      <td className="py-3 text-right text-xs font-semibold text-primary">
+                        Inspect →
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Card>
         </div>
       )}
 
@@ -1270,6 +1361,36 @@ export default function AdminDashboardPage() {
           </Card>
         </div>
       )}
+
+      <DetailDrawer
+        open={selectedSupport !== null}
+        title={selectedSupport?.name ?? "Support message"}
+        subtitle={selectedSupport?.email}
+        onClose={() => setSelectedSupport(null)}
+      >
+        {selectedSupport && (
+          <div className="space-y-4">
+            <p className="text-sm leading-relaxed text-foreground">
+              {selectedSupport.message}
+            </p>
+            <div className="pt-3 border-t border-border flex justify-end gap-2">
+              <Button
+                variant="default"
+                onClick={() => {
+                  dispatch({
+                    type: "TOGGLE_SUPPORT_HANDLED",
+                    messageId: selectedSupport.id,
+                  });
+                  setSelectedSupport(null);
+                  showToast("Support message updated!");
+                }}
+              >
+                {selectedSupport.handled ? "Reopen" : "Mark as handled"}
+              </Button>
+            </div>
+          </div>
+        )}
+      </DetailDrawer>
 
       <ConfirmDialog
         open={confirmAction !== null}

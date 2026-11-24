@@ -19,6 +19,8 @@ import DashboardShell, {
 } from "@/components/dashboard/DashboardShell";
 import ConfirmDialog from "@/components/dashboard/ConfirmDialog";
 import MessagesPanel from "@/components/dashboard/MessagesPanel";
+import { StatCard } from "@/components/ui/stat-card";
+import { Badge } from "@/components/ui/badge";
 import { useAppStore } from "@/lib/store/AppStore";
 import { getCourses } from "@/lib/services/courses";
 import {
@@ -191,35 +193,46 @@ export default function TeacherDashboardPage() {
     >
       {activeTab === "overview" && (
         <div className="space-y-6">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <Card className="p-5">
-              <p className="text-xs text-muted-foreground">Active Batches</p>
-              <p className="text-3xl font-bold mt-1">{batches.length}</p>
-            </Card>
-            <Card className="p-5">
-              <p className="text-xs text-muted-foreground">Total Students</p>
-              <p className="text-3xl font-bold mt-1">{allStudents.length}</p>
-            </Card>
-            <Card className="p-5">
-              <p className="text-xs text-muted-foreground">Attendance Logs</p>
-              <p className="text-3xl font-bold mt-1">{myAttendance.length}</p>
-            </Card>
-            <Card className="p-5">
-              <p className="text-xs text-muted-foreground">Active Assignments</p>
-              <p className="text-3xl font-bold mt-1">{myAssignments.length}</p>
-            </Card>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <StatCard
+              label="Active batches"
+              value={batches.length}
+              hint="Advising groups"
+              icon={<Users className="w-5 h-5" />}
+            />
+            <StatCard
+              label="Total students"
+              value={allStudents.length}
+              hint="Across batches"
+              icon={<BookOpen className="w-5 h-5" />}
+            />
+            <StatCard
+              label="Attendance logs"
+              value={myAttendance.length}
+              hint="Saved sessions"
+              hintTone="success"
+              icon={<CalendarCheck className="w-5 h-5" />}
+            />
+            <StatCard
+              label="Assignments"
+              value={myAssignments.length}
+              hint="Active coursework"
+              icon={<ClipboardList className="w-5 h-5" />}
+            />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card className="p-6 space-y-3">
+            <Card className="p-6 gap-4">
               <div className="flex items-center justify-between">
-                <h2 className="font-bold text-lg">Recent Attendance Snapshots</h2>
+                <h2 className="font-display font-bold text-lg">
+                  Batch attendance snapshot
+                </h2>
                 <Button
                   size="sm"
-                  variant="outline"
+                  variant="accent"
                   onClick={() => setActiveTab("attendance")}
                 >
-                  Take Attendance
+                  Mark attendance
                 </Button>
               </div>
               {myAttendance.slice(0, 4).map((rec) => {
@@ -227,45 +240,61 @@ export default function TeacherDashboardPage() {
                 const batchSize = allStudents.filter(
                   (s) => s.batch === rec.batch
                 ).length;
+                const pct = Math.min(
+                  100,
+                  Math.round(
+                    (rec.presentIds.length /
+                      Math.max(1, batchSize || rec.presentIds.length)) *
+                      100
+                  )
+                );
                 return (
-                  <div
-                    key={rec.id}
-                    className="p-3.5 rounded-xl border flex items-center justify-between text-sm"
-                  >
-                    <div>
-                      <p className="font-semibold">
-                        Batch {rec.batch} • {course?.code ?? "Course"}
-                      </p>
-                      <p className="text-xs text-muted-foreground">{rec.date}</p>
+                  <div key={rec.id} className="space-y-1.5">
+                    <div className="flex items-center justify-between text-xs font-semibold">
+                      <span>
+                        Batch {rec.batch} · {course?.code ?? "Course"} ({rec.date})
+                      </span>
+                      <span>
+                        {rec.presentIds.length}/
+                        {batchSize || rec.presentIds.length} present
+                      </span>
                     </div>
-                    <span className="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold">
-                      {rec.presentIds.length}/{batchSize || rec.presentIds.length} present
-                    </span>
+                    <div className="h-2.5 rounded-full bg-muted overflow-hidden">
+                      <div
+                        className="h-full bg-primary rounded-full"
+                        style={{ width: `${pct}%` }}
+                      />
+                    </div>
                   </div>
                 );
               })}
             </Card>
 
-            <Card className="p-6 space-y-3">
+            <Card className="p-6 gap-4">
               <div className="flex items-center justify-between">
-                <h2 className="font-bold text-lg">Recent Announcements</h2>
+                <h2 className="font-display font-bold text-lg">
+                  Recent announcements
+                </h2>
                 <Button
                   size="sm"
                   variant="outline"
                   onClick={() => setActiveTab("announcements")}
                 >
-                  New Announcement
+                  New announcement
                 </Button>
               </div>
               {myAnnouncements.slice(0, 3).map((ann) => (
-                <div key={ann.id} className="p-3.5 rounded-xl border">
-                  <div className="flex items-center justify-between text-xs text-primary font-bold">
-                    <span>Batch {ann.batch}</span>
-                    <span className="text-muted-foreground font-normal">
+                <div
+                  key={ann.id}
+                  className="p-3.5 rounded-xl border border-border"
+                >
+                  <div className="flex items-center justify-between text-xs">
+                    <Badge variant="saved">Batch {ann.batch}</Badge>
+                    <span className="text-muted-foreground">
                       {new Date(ann.createdAt).toLocaleDateString()}
                     </span>
                   </div>
-                  <p className="font-semibold text-sm mt-1">{ann.title}</p>
+                  <p className="font-semibold text-sm mt-1.5">{ann.title}</p>
                   <p className="text-xs text-muted-foreground line-clamp-2 mt-0.5">
                     {ann.content}
                   </p>
