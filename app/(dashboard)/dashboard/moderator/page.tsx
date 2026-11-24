@@ -6,7 +6,6 @@ import {
   Check,
   Eye,
   EyeOff,
-  FileWarning,
   History,
   LayoutDashboard,
   MessageSquare,
