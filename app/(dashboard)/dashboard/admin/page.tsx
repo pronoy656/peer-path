@@ -506,7 +506,7 @@ export default function AdminDashboardPage() {
               </div>
               <Button
                 type="submit"
-                className="w-full bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-semibold"
+                className="w-full bg-accent hover:bg-accent-hover text-accent-foreground font-semibold"
               >
                 Add User
               </Button>
@@ -632,7 +632,7 @@ export default function AdminDashboardPage() {
       {activeTab === "courses" && (
         <div className="space-y-6">
           {pendingCourses.length > 0 && (
-            <Card className="p-6 border-2 border-yellow-400/70 bg-yellow-50/40 space-y-4">
+            <Card className="p-6 border-2 border-accent/50 bg-accent/5 space-y-4">
               <h2 className="text-lg font-bold">
                 Pending Course Proposals ({pendingCourses.length})
               </h2>
@@ -770,7 +770,7 @@ export default function AdminDashboardPage() {
                 <div className="flex gap-2">
                   <Button
                     type="submit"
-                    className="flex-1 bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-semibold"
+                    className="flex-1 bg-accent hover:bg-accent-hover text-accent-foreground font-semibold"
                   >
                     {editingCourse ? "Update Course" : "Add Course"}
                   </Button>
@@ -884,7 +884,7 @@ export default function AdminDashboardPage() {
               />
               <Button
                 type="submit"
-                className="w-full bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-semibold"
+                className="w-full bg-accent hover:bg-accent-hover text-accent-foreground font-semibold"
               >
                 Add Faculty
               </Button>
@@ -1233,7 +1233,7 @@ export default function AdminDashboardPage() {
               />
               <Button
                 type="submit"
-                className="w-full bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-bold"
+                className="w-full bg-accent hover:bg-accent-hover text-accent-foreground font-bold"
               >
                 Publish Platform Announcement
               </Button>
@@ -1308,7 +1308,7 @@ export default function AdminDashboardPage() {
               </div>
               <Button
                 type="submit"
-                className="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-semibold"
+                className="bg-accent hover:bg-accent-hover text-accent-foreground font-semibold"
               >
                 Save Settings
               </Button>

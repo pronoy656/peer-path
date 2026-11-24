@@ -407,7 +407,7 @@ export default function FacultyDashboardPage() {
                   <p className="text-sm text-foreground/85">{rev.content}</p>
 
                   {rev.reply ? (
-                    <div className="rounded-xl bg-yellow-50 border-l-4 border-yellow-400 p-3 text-sm">
+                    <div className="rounded-xl bg-background border-l-4 border-accent p-3 text-sm">
                       <span className="font-semibold">Your reply: </span>
                       {rev.reply.content}
                     </div>
@@ -427,7 +427,7 @@ export default function FacultyDashboardPage() {
                       />
                       <Button
                         size="sm"
-                        className="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-semibold"
+                        className="bg-accent hover:bg-accent-hover text-accent-foreground font-semibold"
                         onClick={() => {
                           const text = replyDrafts[rev.id]?.trim();
                           if (!text) return;
@@ -511,7 +511,7 @@ export default function FacultyDashboardPage() {
               </div>
               <Button
                 type="submit"
-                className="w-full bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-semibold"
+                className="w-full bg-accent hover:bg-accent-hover text-accent-foreground font-semibold"
               >
                 Publish Material
               </Button>
@@ -616,7 +616,7 @@ export default function FacultyDashboardPage() {
             <div className="flex gap-3">
               <Button
                 type="submit"
-                className="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-semibold"
+                className="bg-accent hover:bg-accent-hover text-accent-foreground font-semibold"
               >
                 Save Faculty Profile
               </Button>

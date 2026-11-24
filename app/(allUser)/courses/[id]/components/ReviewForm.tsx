@@ -35,10 +35,10 @@ export default function ReviewForm({
                 className="transition-transform hover:scale-110"
               >
                 <Star
-                  className={`h-10 w-10 ${
+                  className={`h-8 w-8 ${
                     star <= rating
-                      ? "fill-yellow-400 text-yellow-400"
-                      : "text-gray-300"
+                      ? "fill-accent text-accent"
+                      : "text-border"
                   }`}
                 />
               </button>

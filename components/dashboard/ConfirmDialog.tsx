@@ -48,8 +48,8 @@ export default function ConfirmDialog({
           <div
             className={`p-2 rounded-xl shrink-0 ${
               variant === "danger"
-                ? "bg-red-100 text-red-600"
-                : "bg-yellow-100 text-amber-700"
+                ? "bg-red-50 text-danger"
+                : "bg-accent/15 text-accent-foreground"
             }`}
           >
             <AlertTriangle className="w-5 h-5" />
@@ -68,12 +68,8 @@ export default function ConfirmDialog({
           </Button>
           <Button
             type="button"
+            variant={variant === "danger" ? "destructive" : "accent"}
             onClick={onConfirm}
-            className={
-              variant === "danger"
-                ? "bg-red-600 hover:bg-red-700 text-white"
-                : "bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-semibold"
-            }
           >
             {confirmLabel}
           </Button>

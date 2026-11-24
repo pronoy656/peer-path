@@ -398,7 +398,7 @@ export default function AlumniDashboardPage() {
                       />
                       <Button
                         size="sm"
-                        className="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-semibold"
+                        className="bg-accent hover:bg-accent-hover text-accent-foreground font-semibold"
                         onClick={() => {
                           dispatch({
                             type: "UPDATE_MENTORSHIP_NOTES",
@@ -519,7 +519,7 @@ export default function AlumniDashboardPage() {
               </div>
               <Button
                 type="submit"
-                className="w-full bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-semibold"
+                className="w-full bg-accent hover:bg-accent-hover text-accent-foreground font-semibold"
               >
                 Publish Job
               </Button>
@@ -532,7 +532,7 @@ export default function AlumniDashboardPage() {
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-yellow-100 text-amber-900">
+                      <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-primary/10 text-primary">
                         {job.type}
                       </span>
                       <span
@@ -682,7 +682,7 @@ export default function AlumniDashboardPage() {
               </div>
               <Button
                 type="submit"
-                className="w-full bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-semibold"
+                className="w-full bg-accent hover:bg-accent-hover text-accent-foreground font-semibold"
               >
                 Publish Event
               </Button>
@@ -808,7 +808,7 @@ export default function AlumniDashboardPage() {
             <div className="flex gap-3">
               <Button
                 type="submit"
-                className="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-semibold"
+                className="bg-accent hover:bg-accent-hover text-accent-foreground font-semibold"
               >
                 Save Mentor Profile
               </Button>

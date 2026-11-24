@@ -315,7 +315,7 @@ export default function TeacherDashboardPage() {
                 onClick={() => setSelectedBatch(b)}
                 className={`px-4 py-2 rounded-xl text-sm font-semibold transition ${
                   selectedBatch === b
-                    ? "bg-yellow-400 text-slate-900 shadow-sm"
+                    ? "bg-primary text-primary-foreground shadow-sm"
                     : "bg-card border hover:bg-muted"
                 }`}
               >
@@ -436,7 +436,7 @@ export default function TeacherDashboardPage() {
             <Button
               type="button"
               onClick={handleSaveAttendance}
-              className="w-full bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-bold"
+              className="w-full bg-accent hover:bg-accent-hover text-accent-foreground font-bold"
             >
               Save Attendance ({presentIds.length}/{attStudents.length} Present)
             </Button>
@@ -523,7 +523,7 @@ export default function TeacherDashboardPage() {
               <div className="flex gap-2">
                 <Button
                   type="submit"
-                  className="flex-1 bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-semibold"
+                  className="flex-1 bg-accent hover:bg-accent-hover text-accent-foreground font-semibold"
                 >
                   {editingAnnId ? "Update" : "Publish & Notify"}
                 </Button>
@@ -659,7 +659,7 @@ export default function TeacherDashboardPage() {
               </div>
               <Button
                 type="submit"
-                className="w-full bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-semibold"
+                className="w-full bg-accent hover:bg-accent-hover text-accent-foreground font-semibold"
               >
                 Create Assignment
               </Button>
@@ -684,7 +684,7 @@ export default function TeacherDashboardPage() {
                       </span>
                       <h3 className="font-bold">{asg.title}</h3>
                     </div>
-                    <span className="text-xs px-2.5 py-1 rounded-full bg-yellow-100 text-amber-900 font-semibold">
+                    <span className="text-xs px-2.5 py-1 rounded-full bg-primary/10 text-primary font-semibold">
                       {asg.submissions.length}/{batchTotal || 1} submitted
                     </span>
                   </div>

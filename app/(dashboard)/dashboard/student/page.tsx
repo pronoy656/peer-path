@@ -371,7 +371,7 @@ export default function StudentDashboardPage() {
                 Use Discover to pick your ULAB semester courses.
               </p>
               <Link href="/discover">
-                <Button className="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-semibold gap-2">
+                <Button className="bg-accent hover:bg-accent-hover text-accent-foreground font-semibold gap-2">
                   <Compass className="w-4 h-4" /> Go to Discover
                 </Button>
               </Link>
@@ -394,14 +394,14 @@ export default function StudentDashboardPage() {
                           {instructor?.name ?? "ULAB Faculty"}
                         </p>
                       </div>
-                      <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-yellow-100 text-amber-900">
+                      <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-primary/10 text-primary">
                         {progress}%
                       </span>
                     </div>
 
                     <div className="w-full h-2.5 rounded-full bg-muted overflow-hidden">
                       <div
-                        className="h-full bg-yellow-400 transition-all duration-300"
+                        className="h-full bg-primary transition-all duration-300"
                         style={{ width: `${progress}%` }}
                       />
                     </div>
@@ -414,7 +414,7 @@ export default function StudentDashboardPage() {
                           advanceProgress(dispatch, userId, course.id);
                           showToast(`Completed a lesson in ${course.code}!`);
                         }}
-                        className="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-semibold"
+                        className="bg-accent hover:bg-accent-hover text-accent-foreground font-semibold"
                       >
                         {progress >= 100
                           ? "Completed!"
@@ -527,7 +527,7 @@ export default function StudentDashboardPage() {
                   <div className="flex flex-wrap gap-2">
                     <Button
                       size="sm"
-                      className="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-semibold"
+                      className="bg-accent hover:bg-accent-hover text-accent-foreground font-semibold"
                       onClick={() => {
                         const res = enroll(state, dispatch, userId, course.id);
                         showToast(res.message, res.ok ? "success" : "info");
@@ -605,7 +605,7 @@ export default function StudentDashboardPage() {
                   <div className="flex gap-2 shrink-0">
                     <Button
                       size="sm"
-                      className="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-semibold"
+                      className="bg-accent hover:bg-accent-hover text-accent-foreground font-semibold"
                       onClick={() => {
                         const res = enroll(state, dispatch, userId, course.id);
                         showToast(res.message, res.ok ? "success" : "info");
@@ -790,7 +790,7 @@ export default function StudentDashboardPage() {
                 <div
                   key={n.id}
                   className={`p-4 rounded-xl border flex items-start justify-between gap-4 ${
-                    n.read ? "bg-background" : "bg-yellow-50/70 border-yellow-300"
+                    n.read ? "bg-background" : "bg-accent/10 border-accent/40"
                   }`}
                 >
                   <div>
@@ -916,7 +916,7 @@ export default function StudentDashboardPage() {
 
               <Button
                 type="submit"
-                className="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-semibold"
+                className="bg-accent hover:bg-accent-hover text-accent-foreground font-semibold"
               >
                 Save Changes
               </Button>

@@ -105,3 +105,29 @@ This document summarizes every change completed across **Phases 0–7** followin
 - `npm run lint`: Passed with 0 errors.
 - `npm run build`: Passed cleanly (all 25 static/dynamic routes compiled).
 - Codebase scan for `href="#"`: 0 matches.
+- Codebase scan for hard-coded hex colors outside `globals.css`: 0 matches.
+
+---
+
+## UI/UX Design System (Phases D1–D5)
+
+Implemented following `PeerPath — UI/UX Design Prompt.md`:
+
+- **Phase D1 — Tokens & Typography**:
+  - `app/globals.css`: Warm paper background (`#FAFAF7`), ink foreground (`#101828`), warm gray borders (`#E7E5DE`), deep navy primary (`#1B2A4A`), amber accent (`#F59E0B` with near-black `#1A1305` foreground), dark navy sidebar (`#0F172A`), soft layered shadows, 2px amber focus-visible rings, and `prefers-reduced-motion` support.
+  - `app/layout.tsx`: Loaded `Plus Jakarta Sans` (`600, 700, 800`) and `Inter` (`400, 500, 600`) via `next/font/google`.
+  - `lib/theme/tokens.ts`: Department identity tint badges (`CSE`, `BBA`, `MSJ`, `English`, `Bangla`) and avatar tint classes; removed hard-coded hex values from components and data files.
+- **Phase D2 — Primitives, Shell & Footer**:
+  - Restyled `components/ui/button.tsx` (navy `default`, amber `accent`, `outline`, `ghost`, `destructive`, `loading` state), `card.tsx`, `badge.tsx`, `avatar.tsx` (with fallback initials), `empty-state.tsx`, `stat-card.tsx`, and `skeleton.tsx`.
+  - Updated `AppStore.tsx` toasts to dark navy with semantic left status icons.
+  - Updated `components/common/navbar/page.tsx` with amber `GraduationCap` mark, active amber underline bar, and full mobile slide-down menu.
+  - Updated `components/dashboard/DashboardShell.tsx` with dark navy grouped sidebar (`Overview`, `Manage`, `Account`), 3px amber active indicator, collapsible tablet icon rail, mobile drawer, and white topbar with breadcrumbs.
+  - Rewrote `components/common/footer/page.tsx` with dark navy background, `"Find your path at ULAB."` tagline, 4-column layout, and Back to top button (removed scroll-velocity gimmick).
+- **Phase D3 — Public Pages Art Direction**:
+  - Redesigned Home (`HeroSection`, `ChoosePeerPath`, `CourseMap`, `CourseCard` with strict 16:10 image-first anatomy, 3-step How It Works, static 3-card `Review` quotes, static 3-card `AlumniSections` + navy CTA band, `FaqSection`, and clean `Cta` support form; removed marquee & auto-playing carousels).
+  - Redesigned Discover (`FullDiscoverPage`) with sticky filter bar, 320px desktop sticky selection panel, mobile fixed bottom bar + bottom sheet, and amber-accented Recommendations section.
+  - Aligned Courses, Course Detail (sticky conversion sidebar + syllabus accordion), Faculty/Students/Alumni directories & tabbed profile pages, 2-column Community feed with right rail and collapsible nested comments, and split-layout Auth pages (`auth-split-layout.tsx`).
+- **Phase D4 — Dashboards & Charts**:
+  - Upgraded all 6 dashboards (`/dashboard/student`, `/dashboard/faculty`, `/dashboard/teacher`, `/dashboard/moderator`, `/dashboard/alumni`, `/dashboard/admin`) with `StatCard` grids, Navy/Amber bar charts, clean Section 4.6 tables, and `DetailDrawer.tsx` 480px slide-over drawers.
+- **Phase D5 — Motion, Responsive & A11y Polish**:
+  - Harmonized remaining modals, course/review stars, confirm dialogs, messages panel, and secondary pages (`not-found`, `jobs`, `events`, `privacy`, `terms`) to semantic tokens and verified `tsc`, `eslint`, and `next build`.

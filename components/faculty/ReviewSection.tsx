@@ -4,8 +4,9 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Star, MessageSquare, ThumbsUp } from "lucide-react";
 import { useAppStore } from "@/lib/store/AppStore";
-import { addCourseReview, addFacultyReview } from "@/lib/services/courses";
+import { addFacultyReview } from "@/lib/services/courses";
 import { getFacultyReviews } from "@/lib/services/people";
+import { Button } from "@/components/ui/button";
 
 interface ReviewSectionProps {
   facultyId: string;
@@ -36,16 +37,14 @@ export default function ReviewSection({ facultyId }: ReviewSectionProps) {
     showToast("Faculty review submitted!");
   };
 
-  void addCourseReview;
-
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-      <h3 className="text-lg font-bold text-gray-900 mb-6 flex items-center gap-2">
-        <MessageSquare className="w-5 h-5 text-yellow-500" />
-        Student Reviews ({reviews.length})
+    <div className="bg-card rounded-2xl shadow-[var(--shadow-card)] border border-border p-6">
+      <h3 className="text-lg font-bold font-display text-foreground mb-6 flex items-center gap-2">
+        <MessageSquare className="w-5 h-5 text-primary" />
+        Student reviews ({reviews.length})
       </h3>
 
-      <div className="space-y-6 mb-10">
+      <div className="space-y-5 mb-8">
         {reviews.length > 0 ? (
           reviews.map((review) => {
             const author = state.users.find((u) => u.id === review.authorId);
@@ -55,13 +54,13 @@ export default function ReviewSection({ facultyId }: ReviewSectionProps) {
             return (
               <div
                 key={review.id}
-                className="border-b border-gray-100 last:border-0 pb-6 last:pb-0"
+                className="border-b border-border last:border-0 pb-5 last:pb-0"
               >
                 <div className="flex items-center justify-between mb-2">
-                  <div className="font-semibold text-gray-900">
+                  <div className="font-semibold text-sm text-foreground">
                     {author?.name ?? "ULAB Student"}
                   </div>
-                  <span className="text-xs text-gray-400">
+                  <span className="text-xs text-muted-foreground">
                     {new Date(review.createdAt).toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",
@@ -75,18 +74,18 @@ export default function ReviewSection({ facultyId }: ReviewSectionProps) {
                       key={i}
                       className={`w-4 h-4 ${
                         i < Math.round(review.rating)
-                          ? "text-yellow-400 fill-yellow-400"
-                          : "text-gray-300"
+                          ? "text-accent fill-accent"
+                          : "text-border"
                       }`}
                     />
                   ))}
                 </div>
-                <p className="text-gray-600 text-sm leading-relaxed">
+                <p className="text-muted-foreground text-sm leading-relaxed">
                   {review.content}
                 </p>
                 {review.reply && (
-                  <div className="mt-3 rounded-lg bg-yellow-50/70 border-l-4 border-yellow-400 p-3 text-xs text-gray-700">
-                    <span className="font-semibold text-gray-900">
+                  <div className="mt-3 rounded-lg bg-background border-l-4 border-accent p-3 text-xs text-foreground/85">
+                    <span className="font-semibold text-foreground">
                       {replyAuthor?.name ?? "Faculty"} replied:{" "}
                     </span>
                     {review.reply.content}
@@ -96,20 +95,20 @@ export default function ReviewSection({ facultyId }: ReviewSectionProps) {
             );
           })
         ) : (
-          <div className="text-center text-gray-500 py-4">
+          <div className="text-center text-muted-foreground text-sm py-4">
             No reviews yet. Be the first to review!
           </div>
         )}
       </div>
 
-      <div className="bg-gray-50 rounded-xl p-6">
-        <h4 className="font-bold text-gray-900 mb-4">Write a Review</h4>
+      <div className="bg-background border border-border rounded-xl p-5">
+        <h4 className="font-bold font-display text-foreground mb-4">
+          Write a review
+        </h4>
         {currentUser ? (
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Rating
-              </label>
+              <label className="block text-sm font-medium mb-2">Rating</label>
               <div className="flex gap-2">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <button
@@ -117,13 +116,13 @@ export default function ReviewSection({ facultyId }: ReviewSectionProps) {
                     type="button"
                     aria-label={`Rate ${star} stars`}
                     onClick={() => setNewRating(star)}
-                    className="focus:outline-none transition-transform hover:scale-110"
+                    className="transition-transform hover:scale-110"
                   >
                     <Star
                       className={`w-6 h-6 ${
                         star <= newRating
-                          ? "text-yellow-400 fill-yellow-400"
-                          : "text-gray-300"
+                          ? "text-accent fill-accent"
+                          : "text-border"
                       }`}
                     />
                   </button>
@@ -133,9 +132,9 @@ export default function ReviewSection({ facultyId }: ReviewSectionProps) {
             <div>
               <label
                 htmlFor="faculty-review-text"
-                className="block text-sm font-medium text-gray-700 mb-2"
+                className="block text-sm font-medium mb-1.5"
               >
-                Your Experience
+                Your experience
               </label>
               <textarea
                 id="faculty-review-text"
@@ -144,29 +143,25 @@ export default function ReviewSection({ facultyId }: ReviewSectionProps) {
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
                 placeholder="Share your experience with this faculty member..."
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 outline-none transition-all resize-none bg-white"
+                className="w-full p-3 border border-border rounded-lg text-sm resize-none bg-card"
               />
             </div>
             <div className="flex justify-end">
-              <button
-                type="submit"
-                className="px-6 py-2 bg-yellow-400 hover:bg-yellow-500 text-black font-bold rounded-lg transition-colors flex items-center gap-2"
-              >
-                Submit Review
+              <Button type="submit" variant="default">
                 <ThumbsUp className="w-4 h-4" />
-              </button>
+                Submit review
+              </Button>
             </div>
           </form>
         ) : (
           <div className="flex items-center justify-between flex-wrap gap-3">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-muted-foreground">
               Sign in with your PeerPath account to share a review.
             </p>
-            <Link
-              href="/signIn"
-              className="px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-black font-bold rounded-lg text-sm"
-            >
-              Sign In
+            <Link href="/signIn">
+              <Button variant="default" size="sm">
+                Sign in
+              </Button>
             </Link>
           </div>
         )}

@@ -28,8 +28,8 @@ export default function RatingStars({
               key={i}
               className={`${isLarge ? "h-6 w-6" : "h-4 w-4"} ${
                 i < Math.floor(numRating)
-                  ? "fill-yellow-400 text-yellow-400"
-                  : "text-gray-300"
+                  ? "fill-accent text-accent"
+                  : "text-border"
               }`}
             />
           ))}

@@ -128,7 +128,7 @@ export default function MessagesPanel({
                   onClick={() => setSelectedPeerId(pid)}
                   className={`w-full text-left p-3 rounded-xl border transition ${
                     active
-                      ? "bg-yellow-50 border-yellow-400"
+                      ? "bg-primary/5 border-primary"
                       : "bg-background border-border hover:bg-muted/50"
                   }`}
                 >
@@ -184,7 +184,7 @@ export default function MessagesPanel({
                       <div
                         className={`max-w-[80%] rounded-2xl px-4 py-2.5 text-sm ${
                           isMe
-                            ? "bg-yellow-400 text-slate-900"
+                            ? "bg-primary text-primary-foreground"
                             : "bg-muted text-foreground"
                         }`}
                       >
@@ -215,10 +215,7 @@ export default function MessagesPanel({
                 placeholder="Write a message..."
                 className="flex-1 px-4 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-yellow-400 outline-none"
               />
-              <Button
-                type="submit"
-                className="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-semibold gap-1.5"
-              >
+              <Button type="submit" variant="default">
                 <Send className="w-4 h-4" />
                 Send
               </Button>

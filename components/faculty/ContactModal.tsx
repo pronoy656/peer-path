@@ -2,10 +2,10 @@
 
 import React, { useEffect, useState } from "react";
 import { X, Send, Mail } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
 import { useRouter } from "next/navigation";
 import { useAppStore } from "@/lib/store/AppStore";
 import { sendDirectMessage } from "@/lib/services/people";
+import { Button } from "@/components/ui/button";
 
 interface ContactModalProps {
   isOpen: boolean;
@@ -58,120 +58,102 @@ export default function ContactModal({
       setSubject("");
       setMessage("");
       onClose();
-    }, 1200);
+    }, 1000);
   };
 
   if (!isOpen) return null;
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={onClose}
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-        >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            onClick={(e) => e.stopPropagation()}
-            role="dialog"
-            aria-modal="true"
-            aria-label={`Contact ${facultyName}`}
-            className="bg-white rounded-2xl w-full max-w-lg shadow-xl overflow-hidden"
+    <div
+      onClick={onClose}
+      className="fixed inset-0 bg-black/50 backdrop-blur-xs z-50 flex items-center justify-center p-4"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Contact ${facultyName}`}
+        className="bg-card border border-border rounded-2xl w-full max-w-lg shadow-[var(--shadow-modal)] overflow-hidden"
+      >
+        <div className="bg-sidebar text-white p-6 relative">
+          <button
+            type="button"
+            aria-label="Close contact dialog"
+            onClick={onClose}
+            className="absolute right-4 top-4 p-2 bg-white/10 hover:bg-white/20 rounded-lg text-white transition-colors"
           >
-            <div className="bg-yellow-400 p-6 relative">
-              <button
-                type="button"
-                aria-label="Close contact dialog"
-                onClick={onClose}
-                className="absolute right-4 top-4 p-2 bg-white/20 hover:bg-white/40 rounded-full text-black transition-colors"
-              >
-                <X className="w-4 h-4" />
-              </button>
-              <h2 className="text-xl font-bold text-black mb-1 flex items-center gap-2">
-                <Mail className="w-5 h-5" />
-                Contact Faculty
-              </h2>
-              <p className="text-black/80 font-medium truncate text-sm">
-                To: {facultyName} ({facultyEmail})
+            <X className="w-4 h-4" />
+          </button>
+          <h2 className="text-lg font-bold font-display mb-1 flex items-center gap-2">
+            <Mail className="w-5 h-5 text-accent" />
+            Contact faculty
+          </h2>
+          <p className="text-sidebar-foreground/80 text-sm truncate">
+            To: {facultyName} ({facultyEmail})
+          </p>
+        </div>
+
+        <div className="p-6">
+          {sent ? (
+            <div className="text-center py-6 space-y-2">
+              <div className="mx-auto w-12 h-12 bg-green-50 text-success rounded-full flex items-center justify-center">
+                <Send className="w-5 h-5" />
+              </div>
+              <h3 className="text-base font-bold">Message delivered</h3>
+              <p className="text-muted-foreground text-sm">
+                Your note is now in {facultyName}&apos;s PeerPath inbox.
               </p>
             </div>
-
-            <div className="p-6">
-              {sent ? (
-                <div className="text-center py-8">
-                  <div className="mx-auto w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
-                    <Send className="w-6 h-6 text-green-600" />
-                  </div>
-                  <h3 className="text-lg font-bold text-gray-900">
-                    Message Delivered!
-                  </h3>
-                  <p className="text-gray-500 text-sm">
-                    Your note is now in {facultyName}&apos;s PeerPath inbox.
-                  </p>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div>
-                    <label
-                      htmlFor="faculty-subject"
-                      className="block text-sm font-medium text-gray-700 mb-1"
-                    >
-                      Subject
-                    </label>
-                    <input
-                      type="text"
-                      id="faculty-subject"
-                      required
-                      value={subject}
-                      onChange={(e) => setSubject(e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 outline-none transition-all"
-                      placeholder="e.g. Question about CSE101 office hours"
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="faculty-message"
-                      className="block text-sm font-medium text-gray-700 mb-1"
-                    >
-                      Message
-                    </label>
-                    <textarea
-                      id="faculty-message"
-                      required
-                      rows={4}
-                      value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 outline-none transition-all resize-none"
-                      placeholder="Write your message here..."
-                    />
-                  </div>
-                  <div className="flex justify-end gap-3 pt-2">
-                    <button
-                      type="button"
-                      onClick={onClose}
-                      className="px-4 py-2 text-gray-700 font-medium hover:bg-gray-100 rounded-lg transition-colors"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="submit"
-                      className="px-6 py-2 bg-yellow-400 hover:bg-yellow-500 text-black font-bold rounded-lg transition-colors flex items-center gap-2"
-                    >
-                      Send Message
-                      <Send className="w-4 h-4" />
-                    </button>
-                  </div>
-                </form>
-              )}
-            </div>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label
+                  htmlFor="faculty-subject"
+                  className="block text-sm font-medium mb-1.5"
+                >
+                  Subject
+                </label>
+                <input
+                  type="text"
+                  id="faculty-subject"
+                  required
+                  autoFocus
+                  value={subject}
+                  onChange={(e) => setSubject(e.target.value)}
+                  className="w-full h-10 px-3.5 border border-border rounded-lg text-sm"
+                  placeholder="e.g. Question about CSE101 office hours"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="faculty-message"
+                  className="block text-sm font-medium mb-1.5"
+                >
+                  Message
+                </label>
+                <textarea
+                  id="faculty-message"
+                  required
+                  rows={4}
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  className="w-full p-3.5 border border-border rounded-lg text-sm resize-none"
+                  placeholder="Write your message here..."
+                />
+              </div>
+              <div className="flex justify-end gap-2.5 pt-2">
+                <Button type="button" variant="outline" onClick={onClose}>
+                  Cancel
+                </Button>
+                <Button type="submit" variant="accent">
+                  <Send className="w-4 h-4" />
+                  Send message
+                </Button>
+              </div>
+            </form>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }
