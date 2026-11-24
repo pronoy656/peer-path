@@ -13,64 +13,62 @@ interface FAQItem {
 const faqItems: FAQItem[] = [
   {
     id: 1,
-    question: "What makes your service unique?",
+    question: "Is PeerPath free for ULAB students?",
     answer:
-      "Our service combines cutting-edge technology with exceptional customer support. We offer personalized solutions, 24/7 assistance, and continuous innovation to ensure you always stay ahead.",
+      "Yes. PeerPath is completely free for all University of Liberal Arts Bangladesh (ULAB) students, faculty, class teachers, and alumni mentors. There are no paid courses or subscription fees.",
   },
   {
     id: 2,
-    question: "How do I get started?",
+    question: "How does semester course enrollment work?",
     answer:
-      "Getting started is simple! Sign up for an account, choose your plan, and follow our onboarding guide. Within minutes, you'll have access to all our premium features and tools.",
+      "Use the Discover page to filter courses by your department (CSE, BBA, MSJ, English, or Bangla) and semester. Add courses up to the 14-credit limit, then click Confirm Enrollment to add them to your Student Dashboard.",
   },
   {
     id: 3,
-    question: "What payment methods do you accept?",
+    question: "How can I connect with faculty and check office hours?",
     answer:
-      "We accept all major credit cards, PayPal, bank transfers, and cryptocurrency. All transactions are secure and encrypted with industry-leading security protocols.",
+      "Visit the Faculty Directory to browse professors by department. Each profile lists office hours, room numbers, research areas, syllabus courses, and a Contact Me button that delivers your message directly to the professor's dashboard inbox.",
   },
   {
     id: 4,
-    question: "Can I cancel my subscription anytime?",
+    question: "How does Alumni Mentorship work?",
     answer:
-      "Yes, absolutely. You can cancel your subscription at any time without penalties or hidden fees. Your data remains yours, and we'll provide a smooth transition process.",
+      "Browse ULAB graduates on the Alumni page, open any mentor profile, and click Request Mentorship with a short note about your goals. Once accepted, you can message your mentor and track guidance directly from your dashboard.",
   },
   {
     id: 5,
-    question: "Do you offer customer support?",
+    question: "Can I see what seniors think before picking a course?",
     answer:
-      "We provide comprehensive customer support through multiple channels including email, live chat, and phone support. Our team is available 24/7 to assist you with any questions.",
+      "Yes! Every course detail page and faculty profile displays verified peer reviews from ULAB students, along with faculty replies and weekly syllabus topics.",
   },
   {
     id: 6,
-    question: "Is my data secure?",
+    question: "How does PeerPath keep the community safe?",
     answer:
-      "Security is our top priority. We use end-to-end encryption, regular security audits, and comply with GDPR and other international data protection standards.",
+      "Every post and comment in the Community feed has a Report button. Dedicated ULAB moderators review reports, hide inappropriate content, and warn or suspend accounts that violate campus guidelines.",
   },
 ];
 
 export default function FaqSection() {
-  const [expandedId, setExpandedId] = useState<number | null>(null);
+  const [expandedId, setExpandedId] = useState<number | null>(1);
 
   const toggleItem = (id: number) => {
     setExpandedId(expandedId === id ? null : id);
   };
 
   return (
-    <section className="py-16 md:py-18 px-4 sm:px-6 lg:px-8">
+    <section id="faq" className="py-16 md:py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-12 md:mb-16 text-center">
+        <div className="mb-12 text-center">
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4 text-balance">
             Frequently Asked Questions
           </h2>
           <p className="text-lg text-muted-foreground text-balance">
-            {`  Find answers to common questions about our service. Can't find what
-            you're looking for?`}
+            Quick answers for ULAB students, faculty, and alumni getting started
+            with PeerPath.
           </p>
         </div>
 
-        {/* FAQ Items */}
         <div className="space-y-3">
           {faqItems.map((item) => (
             <FAQItem
@@ -98,12 +96,12 @@ function FAQItem({ item, isExpanded, onToggle }: FAQItemProps) {
       className={cn(
         "group border-2 border-border rounded-xl overflow-hidden transition-all duration-300 ease-out",
         isExpanded
-          ? "bg-gradient-to-br from-primary/10 to-accent/10 border-primary/50 "
+          ? "bg-gradient-to-br from-primary/10 to-accent/10 border-primary/50"
           : "bg-card hover:border-primary/30 hover:shadow-md hover:shadow-primary/10"
       )}
     >
-      {/* Question Button */}
       <button
+        type="button"
         onClick={onToggle}
         className={cn(
           "w-full px-6 py-4 md:px-8 md:py-5 flex items-center justify-between gap-4 text-left transition-all duration-300",
@@ -115,14 +113,14 @@ function FAQItem({ item, isExpanded, onToggle }: FAQItemProps) {
         <h3
           className={cn(
             "text-lg md:text-xl font-semibold pr-4 text-balance",
-            isExpanded ? " font-bold" : "text-foreground"
+            isExpanded ? "font-bold" : "text-foreground"
           )}
         >
           {item.question}
         </h3>
         <div
           className={cn(
-            "flex-shrink-0 w-6 h-6 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center transition-transform duration-300 ease-out",
+            "flex-shrink-0 w-6 h-6 rounded-full bg-gradient-to-br from-primary to-amber-500 flex items-center justify-center transition-transform duration-300 ease-out",
             isExpanded ? "rotate-180" : ""
           )}
         >
@@ -130,7 +128,6 @@ function FAQItem({ item, isExpanded, onToggle }: FAQItemProps) {
         </div>
       </button>
 
-      {/* Answer */}
       <div
         id={`faq-answer-${item.id}`}
         className={cn(

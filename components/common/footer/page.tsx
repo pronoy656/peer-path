@@ -1,71 +1,75 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ScrollBasedVelocityDemo } from "./Velocity";
-// import { ScrollBasedVelocityDemo } from "./Velocity";
-
-const logo = {
-  url: "/",
-  src: "/jbay.png",
-  alt: "Your Brand Logo",
-};
 
 const footerSections = [
   {
-    title: "Links",
+    title: "Explore",
     links: [
-      { title: "Home", href: "#" },
-      { title: "Catagory", href: "#" },
-      { title: "Products", href: "#" },
+      { title: "Discover Courses", href: "/discover" },
+      { title: "All Courses", href: "/courses" },
+      { title: "Faculty Directory", href: "/faculty" },
+      { title: "Community Feed", href: "/community" },
     ],
   },
   {
-    title: "My Bisness",
+    title: "Community",
     links: [
-      { title: "Add Product", href: "#" },
-      { title: "My Products", href: "#" },
-      { title: "Add New Catagory", href: "#" },
+      { title: "Students", href: "/students" },
+      { title: "Alumni Mentors", href: "/alumni" },
+      { title: "Campus Events", href: "/events" },
+      { title: "Alumni Job Board", href: "/jobs" },
     ],
   },
   {
-    title: "Others",
+    title: "Support",
     links: [
-      { title: "Contacts Us", href: "#" },
-      { title: "Tarms & Condition", href: "#" },
-      { title: "Privacy Policy", href: "#" },
+      { title: "Contact Us", href: "/contact" },
+      { title: "FAQ", href: "/#faq" },
+      { title: "Privacy Policy", href: "/privacy" },
+      { title: "Terms of Use", href: "/terms" },
     ],
   },
 ];
 
 export default function Footer() {
   return (
-    <footer className="border-t bg-[#E8E8E899]">
-      <div className="max-w-7xl mx-auto px-6 xl:px-0 py-12 ">
-        {/* Top footer content */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-8 gap-y-10 z-50 relative">
-          <div className="col-span-full xl:col-span-2">
-            <Link href={logo.url} className="flex items-center gap-2">
-              <Image width={100} height={100} src={logo.src} alt={logo.alt} />
-              <h1 className="text-4xl font-bold">ULAB</h1>
+    <footer className="border-t bg-muted/50">
+      <div className="max-w-7xl mx-auto px-6 xl:px-8 py-12">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-8 gap-y-10 z-20 relative">
+          <div className="col-span-full lg:col-span-2">
+            <Link href="/" className="inline-flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-xl flex items-center justify-center shadow-sm">
+                <span className="text-slate-900 font-extrabold text-xl">P</span>
+              </div>
+              <div>
+                <span className="text-2xl font-bold tracking-tight text-foreground">
+                  PeerPath
+                </span>
+                <span className="block text-xs font-medium text-muted-foreground">
+                  ULAB Campus Learning Network
+                </span>
+              </div>
             </Link>
-            <p className="mt-4 text-muted-foreground">
-              At JBAY, we’re committed to keeping drivers on the road with
-              confidence. From essential replacement parts to performance
-              upgrades, we deliver top-quality auto solutions that power every
-              journey.
+            <p className="mt-4 text-sm text-muted-foreground max-w-md leading-relaxed">
+              PeerPath helps University of Liberal Arts Bangladesh (ULAB)
+              students find the right semester courses, connect with peers and
+              faculty, learn from alumni mentors, and grow together.
             </p>
           </div>
 
           {footerSections.map(({ title, links }) => (
             <div key={title}>
-              <h6 className="font-medium md:text-right">{title}</h6>
-              <ul className="mt-6 space-y-4 md:text-right">
-                {links.map(({ title, href }) => (
-                  <li key={title}>
+              <h6 className="font-semibold text-foreground md:text-right">
+                {title}
+              </h6>
+              <ul className="mt-4 space-y-3 md:text-right text-sm">
+                {links.map(({ title: linkTitle, href }) => (
+                  <li key={linkTitle}>
                     <Link
                       href={href}
-                      className="text-muted-foreground hover:text-foreground"
+                      className="text-muted-foreground hover:text-foreground transition-colors"
                     >
-                      {title}
+                      {linkTitle}
                     </Link>
                   </li>
                 ))}
@@ -73,10 +77,17 @@ export default function Footer() {
             </div>
           ))}
         </div>
+
+        <div className="mt-10 pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground relative z-20">
+          <p>
+            © {new Date().getFullYear()} PeerPath — University of Liberal Arts
+            Bangladesh (ULAB) Student Community.
+          </p>
+          <p>Built for CSE, BBA, MSJ, English &amp; Bangla learners.</p>
+        </div>
       </div>
 
-      {/* 👇 Footer bottom velocity section */}
-      <div className="relative w-full overflow-hidden -mt-50">
+      <div className="relative w-full overflow-hidden -mt-20 pointer-events-none select-none">
         <ScrollBasedVelocityDemo />
       </div>
     </footer>

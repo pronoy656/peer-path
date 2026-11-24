@@ -5,11 +5,13 @@ import { Mail } from "lucide-react";
 import ContactModal from "./ContactModal";
 
 interface ContactButtonProps {
+  facultyId: string;
   facultyName: string;
   facultyEmail: string;
 }
 
 export default function ContactButton({
+  facultyId,
   facultyName,
   facultyEmail,
 }: ContactButtonProps) {
@@ -18,6 +20,7 @@ export default function ContactButton({
   return (
     <>
       <button
+        type="button"
         onClick={() => setIsOpen(true)}
         className="w-full py-2.5 bg-black hover:bg-gray-800 text-white font-bold rounded-xl transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
       >
@@ -27,6 +30,7 @@ export default function ContactButton({
       <ContactModal
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
+        facultyId={facultyId}
         facultyName={facultyName}
         facultyEmail={facultyEmail}
       />

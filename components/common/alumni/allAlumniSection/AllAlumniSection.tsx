@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-
+import { useRouter } from "next/navigation";
 import {
   Star,
   MessageCircle,
@@ -12,225 +12,60 @@ import {
   Search,
   ArrowRight,
   X,
-  Linkedin,
-  Facebook,
+  Calendar,
+  CheckCircle2,
+  Send,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-
-const mentors = [
-  {
-    id: 1,
-    name: "Dr. Sarah Chen",
-    title: "Tech Lead at Google",
-    department: "CSE",
-    expertise: ["AI/ML", "Full Stack", "Leadership"],
-    rating: 4.9,
-    reviews: 127,
-    availability: "Available",
-    mentees: 45,
-    image: "/avater-2.jpg",
-    bio: "Senior engineer with 10+ years experience in tech. Passionate about helping newcomers break into the industry.",
-  },
-  {
-    id: 2,
-    name: "Michael Brown",
-    title: "Senior Product Manager at Meta",
-    department: "BBA",
-    expertise: ["Product Strategy", "Business Development", "Growth"],
-    rating: 4.8,
-    reviews: 89,
-    availability: "Available",
-    mentees: 32,
-    image: "/avater-1.jpg",
-    bio: "Product leader focused on scaling teams and building products that matter.",
-  },
-  {
-    id: 3,
-    name: "Lisa Wang",
-    title: "Founder & CEO",
-    department: "BBA",
-    expertise: ["Entrepreneurship", "Fundraising", "Strategy"],
-    rating: 4.9,
-    reviews: 156,
-    availability: "Limited",
-    mentees: 28,
-    image: "/avater-2.jpg",
-    bio: "Built two successful startups from scratch. Now mentoring next-gen founders.",
-  },
-  {
-    id: 4,
-    name: "James Wilson",
-    title: "Senior UX Designer at Apple",
-    department: "CSE",
-    expertise: ["UX Design", "Product Design", "Design Systems"],
-    rating: 4.7,
-    reviews: 94,
-    availability: "Available",
-    mentees: 38,
-    image: "/avater-1.jpg",
-    bio: "Design leader passionate about creating intuitive user experiences.",
-  },
-  {
-    id: 5,
-    name: "Emma Martinez",
-    title: "Data Science Manager at Netflix",
-    department: "CSE",
-    expertise: ["Data Science", "ML Engineering", "Analytics"],
-    rating: 4.8,
-    reviews: 112,
-    availability: "Available",
-    mentees: 41,
-    image: "/avater-2.jpg",
-    bio: "Data scientist helping others navigate the AI/ML landscape.",
-  },
-  {
-    id: 6,
-    name: "David Park",
-    title: "VP of Engineering at Stripe",
-    department: "CSE",
-    expertise: ["Systems Design", "Engineering Management", "Tech Culture"],
-    rating: 4.9,
-    reviews: 134,
-    availability: "Available",
-    mentees: 35,
-    image: "/avater-2.jpg",
-    bio: "Engineering leader focused on building high-performing teams.",
-  },
-  {
-    id: 7,
-    name: "Priya Sharma",
-    title: "Marketing Director at TechCorp",
-    department: "BBA",
-    expertise: ["Marketing Strategy", "Brand Development", "Digital Marketing"],
-    rating: 4.8,
-    reviews: 98,
-    availability: "Available",
-    mentees: 29,
-    image: "/avater-2.jpg",
-    bio: "Marketing expert focused on building strong brands and growth strategies.",
-  },
-  {
-    id: 8,
-    name: "Prof. Ahmed Hassan",
-    title: "English Department Head",
-    department: "English",
-    expertise: ["Academic Writing", "Communication", "Teaching Methodology"],
-    rating: 4.9,
-    reviews: 110,
-    availability: "Available",
-    mentees: 26,
-    image: "/avater-2.jpg",
-    bio: "Dedicated educator helping students master the art of communication.",
-  },
-  {
-    id: 9,
-    name: "Dr. Ravi Kumar",
-    title: "Research Scholar in Media Studies",
-    department: "MSJ",
-    expertise: ["Journalism", "Media Studies", "Content Creation"],
-    rating: 4.7,
-    reviews: 85,
-    availability: "Limited",
-    mentees: 22,
-    image: "/avater-1.jpg",
-    bio: "Media professional helping aspiring journalists find their voice.",
-  },
-  {
-    id: 10,
-    name: "Tanvi Das",
-    title: "Bengali Literature Expert",
-    department: "Bangla",
-    expertise: ["Bengali Literature", "Language Teaching", "Cultural Studies"],
-    rating: 4.8,
-    reviews: 92,
-    availability: "Available",
-    mentees: 24,
-    image: "/avater-1.jpg",
-    bio: "Passionate about preserving and sharing Bengali language and culture.",
-  },
-];
-
-const jobs = [
-  {
-    id: 1,
-    title: "Junior Full Stack Developer",
-    company: "Tech Startup",
-    location: "San Francisco, CA",
-    type: "Full-time",
-    salary: "$80K - $120K",
-    postedBy: "Alumni",
-    date: "2 days ago",
-  },
-  {
-    id: 2,
-    title: "Data Science Intern",
-    company: "AI Company",
-    location: "Remote",
-    type: "Internship",
-    salary: "$15 - $20/hr",
-    postedBy: "Alumni",
-    date: "5 days ago",
-  },
-  {
-    id: 3,
-    title: "Product Manager",
-    company: "E-commerce Platform",
-    location: "New York, NY",
-    type: "Full-time",
-    salary: "$120K - $160K",
-    postedBy: "Alumni",
-    date: "1 week ago",
-  },
-  {
-    id: 4,
-    title: "UX/UI Designer",
-    company: "Design Studio",
-    location: "Los Angeles, CA",
-    type: "Full-time",
-    salary: "$90K - $130K",
-    postedBy: "Alumni",
-    date: "1 week ago",
-  },
-];
-
-const departmentExpertise: Record<string, string[]> = {
-  All: ["All"],
-  CSE: [
-    "AI/ML",
-    "Full Stack",
-    "Data Science",
-    "UX Design",
-    "Leadership",
-    "Systems Design",
-  ],
-  BBA: [
-    "Product Strategy",
-    "Business Development",
-    "Entrepreneurship",
-    "Fundraising",
-    "Marketing Strategy",
-  ],
-  MSJ: ["Journalism", "Media Studies", "Content Creation"],
-  English: ["Academic Writing", "Communication", "Teaching Methodology"],
-  Bangla: ["Bengali Literature", "Language Teaching", "Cultural Studies"],
-};
+import { useAppStore } from "@/lib/store/AppStore";
+import {
+  getAlumniList,
+  getEvents,
+  getJobs,
+  requestMentorship,
+} from "@/lib/services/people";
+import type { AlumniProfile } from "@/lib/types";
 
 export default function AllAlumniSection() {
+  const { state, dispatch, currentUser, showToast } = useAppStore();
+  const router = useRouter();
+
   const [selectedDepartment, setSelectedDepartment] = useState("All");
   const [selectedExpertise, setSelectedExpertise] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
-  const [mentorFilter, setMentorFilter] = useState("all");
-  const [connectingMentor, setConnectingMentor] = useState<number | null>(null);
+  const [mentorFilter, setMentorFilter] = useState<"all" | "available">("all");
+  const [mentorshipTarget, setMentorshipTarget] =
+    useState<AlumniProfile | null>(null);
+  const [mentorshipMsg, setMentorshipMsg] = useState("");
+
+  const mentors = getAlumniList(state);
+  const jobs = getJobs(state).filter((j) => j.status === "open");
+  const events = getEvents(state);
 
   const departments = ["All", "CSE", "BBA", "MSJ", "English", "Bangla"];
-  const expertiseAreas =
-    departmentExpertise[selectedDepartment] || departmentExpertise["All"];
+
+  const expertiseAreas = [
+    "All",
+    ...Array.from(
+      new Set(
+        mentors
+          .filter(
+            (m) =>
+              selectedDepartment === "All" ||
+              m.department === selectedDepartment
+          )
+          .flatMap((m) => m.expertise)
+      )
+    ),
+  ];
 
   const filtered = mentors.filter((mentor) => {
+    const q = searchTerm.toLowerCase();
     const matchesSearch =
-      mentor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      mentor.title.toLowerCase().includes(searchTerm.toLowerCase());
+      mentor.name.toLowerCase().includes(q) ||
+      mentor.currentRole.toLowerCase().includes(q) ||
+      mentor.company.toLowerCase().includes(q);
     const matchesDepartment =
       selectedDepartment === "All" || mentor.department === selectedDepartment;
     const matchesExpertise =
@@ -245,45 +80,93 @@ export default function AllAlumniSection() {
     );
   });
 
+  const handleRequestMentorship = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!mentorshipTarget) return;
+    if (!currentUser) {
+      showToast("Please sign in to request alumni mentorship.", "info");
+      setMentorshipTarget(null);
+      router.push("/signIn");
+      return;
+    }
+    const res = requestMentorship(state, dispatch, {
+      studentId: currentUser.id,
+      alumniId: mentorshipTarget.id,
+      message:
+        mentorshipMsg.trim() ||
+        "Hi! I would appreciate your mentorship and career guidance.",
+    });
+    showToast(res.message, res.ok ? "success" : "info");
+    setMentorshipMsg("");
+    setMentorshipTarget(null);
+  };
+
+  const handleRsvp = (eventId: string, title: string) => {
+    if (!currentUser) {
+      showToast("Please sign in to RSVP for campus events.", "info");
+      router.push("/signIn");
+      return;
+    }
+    const event = events.find((e) => e.id === eventId);
+    const alreadyGoing = event?.attendees.includes(currentUser.id) ?? false;
+    dispatch({ type: "TOGGLE_EVENT_RSVP", eventId, userId: currentUser.id });
+    showToast(
+      alreadyGoing
+        ? `Cancelled RSVP for ${title}`
+        : `RSVP confirmed for ${title}!`,
+      alreadyGoing ? "info" : "success"
+    );
+  };
+
   return (
-    <div className="min-h-screen flex flex-col ">
-      <main className="flex-1 pt-28">
-        {/* Hero Section with Background Image */}
-        <section className="relative py-16 md:py-28 overflow-hidden bg-yellow-50 dark:bg-yellow-950/20">
+    <div className="min-h-screen flex flex-col">
+      <main className="flex-1 pt-20">
+        {/* Hero Section */}
+        <section className="relative py-16 md:py-24 overflow-hidden bg-yellow-50">
           <div className="absolute inset-0 z-0">
             <Image
               src="/alumni-together.jpg"
-              alt="Alumni Network Background"
+              alt="ULAB Alumni Network"
               fill
               className="h-full w-full object-cover object-center"
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-gray-700/70 to-gray-700/50"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-slate-900/80 to-slate-900/55" />
           </div>
 
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 max-w-7xl">
             <div className="max-w-2xl">
               <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-                Alumni Network
+                ULAB Alumni Network
               </h1>
-              <p className="text-xl text-white/90 mb-8">
-                Connect with industry leaders, discover opportunities, and grow
-                your professional network.
+              <p className="text-lg sm:text-xl text-white/90 mb-8">
+                Connect with verified ULAB graduates across Dhaka&apos;s tech,
+                business, and media sectors for mentorship, jobs, and campus
+                sessions.
               </p>
 
-              {/* Stats */}
-              <div className="grid grid-cols-3 gap-6">
-                <div className="bg-gray-400/20 backdrop-blur-sm rounded-lg p-4 border border-gray-300/30">
-                  <p className="text-2xl font-bold text-white">800+</p>
-                  <p className="text-sm text-white/80">Active Mentors</p>
+              <div className="grid grid-cols-3 gap-4 sm:gap-6">
+                <div className="bg-white/15 backdrop-blur-sm rounded-xl p-4 border border-white/25">
+                  <p className="text-2xl font-bold text-white">
+                    {mentors.length}
+                  </p>
+                  <p className="text-xs sm:text-sm text-white/85">
+                    Alumni Mentors
+                  </p>
                 </div>
-                <div className="bg-gray-400/20 backdrop-blur-sm rounded-lg p-4 border border-gray-300/30">
-                  <p className="text-2xl font-bold text-white">5K+</p>
-                  <p className="text-sm text-white/80">Job Placements</p>
+                <div className="bg-white/15 backdrop-blur-sm rounded-xl p-4 border border-white/25">
+                  <p className="text-2xl font-bold text-white">{jobs.length}</p>
+                  <p className="text-xs sm:text-sm text-white/85">
+                    Open Job Roles
+                  </p>
                 </div>
-                <div className="bg-gray-400/20 backdrop-blur-sm rounded-lg p-4 border border-gray-300/30">
-                  <p className="text-2xl font-bold text-white">95%</p>
-                  <p className="text-sm text-white/80">Success Rate</p>
+                <div className="bg-white/15 backdrop-blur-sm rounded-xl p-4 border border-white/25">
+                  <p className="text-2xl font-bold text-white">
+                    {events.length}
+                  </p>
+                  <p className="text-xs sm:text-sm text-white/85">
+                    Upcoming Events
+                  </p>
                 </div>
               </div>
             </div>
@@ -291,224 +174,208 @@ export default function AllAlumniSection() {
         </section>
 
         {/* Mentors Section */}
-        <section className="py-16 md:py-20">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between mb-8">
-              <div>
-                <h2 className="text-3xl font-bold">Find Your Mentor</h2>
-                <p className="text-foreground/60 mt-2">
-                  Connect with industry experts
-                </p>
+        <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-8">
+            <h2 className="text-3xl font-bold">Find Your Mentor</h2>
+            <p className="text-muted-foreground mt-1">
+              Filter ULAB alumni by department, expertise, or availability
+            </p>
+          </div>
+
+          <div className="space-y-4 mb-8 bg-card p-6 rounded-xl border border-yellow-200">
+            <div className="relative">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <input
+                type="text"
+                placeholder="Search mentors by name, role, or company..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-11 pr-4 py-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-background"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <p className="text-sm font-semibold">Department</p>
+              <div className="flex flex-wrap gap-2">
+                {departments.map((dept) => (
+                  <button
+                    key={dept}
+                    type="button"
+                    onClick={() => {
+                      setSelectedDepartment(dept);
+                      setSelectedExpertise("All");
+                    }}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                      selectedDepartment === dept
+                        ? "bg-yellow-400 text-black shadow-sm"
+                        : "bg-yellow-100/70 text-foreground hover:bg-yellow-200"
+                    }`}
+                  >
+                    {dept}
+                  </button>
+                ))}
               </div>
             </div>
 
-            {/* Search & Filters */}
-            <div className="space-y-4 mb-8 bg-card p-6 rounded-lg border border-yellow-200 dark:border-yellow-900/30">
-              {/* Search */}
-              <div className="relative">
-                <Search className="absolute right-0 top-1/2 -translate-y-1/2 h-5 w-5 text-foreground/40" />
-                <input
-                  type="text"
-                  placeholder="Search mentors by name or title..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-3 py-3 border border-yellow-200 dark:border-yellow-900/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                />
-              </div>
-
-              {/* Department Filter */}
-              <div className="space-y-3">
-                <p className="text-sm font-semibold">Department</p>
-                <div className="flex flex-wrap gap-2">
-                  {departments.map((dept) => (
-                    <button
-                      key={dept}
-                      onClick={() => {
-                        setSelectedDepartment(dept);
-                        setSelectedExpertise("All");
-                      }}
-                      className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                        selectedDepartment === dept
-                          ? "bg-yellow-500 text-black shadow-md"
-                          : "bg-yellow-100 dark:bg-yellow-900/30 text-foreground hover:bg-yellow-200 dark:hover:bg-yellow-900/40"
-                      }`}
-                    >
-                      {dept}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Expertise Filter */}
-              <div className="space-y-3">
-                <p className="text-sm font-semibold">Expertise Areas</p>
-                <div className="flex flex-wrap gap-2">
-                  {expertiseAreas.map((area) => (
-                    <button
-                      key={area}
-                      onClick={() => setSelectedExpertise(area)}
-                      className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                        selectedExpertise === area
-                          ? "bg-primary text-black shadow-md"
-                          : "bg-secondary dark:bg-yellow-900/30 text-foreground hover:bg-primary dark:hover:bg-yellow-900/40"
-                      }`}
-                    >
-                      {area}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Availability Filter */}
-              <div className="flex gap-3">
-                <button
-                  onClick={() => setMentorFilter("all")}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                    mentorFilter === "all"
-                      ? "bg-yellow-500 text-black"
-                      : "bg-primary/30 dark:bg-yellow-900/30 text-foreground hover:bg-yellow-200 dark:hover:bg-yellow-900/40"
-                  }`}
-                >
-                  All Mentors
-                </button>
-                <button
-                  onClick={() => setMentorFilter("available")}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                    mentorFilter === "available"
-                      ? "bg-yellow-500 text-black"
-                      : "bg-primary dark:bg-yellow-900/30 text-foreground hover:bg-yellow-200 dark:hover:bg-yellow-900/40"
-                  }`}
-                >
-                  Available Now
-                </button>
+            <div className="space-y-2">
+              <p className="text-sm font-semibold">Expertise Areas</p>
+              <div className="flex flex-wrap gap-2">
+                {expertiseAreas.map((area) => (
+                  <button
+                    key={area}
+                    type="button"
+                    onClick={() => setSelectedExpertise(area)}
+                    className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all ${
+                      selectedExpertise === area
+                        ? "bg-slate-900 text-white"
+                        : "bg-secondary text-foreground hover:bg-secondary/80"
+                    }`}
+                  >
+                    {area}
+                  </button>
+                ))}
               </div>
             </div>
 
-            {/* Mentors Grid */}
+            <div className="flex gap-3 pt-1">
+              <button
+                type="button"
+                onClick={() => setMentorFilter("all")}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                  mentorFilter === "all"
+                    ? "bg-yellow-400 text-black font-semibold"
+                    : "bg-muted text-foreground hover:bg-muted/80"
+                }`}
+              >
+                All Mentors ({mentors.length})
+              </button>
+              <button
+                type="button"
+                onClick={() => setMentorFilter("available")}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                  mentorFilter === "available"
+                    ? "bg-yellow-400 text-black font-semibold"
+                    : "bg-muted text-foreground hover:bg-muted/80"
+                }`}
+              >
+                Available Now
+              </button>
+            </div>
+          </div>
+
+          {filtered.length === 0 ? (
+            <Card className="p-12 text-center border-dashed">
+              <p className="font-semibold text-lg">No mentors matched</p>
+              <p className="text-sm text-muted-foreground mt-1 mb-4">
+                Try clearing your search or choosing All departments.
+              </p>
+              <Button
+                onClick={() => {
+                  setSearchTerm("");
+                  setSelectedDepartment("All");
+                  setSelectedExpertise("All");
+                  setMentorFilter("all");
+                }}
+              >
+                Reset Filters
+              </Button>
+            </Card>
+          ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filtered.map((mentor) => (
                 <Card
                   key={mentor.id}
-                  className="p-6 hover:shadow-lg transition-all hover:scale-102 hover:border-primary flex flex-col bg-gradient-to-br from-card to-card/50 border-yellow-200 dark:border-yellow-900/30"
+                  className="p-6 hover:shadow-lg transition-all flex flex-col border-yellow-200/80"
                 >
                   <div className="space-y-4 flex-1">
-                    {/* Header */}
-                    <div className="flex items-start justify-between">
-                      <div className="flex gap-3 flex-1">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex gap-3 flex-1 min-w-0">
                         <Image
-                          src={mentor.image || "/placeholder.svg"}
+                          src={mentor.avatar || "/avater-1.jpg"}
                           alt={mentor.name}
                           width={48}
                           height={48}
-                          className="rounded-full object-cover"
+                          className="rounded-full object-cover w-12 h-12 shrink-0"
                         />
                         <div className="flex-1 min-w-0">
-                          <h3 className="font-semibold text-lg line-clamp-1">
+                          <h3 className="font-semibold text-lg truncate">
                             {mentor.name}
                           </h3>
-                          <p className="text-sm text-foreground/60 line-clamp-1">
-                            {mentor.title}
+                          <p className="text-sm text-muted-foreground truncate">
+                            {mentor.currentRole} • {mentor.company}
                           </p>
                         </div>
                       </div>
-                      {mentor.availability === "Available" && (
-                        <span className="px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs rounded-full font-medium whitespace-nowrap ml-2">
-                          Available
-                        </span>
-                      )}
+                      <span
+                        className={`px-2.5 py-0.5 text-xs rounded-full font-medium whitespace-nowrap ${
+                          mentor.availability === "Available"
+                            ? "bg-emerald-100 text-emerald-700"
+                            : "bg-amber-100 text-amber-800"
+                        }`}
+                      >
+                        {mentor.availability}
+                      </span>
                     </div>
 
-                    {/* Department Badge */}
-                    <span className="inline-block px-3 py-1 bg-yellow-200 dark:bg-yellow-900/40 text-yellow-900 dark:text-yellow-200 text-xs rounded-full font-medium">
-                      {mentor.department}
-                    </span>
+                    <div className="flex items-center gap-2 text-xs">
+                      <span className="px-2.5 py-1 bg-yellow-100 text-amber-900 rounded-full font-semibold">
+                        {mentor.department} • Batch {mentor.batch}
+                      </span>
+                      <span className="flex items-center gap-1 font-medium text-foreground">
+                        <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
+                        {mentor.rating.toFixed(1)}
+                      </span>
+                    </div>
 
-                    {/* Bio */}
-                    <p className="text-sm text-foreground/70 line-clamp-2">
+                    <p className="text-sm text-foreground/75 line-clamp-2">
                       {mentor.bio}
                     </p>
 
-                    {/* Rating */}
-                    <div className="flex items-center gap-2">
-                      <div className="flex gap-1">
-                        {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className={`h-4 w-4 ${
-                              i < Math.floor(mentor.rating)
-                                ? "fill-yellow-400 text-yellow-400"
-                                : "text-border"
-                            }`}
-                          />
-                        ))}
-                      </div>
-                      <span className="text-sm font-medium">
-                        {mentor.rating}
-                      </span>
-                      <span className="text-xs text-foreground/60">
-                        ({mentor.reviews})
-                      </span>
-                    </div>
-
-                    {/* Expertise Tags */}
-                    <div className="flex flex-wrap gap-2">
-                      {mentor.expertise.slice(0, 2).map((exp) => (
+                    <div className="flex flex-wrap gap-1.5">
+                      {mentor.expertise.slice(0, 3).map((exp) => (
                         <span
                           key={exp}
-                          className="px-3 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-900 dark:text-yellow-200 text-xs rounded-full font-medium"
+                          className="px-2.5 py-1 bg-muted text-foreground text-xs rounded-full font-medium"
                         >
                           {exp}
                         </span>
                       ))}
-                      {mentor.expertise.length > 2 && (
-                        <span className="px-3 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-900 dark:text-yellow-200 text-xs rounded-full font-medium">
-                          +{mentor.expertise.length - 2}
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Stats */}
-                    <div className="text-xs text-foreground/60 pt-2">
-                      <p>{mentor.mentees} mentees this year</p>
                     </div>
                   </div>
 
-                  {/* Actions */}
-                  <div className="flex gap-2 pt-4 border-t border-primary/40 dark:border-primary/30 mt-4">
+                  <div className="flex gap-2 pt-4 border-t border-border mt-4">
                     <Link href={`/alumni/${mentor.id}`} className="flex-1">
-                      <Button
-                        variant="outline"
-                        className="w-full bg-transparent border-primary dark:border-yellow-900/30 hover:bg-primary dark:hover:bg-primary/20"
-                      >
+                      <Button variant="outline" className="w-full">
                         View Profile
                       </Button>
                     </Link>
                     <Button
-                      className="flex-1 gap-2 bg-primary hover:bg-yellow-600 text-black"
-                      onClick={() => setConnectingMentor(mentor.id)}
+                      className="flex-1 gap-2 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold"
+                      onClick={() => setMentorshipTarget(mentor)}
                     >
                       <MessageCircle className="h-4 w-4" />
-                      Connect
+                      Mentorship
                     </Button>
                   </div>
                 </Card>
               ))}
             </div>
-          </div>
+          )}
         </section>
 
-        {/* Job Board Section - Enhanced Design */}
-        <section className="py-16 md:py-20 bg-yellow-50 rounded-2xl dark:bg-yellow-950/20 border-y border-yellow-200 dark:border-yellow-900/30">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between mb-8">
+        {/* Job Board Section */}
+        <section className="py-16 bg-yellow-50/70 border-y border-yellow-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
               <div>
                 <h2 className="text-3xl font-bold">Alumni Job Board</h2>
-                <p className="text-foreground/60 mt-2">
-                  Opportunities from our alumni network
+                <p className="text-muted-foreground mt-1">
+                  Dhaka &amp; remote roles posted by ULAB graduates (salaries in
+                  BDT/month)
                 </p>
               </div>
-              <Link href="/alumni/jobs">
-                <Button className="gap-2 bg-yellow-500 hover:bg-yellow-600 text-black">
+              <Link href="/jobs">
+                <Button className="gap-2 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold">
                   View All Jobs
                   <ArrowRight className="h-4 w-4" />
                 </Button>
@@ -519,21 +386,18 @@ export default function AllAlumniSection() {
               {jobs.map((job) => (
                 <Card
                   key={job.id}
-                  className="p-6 hover:shadow-lg transition-all hover:border-yellow-500 border-l-4 border-yellow-500/30 hover:border-l-yellow-500 bg-gradient-to-r from-card to-card/50"
+                  className="p-6 hover:shadow-md transition-all border-l-4 border-l-yellow-400"
                 >
                   <div className="flex items-start justify-between gap-4 flex-wrap">
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-start gap-3 mb-2">
-                        <div className="text-2xl mt-1">💼</div>
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-semibold text-lg text-foreground">
-                            {job.title}
-                          </h3>
-                          <p className="text-foreground/60">{job.company}</p>
-                        </div>
-                      </div>
+                      <h3 className="font-bold text-lg text-foreground">
+                        {job.title}
+                      </h3>
+                      <p className="text-muted-foreground font-medium">
+                        {job.company}
+                      </p>
 
-                      <div className="flex flex-wrap gap-4 text-sm text-foreground/60 mt-4">
+                      <div className="flex flex-wrap gap-4 text-sm text-muted-foreground mt-3">
                         <span className="flex items-center gap-1">
                           <MapPin className="h-4 w-4" />
                           {job.location}
@@ -543,32 +407,18 @@ export default function AllAlumniSection() {
                           {job.type}
                         </span>
                         <span className="font-semibold text-foreground">
-                          {job.salary}
-                        </span>
-                      </div>
-
-                      <div className="flex flex-wrap gap-2 mt-4">
-                        <span className="px-3 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-900 dark:text-yellow-200 text-xs rounded-full font-medium">
-                          {job.type}
-                        </span>
-                        <span className="px-3 py-1 bg-yellow-100/50 dark:bg-yellow-900/20 text-foreground/60 text-xs rounded-full font-medium">
-                          Posted {job.date}
+                          BDT {job.salaryMin.toLocaleString()} –{" "}
+                          {job.salaryMax.toLocaleString()}/mo
                         </span>
                       </div>
                     </div>
 
-                    <div className="flex gap-2 flex-shrink-0">
-                      <Link href={`/alumni/jobs/${job.id}`}>
-                        <Button className="bg-primary hover:bg-primary text-black">
+                    <div className="flex gap-2 shrink-0">
+                      <Link href={`/jobs/${job.id}`}>
+                        <Button className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold">
                           Apply Now
                         </Button>
                       </Link>
-                      <Button
-                        variant="outline"
-                        className="border-primary dark:border-yellow-900/30"
-                      >
-                        Save
-                      </Button>
                     </div>
                   </div>
                 </Card>
@@ -577,156 +427,156 @@ export default function AllAlumniSection() {
           </div>
         </section>
 
-        {/* Networking Events */}
-        <section className="py-16 md:py-20">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold mb-8">
-              Upcoming Networking Events
-            </h2>
+        {/* Upcoming Events Section */}
+        <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
+            <div>
+              <h2 className="text-3xl font-bold">Upcoming Campus Events</h2>
+              <p className="text-muted-foreground mt-1">
+                Workshops, mock interviews, and advising sessions at ULAB
+              </p>
+            </div>
+            <Link href="/events">
+              <Button variant="outline" className="gap-2">
+                All Events <ArrowRight className="h-4 w-4" />
+              </Button>
+            </Link>
+          </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {[
-                {
-                  title: "Alumni Lunch & Learn",
-                  date: "March 15, 2025",
-                  time: "12:00 PM - 1:30 PM",
-                  speaker: "Sarah Chen - Tech Lead at Google",
-                  topic: "AI/ML Career Paths",
-                  icon: "🍽️",
-                },
-                {
-                  title: "Startup Founder Panel",
-                  date: "March 22, 2025",
-                  time: "6:00 PM - 7:30 PM",
-                  speaker: "4 Successful Founders",
-                  topic: "From Idea to IPO",
-                  icon: "🚀",
-                },
-                {
-                  title: "Product Management Workshop",
-                  date: "March 29, 2025",
-                  time: "3:00 PM - 5:00 PM",
-                  speaker: "Michael Brown - PM at Meta",
-                  topic: "Building Products Users Love",
-                  icon: "📱",
-                },
-                {
-                  title: "Design Systems Talk",
-                  date: "April 5, 2025",
-                  time: "5:00 PM - 6:30 PM",
-                  speaker: "James Wilson - Designer at Apple",
-                  topic: "Scaling Design",
-                  icon: "🎨",
-                },
-              ].map((event, index) => (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {events.map((event) => {
+              const organizer = state.users.find(
+                (u) => u.id === event.organizerId
+              );
+              const isGoing = currentUser
+                ? event.attendees.includes(currentUser.id)
+                : false;
+
+              return (
                 <Card
-                  key={index}
-                  className="p-6 hover:shadow-lg transition-all hover:scale-105 border-t-4 border-yellow-500 hover:border-yellow-600 bg-gradient-to-br from-card to-card/50"
+                  key={event.id}
+                  className="p-6 flex flex-col justify-between border-t-4 border-t-yellow-400"
                 >
-                  <div className="space-y-4">
-                    <div className="flex items-start justify-between">
-                      <h3 className="font-semibold text-lg flex-1">
-                        {event.title}
-                      </h3>
-                      <span className="text-2xl">{event.icon}</span>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between text-xs text-muted-foreground">
+                      <span className="inline-flex items-center gap-1 font-semibold text-amber-700">
+                        <Calendar className="w-3.5 h-3.5" />
+                        {new Date(event.date).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                        })}
+                      </span>
+                      <span>{event.attendees.length} going</span>
                     </div>
-                    <div className="space-y-2 text-sm text-foreground/60">
-                      <p className="font-medium text-foreground">
-                        📅 {event.date}
-                      </p>
-                      <p>⏰ {event.time}</p>
-                      <p>🎤 {event.speaker}</p>
-                      <p className="text-yellow-600 dark:text-yellow-400 font-medium">
-                        📌 {event.topic}
-                      </p>
-                    </div>
-                    <Button
-                      variant="outline"
-                      className="w-full bg-transparent border-yellow-200 dark:border-yellow-900/30 hover:bg-yellow-50 dark:hover:bg-yellow-900/20"
-                    >
-                      Register Now
-                    </Button>
+                    <h3 className="font-bold text-lg text-foreground">
+                      {event.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground line-clamp-3">
+                      {event.description}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      <span className="font-semibold text-foreground">
+                        Location:
+                      </span>{" "}
+                      {event.location}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      Hosted by {organizer?.name ?? "ULAB Alumni"}
+                    </p>
                   </div>
+
+                  <Button
+                    type="button"
+                    variant={isGoing ? "secondary" : "default"}
+                    onClick={() => handleRsvp(event.id, event.title)}
+                    className={`w-full mt-5 ${
+                      isGoing
+                        ? "bg-emerald-100 text-emerald-800 hover:bg-emerald-200"
+                        : "bg-yellow-400 hover:bg-yellow-500 text-black font-semibold"
+                    }`}
+                  >
+                    {isGoing ? (
+                      <span className="flex items-center gap-2">
+                        <CheckCircle2 className="w-4 h-4" /> RSVP&apos;d (Cancel)
+                      </span>
+                    ) : (
+                      "RSVP Now"
+                    )}
+                  </Button>
                 </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* CTA Section */}
-        <section
-          id="contact-mentors"
-          className="relative py-16 md:py-20 overflow-hidden bg-primary dark:bg-primary/20"
-        >
-          <div className="absolute inset-0 z-0">
-            <Image
-              src="/alumni-together.jpg"
-              alt="Alumni Network CTA"
-              fill
-              className="object-cover"
-            />
-            <div className="absolute inset-0  bg-gray-600/70 dark:bg-gray-900/70"></div>
-          </div>
-
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6 relative z-10">
-            <h2 className="text-3xl md:text-4xl font-bold text-white">
-              Ready to Connect?
-            </h2>
-            <p className="text-lg text-white/90 max-w-2xl mx-auto">
-              Get matched with industry leaders, explore opportunities, and
-              accelerate your career growth.
-            </p>
-            <Button className="px-8 py-3 bg-white text-primary hover:bg-yellow-50 text-lg font-semibold">
-              Start Your Journey
-            </Button>
+              );
+            })}
           </div>
         </section>
       </main>
 
-      {connectingMentor !== null && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <Card className="max-w-sm p-6 space-y-6">
+      {/* Request Mentorship Modal */}
+      {mentorshipTarget && (
+        <div
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={() => setMentorshipTarget(null)}
+        >
+          <Card
+            className="w-full max-w-md p-6 space-y-4 bg-white"
+            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-label={`Request mentorship from ${mentorshipTarget.name}`}
+          >
             <div className="flex items-center justify-between">
-              <h3 className="text-xl font-bold">
-                Connect with{" "}
-                {mentors.find((m) => m.id === connectingMentor)?.name}
-              </h3>
+              <div>
+                <h3 className="text-xl font-bold">Request Mentorship</h3>
+                <p className="text-sm text-muted-foreground">
+                  To: {mentorshipTarget.name} ({mentorshipTarget.company})
+                </p>
+              </div>
               <button
-                onClick={() => setConnectingMentor(null)}
-                className="text-foreground/60 hover:text-foreground"
+                type="button"
+                aria-label="Close modal"
+                onClick={() => setMentorshipTarget(null)}
+                className="p-1.5 rounded-full hover:bg-muted"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
-            <div className="space-y-3">
-              <Button className="w-full gap-2 bg-blue-600 hover:bg-blue-700 text-black border h-12">
-                <Linkedin className="h-5 w-5" />
-                Connect via LinkedIn
-              </Button>
-              <Button className="w-full gap-2 bg-blue-500 hover:bg-blue-600 text-white h-12">
-                <Facebook className="h-5 w-5" />
-                Connect via Facebook
-              </Button>
-              <Button className="w-full gap-2 bg-black dark:bg-gray-800 hover:bg-gray-900 dark:hover:bg-gray-700 text-black border h-12">
-                <svg
-                  className="h-5 w-5"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
+            <form onSubmit={handleRequestMentorship} className="space-y-4">
+              <div>
+                <label
+                  htmlFor="mentorship-msg"
+                  className="block text-sm font-medium mb-1.5"
                 >
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.6l-5.165-6.75-5.908 6.75h-3.315l7.73-8.835L.424 2.25h6.755l4.872 6.237 5.477-6.237zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                </svg>
-                Connect via X
-              </Button>
-            </div>
+                  Your Goals / Questions
+                </label>
+                <textarea
+                  id="mentorship-msg"
+                  required
+                  rows={4}
+                  value={mentorshipMsg}
+                  onChange={(e) => setMentorshipMsg(e.target.value)}
+                  placeholder="Share your semester, interests, and what advice you're looking for..."
+                  className="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-yellow-400 outline-none resize-none"
+                />
+              </div>
 
-            <Button
-              variant="outline"
-              className="w-full bg-transparent"
-              onClick={() => setConnectingMentor(null)}
-            >
-              Cancel
-            </Button>
+              <div className="flex gap-3">
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="flex-1"
+                  onClick={() => setMentorshipTarget(null)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  className="flex-1 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold gap-2"
+                >
+                  Send Request <Send className="w-4 h-4" />
+                </Button>
+              </div>
+            </form>
           </Card>
         </div>
       )}

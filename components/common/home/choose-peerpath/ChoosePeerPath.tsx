@@ -20,54 +20,54 @@ interface FeatureCard {
 const features: FeatureCard[] = [
   {
     id: "1",
-    title: "Course Discovery",
+    title: "Semester Course Discovery",
     description:
-      "Find the perfect courses tailored to your learning goals and career aspirations.",
+      "Filter ULAB courses across CSE, BBA, MSJ, English, and Bangla by semester while tracking the 14-credit limit.",
     icon: <Search className="w-7 h-7" />,
     iconBg: "bg-blue-500",
     iconColor: "text-white",
   },
   {
     id: "2",
-    title: "Peer Reviews",
+    title: "Honest Senior Reviews",
     description:
-      "Read honest reviews from students who have already taken these courses.",
+      "Read real feedback from ULAB peers who already completed the course, including instructor replies.",
     icon: <MessageCircle className="w-7 h-7" />,
     iconBg: "bg-purple-500",
     iconColor: "text-white",
   },
   {
     id: "3",
-    title: "Alumni Network",
+    title: "ULAB Alumni Mentors",
     description:
-      "Connect with graduates and build valuable professional relationships.",
+      "Connect with graduates working at bKash, Pathao, Chaldal, The Daily Star, and BRAC for career guidance.",
     icon: <Users className="w-7 h-7" />,
     iconBg: "bg-emerald-500",
     iconColor: "text-white",
   },
   {
     id: "4",
-    title: "Verified Ratings",
+    title: "Faculty Office Hours",
     description:
-      "Trust authentic ratings verified by our community of real learners.",
+      "Check faculty research areas, teaching methodology, current courses, and message professors directly.",
     icon: <Star className="w-7 h-7" />,
     iconBg: "bg-amber-500",
     iconColor: "text-white",
   },
   {
     id: "5",
-    title: "Recommendations",
+    title: "Smart Recommendations",
     description:
-      "Get personalized course recommendations based on your interests and goals.",
+      "Get rule-based semester recommendations tailored to your department, current semester, and difficulty level.",
     icon: <Lightbulb className="w-7 h-7" />,
     iconBg: "bg-rose-500",
     iconColor: "text-white",
   },
   {
     id: "6",
-    title: "Community Forums",
+    title: "Department Community",
     description:
-      "Join discussions, ask questions, and learn from the community.",
+      "Ask seniors about midterms, form case-competition teams, and stay safe with active student moderation.",
     icon: <MessageSquare className="w-7 h-7" />,
     iconBg: "bg-cyan-500",
     iconColor: "text-white",
@@ -78,18 +78,16 @@ export default function ChoosePeerPath() {
   return (
     <section className="py-20 px-4 sm:px-6 lg:px-8 bg-linear-to-b from-background to-secondary/5">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
         <div className="text-center mb-16">
-          <h2 className="text-6xl sm:text-6xl font-bold text-foreground mb-4 text-balance">
-            Why Choose Peer-path?
+          <h2 className="text-4xl sm:text-5xl font-bold text-foreground mb-4 text-balance">
+            Why Choose PeerPath?
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-balance">
-            Everything you need to make informed decisions about your education
-            and career growth.
+            Replacing scattered PDFs and Facebook groups with one organized hub
+            built for ULAB students, faculty, and alumni.
           </p>
         </div>
 
-        {/* Features Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feature) => (
             <Card
@@ -103,12 +101,10 @@ export default function ChoosePeerPath() {
                   {feature.icon}
                 </div>
 
-                {/* Title */}
                 <h3 className="text-lg font-semibold text-foreground mb-2">
                   {feature.title}
                 </h3>
 
-                {/* Description */}
                 <p className="text-sm text-muted-foreground leading-relaxed">
                   {feature.description}
                 </p>
