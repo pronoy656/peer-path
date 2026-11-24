@@ -29,7 +29,7 @@ const carouselImages = [
 export default function ImageCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoplay, setIsAutoplay] = useState(true);
-  const [nextIndex, setNextIndex] = useState(1);
+  const nextIndex = (currentIndex + 1) % carouselImages.length;
 
   useEffect(() => {
     if (!isAutoplay) return;
@@ -61,7 +61,7 @@ export default function ImageCarousel() {
             }`}
           >
             <Image
-              src={image.src || "/placeholder.svg"}
+              src={image.src || "/ulab-campus-1.jpg"}
               alt={`Slide ${index + 1}`}
               fill
               className="object-cover"

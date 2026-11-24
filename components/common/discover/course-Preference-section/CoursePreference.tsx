@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { Heart, BookmarkIcon, Sparkles, Plus, Check } from "lucide-react";
 import { useAppStore } from "@/lib/store/AppStore";
@@ -24,23 +24,23 @@ export default function CoursePreference({
   onAddCourse,
   selectedCourseIds = [],
 }: CoursePreferenceProps) {
-  const { state, dispatch, currentUser, showToast, hydrated } = useAppStore();
-  const initial = getPreferences(state, currentUser?.id);
+  const { state, dispatch, currentUser, showToast } = useAppStore();
+  const saved = getPreferences(state, currentUser?.id);
 
-  const [preferences, setPreferences] = useState<StudentPreferences>(initial);
+  const [draft, setDraft] = useState<Partial<StudentPreferences>>({});
+  const preferences: StudentPreferences = {
+    ...saved,
+    ...draft,
+  };
+
   const [recommendations, setRecommendations] = useState<Course[]>([]);
   const [hasRequestedRecs, setHasRequestedRecs] = useState(false);
-
-  useEffect(() => {
-    if (!hydrated) return;
-    setPreferences(getPreferences(state, currentUser?.id));
-  }, [hydrated, currentUser?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handlePreferenceChange = <K extends keyof StudentPreferences>(
     key: K,
     value: StudentPreferences[K]
   ) => {
-    setPreferences((prev) => ({
+    setDraft((prev) => ({
       ...prev,
       [key]: value,
     }));

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import DiscoverBanner from "../discover-banner/DiscoverBanner";
 import DepartmentTabs from "../department-tabs/DepartmentTabs";
@@ -17,24 +17,20 @@ import {
 import type { Course, Department } from "@/lib/types";
 
 export default function FullDiscoverPage() {
-  const { state, dispatch, currentUser, showToast, hydrated } = useAppStore();
+  const { state, dispatch, currentUser, showToast } = useAppStore();
   const router = useRouter();
 
   const savedPrefs = getPreferences(state, currentUser?.id);
-  const [selectedDepartment, setSelectedDepartment] = useState<Department>(
-    savedPrefs.department
-  );
-  const [selectedSemester, setSelectedSemester] = useState<string>(
-    String(savedPrefs.semester)
-  );
+  const [departmentOverride, setDepartmentOverride] =
+    useState<Department | null>(null);
+  const [semesterOverride, setSemesterOverride] = useState<string | null>(null);
   const [selectedCourses, setSelectedCourses] = useState<Course[]>([]);
 
-  useEffect(() => {
-    if (!hydrated) return;
-    const prefs = getPreferences(state, currentUser?.id);
-    setSelectedDepartment(prefs.department);
-    setSelectedSemester(String(prefs.semester));
-  }, [hydrated, currentUser?.id]); // eslint-disable-line react-hooks/exhaustive-deps
+  const selectedDepartment = departmentOverride ?? savedPrefs.department;
+  const selectedSemester = semesterOverride ?? String(savedPrefs.semester);
+  const setSelectedDepartment = (dept: Department) =>
+    setDepartmentOverride(dept);
+  const setSelectedSemester = (sem: string) => setSemesterOverride(sem);
 
   const handleAddCourse = (course: Course) => {
     if (selectedCourses.find((c) => c.id === course.id)) {

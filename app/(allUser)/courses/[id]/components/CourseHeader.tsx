@@ -11,7 +11,7 @@ export default function CourseHeader({
   return (
     <section className="relative h-80 md:h-96 bg-gradient-to-b from-blue-600 to-blue-400 overflow-hidden">
       <img
-        src={image || "/placeholder.svg"}
+        src={image || "/programming-intro.jpg"}
         alt={title || "Course"}
         className="absolute inset-0 w-full h-full object-cover opacity-70"
       />
