@@ -1,17 +1,20 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 "use client";
 
 import { X } from "lucide-react";
+import type { Course } from "@/lib/types";
 
 interface CoursePreviewSectionProps {
-  courses: any[];
+  courses: Course[];
   onRemoveCourse: (courseId: string) => void;
+  onConfirmEnrollment: () => void;
+  onSaveForLater: () => void;
 }
 
 export default function CoursePreview({
   courses,
   onRemoveCourse,
+  onConfirmEnrollment,
+  onSaveForLater,
 }: CoursePreviewSectionProps) {
   const totalCredits = courses.reduce((sum, course) => sum + course.credits, 0);
   const creditLimit = 14;
@@ -35,7 +38,6 @@ export default function CoursePreview({
           </div>
         </div>
 
-        {/* Course List */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {courses.map((course) => (
             <div
@@ -43,7 +45,7 @@ export default function CoursePreview({
               className="bg-card rounded-lg border border-border p-4 flex items-start justify-between"
             >
               <div className="grow">
-                <h3 className="font-semibold text-foreground">{course.name}</h3>
+                <h3 className="font-semibold text-foreground">{course.title}</h3>
                 <p className="text-xs text-muted-foreground mt-1">
                   {course.code}
                 </p>
@@ -52,6 +54,8 @@ export default function CoursePreview({
                 </p>
               </div>
               <button
+                type="button"
+                aria-label={`Remove ${course.title}`}
                 onClick={() => onRemoveCourse(course.id)}
                 className="ml-4 p-2 hover:bg-red-50 rounded-lg transition-colors text-red-600"
               >
@@ -61,11 +65,12 @@ export default function CoursePreview({
           ))}
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex gap-4 pt-4">
+        <div className="flex flex-wrap gap-4 pt-4">
           <button
+            type="button"
+            onClick={onConfirmEnrollment}
             disabled={totalCredits > creditLimit}
-            className={`flex-1 px-6 py-3 rounded-lg font-semibold transition-colors duration-300 border-2 border-primary ${
+            className={`flex-1 min-w-[200px] px-6 py-3 rounded-lg font-semibold transition-colors duration-300 border-2 border-primary ${
               totalCredits > creditLimit
                 ? "bg-gray-100 text-gray-500 cursor-not-allowed border-gray-300"
                 : "bg-primary text-foreground hover:bg-primary/90"
@@ -73,7 +78,11 @@ export default function CoursePreview({
           >
             Confirm Enrollment
           </button>
-          <button className="px-6 py-3 border-2 border-primary text-primary rounded-lg font-semibold hover:bg-primary/10 transition-colors">
+          <button
+            type="button"
+            onClick={onSaveForLater}
+            className="px-6 py-3 border-2 border-primary text-primary rounded-lg font-semibold hover:bg-primary/10 transition-colors"
+          >
             Save for Later
           </button>
         </div>

@@ -1,61 +1,97 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// import React from 'react'
-
-// export default function FullDiscoverPage() {
-//   return (
-//     <div>FullDiscoverPage</div>
-//   )
-// }
-
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import DiscoverBanner from "../discover-banner/DiscoverBanner";
 import DepartmentTabs from "../department-tabs/DepartmentTabs";
 import SemesterTabs from "../semester-tabs/SemesterTabs";
 import CourseCard from "../course-card/CourseCard";
 import CoursePreview from "../courese-preview/CoursePreview";
 import CoursePreference from "../course-Preference-section/CoursePreference";
-// import { CourseHero } from "./course-hero"
-// import { DepartmentTabs } from "./department-tabs"
-// import { SemesterTabs } from "./semester-tabs"
-// import { CourseGrid } from "./course-grid"
-// import { PreferencesSection } from "./preferences-section"
-// import { CoursePreviewSection } from "./course-preview-section"
+import { useAppStore } from "@/lib/store/AppStore";
+import {
+  enrollBatch,
+  getPreferences,
+  toggleSaveCourse,
+} from "@/lib/services/enrollment";
+import type { Course, Department } from "@/lib/types";
 
 export default function FullDiscoverPage() {
-  const [selectedDepartment, setSelectedDepartment] = useState("CSE");
-  const [selectedSemester, setSelectedSemester] = useState("1");
-  const [selectedCourses, setSelectedCourses] = useState<any[]>([]);
+  const { state, dispatch, currentUser, showToast, hydrated } = useAppStore();
+  const router = useRouter();
 
-  const handleAddCourse = (course: any) => {
-    // Check if course already selected
+  const savedPrefs = getPreferences(state, currentUser?.id);
+  const [selectedDepartment, setSelectedDepartment] = useState<Department>(
+    savedPrefs.department
+  );
+  const [selectedSemester, setSelectedSemester] = useState<string>(
+    String(savedPrefs.semester)
+  );
+  const [selectedCourses, setSelectedCourses] = useState<Course[]>([]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    const prefs = getPreferences(state, currentUser?.id);
+    setSelectedDepartment(prefs.department);
+    setSelectedSemester(String(prefs.semester));
+  }, [hydrated, currentUser?.id]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleAddCourse = (course: Course) => {
     if (selectedCourses.find((c) => c.id === course.id)) {
-      setSelectedCourses(selectedCourses.filter((c) => c.id !== course.id));
+      setSelectedCourses((prev) => prev.filter((c) => c.id !== course.id));
+      showToast(`Removed ${course.code} from selection`, "info");
     } else {
-      // Calculate total credits
-      const totalCredits = selectedCourses.reduce(
-        (sum, c) => sum + c.credits,
-        0
-      );
+      const totalCredits = selectedCourses.reduce((sum, c) => sum + c.credits, 0);
       if (totalCredits + course.credits <= 14) {
-        setSelectedCourses([...selectedCourses, course]);
+        setSelectedCourses((prev) => [...prev, course]);
+        showToast(`Added ${course.code} to semester selection`);
       } else {
-        alert("Cannot exceed 14 credits per semester");
+        showToast("Cannot exceed 14 credits per semester.", "error");
       }
     }
   };
 
   const handleRemoveCourse = (courseId: string) => {
-    setSelectedCourses(selectedCourses.filter((c) => c.id !== courseId));
+    setSelectedCourses((prev) => prev.filter((c) => c.id !== courseId));
+  };
+
+  const handleConfirmEnrollment = () => {
+    if (!currentUser) {
+      showToast("Please sign in to confirm course enrollment.", "info");
+      router.push("/signIn");
+      return;
+    }
+    const res = enrollBatch(
+      state,
+      dispatch,
+      currentUser.id,
+      selectedCourses.map((c) => c.id)
+    );
+    if (res.ok) {
+      showToast(res.message);
+      setSelectedCourses([]);
+    } else {
+      showToast(res.message, "info");
+    }
+  };
+
+  const handleSaveForLater = () => {
+    for (const c of selectedCourses) {
+      const alreadySaved = (
+        state.savedCourseIds[currentUser?.id || "guest"] ?? []
+      ).includes(c.id);
+      if (!alreadySaved) {
+        toggleSaveCourse(state, dispatch, currentUser?.id, c.id);
+      }
+    }
+    showToast(`Saved ${selectedCourses.length} course(s) for later.`);
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted">
       <DiscoverBanner />
 
-      <div className="container mx-auto px-4 py-12 space-y-12">
-        {/* Department Selection */}
+      <div id="discover-catalog" className="container mx-auto px-4 py-12 space-y-12">
         <div>
           <h2 className="text-2xl font-bold text-foreground mb-6">
             Select Department
@@ -66,7 +102,6 @@ export default function FullDiscoverPage() {
           />
         </div>
 
-        {/* Semester Selection */}
         <div>
           <h2 className="text-2xl font-bold text-foreground mb-6">
             Select Semester
@@ -77,10 +112,9 @@ export default function FullDiscoverPage() {
           />
         </div>
 
-        {/* Course Grid */}
         <div>
           <h2 className="text-2xl font-bold text-foreground mb-6">
-            Available Courses - {selectedDepartment} (Semester{" "}
+            Available Courses — {selectedDepartment} (Semester{" "}
             {selectedSemester})
           </h2>
           <CourseCard
@@ -88,6 +122,7 @@ export default function FullDiscoverPage() {
             semester={selectedSemester}
             onAddCourse={handleAddCourse}
             selectedCourses={selectedCourses.map((c) => c.id)}
+            onResetSemester={() => setSelectedSemester("1")}
           />
         </div>
 
@@ -95,11 +130,17 @@ export default function FullDiscoverPage() {
           <CoursePreview
             courses={selectedCourses}
             onRemoveCourse={handleRemoveCourse}
+            onConfirmEnrollment={handleConfirmEnrollment}
+            onSaveForLater={handleSaveForLater}
           />
         )}
 
-        {/* Preferences Section */}
-        <CoursePreference />
+        <CoursePreference
+          selectedDepartment={selectedDepartment}
+          selectedSemester={Number(selectedSemester) || 1}
+          onAddCourse={handleAddCourse}
+          selectedCourseIds={selectedCourses.map((c) => c.id)}
+        />
       </div>
     </div>
   );
